@@ -1,0 +1,87 @@
+<?php
+
+{
+    "@context":"https://schema.org",
+    "@graph":[
+    {
+        "@type":"WebPage",
+        "@id":"https://traveling-best.ru/",
+        "url":"https://traveling-best.ru/",
+        "name":"Отдых в России, глэмпинги, базы отдыха, отели | Путешественник",
+        "isPartOf":{
+            "@id":"https://traveling-best.ru/#website"
+        },
+        "about":{
+            "@id":"https://traveling-best.ru/#organization"
+        },
+        "datePublished":"2024-10-01T09:00:38+00:00",
+        "dateModified":"2025-03-26T17:44:06+00:00",
+        "description":"Путешественник помогает найти и забронировать лучшие места для отдыха в России. Глэмпинги в лесу, на море и в горах с лучшими ценами.",
+        "breadcrumb":{
+            "@id":"https://traveling-best.ru/#breadcrumb"
+        },
+        "inLanguage":"ru-RU",
+        "potentialAction":[
+        {
+            "@type":"ReadAction",
+            "target":["https://traveling-best.ru/"]
+        }
+        ]
+    },
+    {
+        "@type":"BreadcrumbList",
+        "@id":"https://traveling-best.ru/#breadcrumb",
+        "itemListElement":[
+        {
+            "@type":"ListItem",
+            "position":1,
+            "name":"Главная страница"
+        }
+        ]
+    },
+    {
+        "@type":"WebSite",
+        "@id":"https://traveling-best.ru/#website",
+        "url":"https://traveling-best.ru/",
+        "name":"Путешественник",
+        "description":"",
+        "publisher":{
+            "@id":"https://traveling-best.ru/#organization"
+        },
+        "potentialAction":[
+        {
+            "@type":"SearchAction",
+            "target":{
+                "@type":"EntryPoint",
+                "urlTemplate":"https://traveling-best.ru/?s={search_term_string}"
+            },
+            "query-input":{
+                "@type":"PropertyValueSpecification",
+                "valueRequired":true,
+                "valueName":"search_term_string"
+            }
+        }
+        ],
+        "inLanguage":"ru-RU"
+    },
+    {
+        "@type":"Organization",
+        "@id":"https://traveling-best.ru/#organization",
+        "name":"Путешественник",
+        "url":"https://traveling-best.ru/",
+        "logo":{
+            "@type":"ImageObject",
+            "inLanguage":"ru-RU",
+            "@id":"https://traveling-best.ru/#/schema/logo/image/",
+            "url":"https://traveling-best.ru/wp-content/uploads/2025/02/cropped-cropped-logo-new.png",
+            "contentUrl":"https://traveling-best.ru/wp-content/uploads/2025/02/cropped-cropped-logo-new.png",
+            "width":512,
+            "height":512,
+            "caption":"Путешественник"
+        },
+        "image":{
+            "@id":"https://traveling-best.ru/#/schema/logo/image/"
+        }
+    }
+    ]
+}

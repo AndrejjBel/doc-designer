@@ -1,5 +1,4 @@
 <?php
-use Hleb\Constructor\Script\Hlogin;
 use Hleb\Static\System;
 ?><!DOCTYPE html>
 <html lang="en">
@@ -11,7 +10,6 @@ use Hleb\Static\System;
     <meta name="description" content="Framework HLEB"/>
     <meta name="theme-color" content="#ff786c"/>
     <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
-    <link rel="stylesheet" href="/hlresource/framework/v<?= System::getApiVersion() ?>/css/default"/>
     <title>HLEB Start Page</title>
 </head>
 <body>
@@ -25,9 +23,7 @@ use Hleb\Static\System;
 <div class="info">
     <div class="content-wrapper">
         <div class="content">
-            <img src="/hlresource/framework/v<?= System::getApiVersion() ?>/svg/logo" width="200" height="200" alt="HL"><br>
             <div class="text"><i>Demo page.</i></div>
-            <?= Hlogin::info(); ?>
         </div>
     </div>
 </div>
@@ -37,7 +33,11 @@ use Hleb\Static\System;
         <a href="https://github.com/phphleb/framework/">phphleb/framework<span class="footer-link">&#10551;</span></a>
         <a href="https://github.com/phphleb/hlogin/">phphleb/hlogin<span class="footer-link">&#10551;</span></a>
     </div>
-    <div class="php-version">PHP v<?= \phpversion() ?></div>
+    <div class="php-version">PHP v<?= phpversion() ?></div>
 </div>
-<?= Hlogin::get(); ?>
 </body>
+
+<?php
+// echo '<pre>';
+// var_dump2(insertHeader('', ['title' => 'Title!!', 'description' => 'Description!!']));
+// echo '</pre>';

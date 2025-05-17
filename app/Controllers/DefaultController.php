@@ -9,6 +9,6 @@ class DefaultController extends Controller
 {
     public function index(): View
     {
-        return view("default");
+        return view('/admin/admin', ['title' => 'Home', 'description' => 'Home description']);
     }
 }

@@ -1,0 +1,252 @@
+html[data-sidenav-size=condensed] .wrapper .content-page {
+    min-height: calc(100vh - var(--ct-topbar-height));
+}
+
+.text-logo {
+    color: #FFFFFF;
+}
+
+.auth-brand .text-logo {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--ct-heading-color);
+}
+
+.dashboard-logout-btn {
+    border: none;
+    background: none;
+    font-weight: 400;
+    color: var(--ct-dropdown-link-color);
+}
+
+.cursor-pointer:not(:disabled) {
+    cursor: pointer;
+}
+
+.alert-container {
+    margin-bottom: 1.875rem;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--ct-body-color);
+  -webkit-box-shadow: 0 0 0px 40rem #FFFFFF inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.filepond--panel-root {
+    background-color: var(--ct-body-bg);
+    border: var(--ct-border-width) solid var(--ct-border-color);
+}
+
+.filepond--list.filepond--list {
+    display: flex;
+    gap: 10px;
+}
+
+.post-gallery .filepond--item {
+    width: calc((100% - 3em) / 4);
+}
+
+.filepond--root .filepond--credits[style] {
+    display: none;
+}
+
+.filepond--drop-label.filepond--drop-label label {
+    color: var(--ct-body-color);
+}
+
+input.tagsinput {
+    visibility: hidden;
+    height: 0;
+}
+
+.tagitem {
+    cursor: default;
+}
+
+.tagitem i {
+    cursor: pointer;
+}
+
+.tagitem i:hover {
+    color: #dc3545;
+}
+
+.ql-editor.ql-blank::before {
+    color: inherit;
+}
+
+.table-img {
+    width: 30px;
+    height: 30px;
+}
+
+.table-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.post-thumbnail-img {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    border-radius: .25rem;
+    overflow: hidden;
+}
+
+.post-thumbnail-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.post-thumbnail-img button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.thumbnail-remove {
+    padding: 6px 10px;
+}
+
+.post-gallery-img {}
+
+.post-gallery-img .post-gallery-edit-item {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    border-radius: .25rem;
+    overflow: hidden;
+}
+
+.post-gallery-img .post-gallery-edit-item img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+}
+
+.post-gallery-img .post-gallery-edit-item button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.post-gallery-img .post-gallery-edit-item.gu-transit button {
+    display: none;
+    opacity: 0;
+}
+
+input.input-upload {
+    display: none;
+}
+
+.label-upload {
+    display: none;
+}
+
+.label-upload.activate {
+    display: inline-block;
+}
+
+.user-settings .card-body {
+    padding: 0 1.25rem 1.25rem 1.25rem;
+}
+
+.adm-user-settings {
+    max-width: 260px;
+    width: 260px;
+}
+
+.btn-del-acc-option {
+    top: 7px;
+    right: 30px;
+    z-index: 9;
+}
+
+.acc-options .accordion-item:first-child .btn-del-acc-option {
+	display: none;
+}
+
+.btn-info-add {
+    position: fixed;
+    top: 150px;
+    right: 20px;
+    z-index: 9;
+    padding: 2px 6px;
+}
+
+.add-post-info {
+    /* position: fixed;
+    top: 150px;
+    right: 20px;
+    z-index: 9; */
+    padding: 2px 6px;
+}
+
+.tab-img {
+    width: 40px;
+    height: 30px;
+    overflow: hidden;
+    padding: 2px;
+}
+
+.tab-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.table-post-title {
+    max-width: 180px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.active>.page-link, .page-link.active {
+    background-color: #16a34a;
+    border-color: #16a34a;
+}
+
+.js-spinner-thumb,
+.js-spinner-gallery {
+    display: none;
+}
+
+.status-value {
+    font-weight: 600;
+}
+
+td .status-value {
+    font-size: 12px;
+}
+
+.status-value.published {
+    color: #87bf8a;
+}
+
+.status-value.pending,
+.status-value.draft {
+    color: #e7607b;
+}
+
+.status-value.private {
+    color: #d89e70;
+}
+
+@media (max-width: 867px) {
+    .post-gallery .filepond--item {
+        width: calc((100% - 2em) / 2);
+    }
+}
+
+@media (max-width: 767px) {
+    .add-post-info {
+        top: 90px;
+        right: 10px;
+    }
+}

@@ -156,7 +156,7 @@ return [
     │ Изначально: 0
     │
     */
-    'ending.slash.url' => 0,
+    'ending.slash.url' => 1,
 
     /*
     │-----------------------------------------------------------------------------
@@ -455,7 +455,10 @@ return [
     │
     */
     'custom.function.files' => [
-        // '/functions.php',
+        '/app/helpers.php',
+        '/app/category.php',
+        '/app/location.php',
+        '/app/seo.php'
     ],
 
     /*
@@ -484,6 +487,6 @@ return [
     │
     */
     'custom.setting.files' => [
-        // 'custom' => '/config/custom.php',
+        'navigation' => '/config/navigation.php',
     ],
 ];

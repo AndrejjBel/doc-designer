@@ -19,10 +19,12 @@
     <title><?= $httpCode . '. ' . $message ?></title>
 </head>
 <body>
-<div class="hl-error-page-content">
+<div class="hl-error-page-content" style="pointer-events: auto;">
     <h1 class="hl-error-page-message">
         <span class="hl-error-page-code"><?= $httpCode ?></span>
         <?= $message ?>
+        <br>
+        <a href="/"  style="display: block; margin-top: 40px;">На главную</a>
     </h1>
 </div>
 </body>

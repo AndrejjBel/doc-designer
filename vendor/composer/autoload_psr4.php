@@ -11,5 +11,10 @@ return array(
     'Phphleb\\Debugpan\\' => array($vendorDir . '/phphleb/debugpan'),
     'Phphleb\\' => array($vendorDir . '/phphleb'),
     'Hleb\\' => array($vendorDir . '/phphleb/framework', $vendorDir . '/phphleb/framework'),
+    'Delight\\Http\\' => array($vendorDir . '/delight-im/http/src'),
+    'Delight\\Db\\' => array($vendorDir . '/delight-im/db/src'),
+    'Delight\\Cookie\\' => array($vendorDir . '/delight-im/cookie/src'),
+    'Delight\\Base64\\' => array($vendorDir . '/delight-im/base64/src'),
+    'Delight\\Auth\\' => array($vendorDir . '/delight-im/auth/src'),
     'App\\' => array($baseDir . '/app'),
 );
