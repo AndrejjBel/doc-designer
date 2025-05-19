@@ -1,0 +1,224 @@
+/*!*************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/scss/main.scss ***!
+  \*************************************************************************************************************/
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  padding: 8px 0; }
+  .breadcrumb span {
+    font-size: 12px; }
+    .breadcrumb span a {
+      font-size: 12px;
+      font-weight: 500;
+      color: #212529;
+      text-decoration: none; }
+      .breadcrumb span a:hover {
+        color: #16a34a; }
+    .breadcrumb span.breadcrumbs__separator {
+      display: flex; }
+      .breadcrumb span.breadcrumbs__separator svg path {
+        fill: var(--separator-coror); }
+  .breadcrumb .breadcrumb-item {
+    text-transform: none;
+    font-size: 14px;
+    font-weight: 700;
+    padding-left: 0;
+    display: inline-block; }
+    .breadcrumb .breadcrumb-item::after {
+      display: none; }
+    .breadcrumb .breadcrumb-item.active {
+      font-weight: 600; }
+
+.popular-tour {
+  height: 300px; }
+  .popular-tour img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; }
+  .popular-tour .content {
+    bottom: 0;
+    left: 0;
+    padding: 10px; }
+  .popular-tour .link-location {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%; }
+
+.popular-glampings-home {
+  gap: 30px; }
+  @media (max-width: 1199px) {
+    .popular-glampings-home {
+      gap: 20px; } }
+
+.glampings-items,
+.locations-items {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap; }
+
+.card-items {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: calc((100% - 90px) / 4);
+  border: 1px solid var(--border-widget-color);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 3px rgba(60, 72, 88, 0.15); }
+  .card-items:hover {
+    box-shadow: 0 0 13px rgba(60, 72, 88, 0.15); }
+  @media (max-width: 1199px) {
+    .card-items {
+      width: calc((100% - 40px) / 3); } }
+  @media (max-width: 767px) {
+    .card-items {
+      width: calc((100% - 20px) / 2); } }
+  @media (max-width: 567px) {
+    .card-items {
+      width: 100%; } }
+  .card-items__link {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 2; }
+    .card-items__link:hover ~ .card-items__content a {
+      color: #16a34a; }
+    .card-items__link:hover ~ .card-items__img span img {
+      transform: scale(1.1); }
+  .card-items__img {
+    position: relative;
+    flex: none;
+    width: auto;
+    overflow: hidden;
+    aspect-ratio: 1 / 0.6; }
+    .card-items__img span {
+      display: block;
+      width: 100%;
+      height: 100%; }
+      .card-items__img span img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: 0.3s all; }
+        @media (max-width: 567px) {
+          .card-items__img span img {
+            height: auto; } }
+        .card-items__img span img:hover {
+          background-size: 180%; }
+  .card-items__content {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    height: 100%; }
+    .card-items__content a {
+      line-height: 25px;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-color);
+      font-weight: 600;
+      text-decoration: none;
+      margin-bottom: 13px; }
+      .card-items__content a:hover {
+        color: #16a34a; }
+    .card-items__content__adress {
+      margin-bottom: 14px;
+      font-size: 13px;
+      line-height: 15px; }
+      .card-items__content__adress svg {
+        margin-bottom: 2px; }
+        .card-items__content__adress svg path {
+          fill: var(--bs-gray); }
+    .card-items__content__reviews {
+      margin-top: auto; }
+      .card-items__content__reviews-stars {
+        display: inline-flex;
+        padding: 0 8px;
+        border-radius: 4px;
+        color: #FFFFFF;
+        background: #16a34a; }
+      .card-items__content__reviews-count {
+        font-size: 12px; }
+    .card-items__content__bottom {
+      display: flex;
+      justify-content: space-between; }
+      .card-items__content__bottom-min_placement {
+        display: flex;
+        align-items: center;
+        font-weight: 500; }
+        .card-items__content__bottom-min_placement svg {
+          margin-right: 6px; }
+      .card-items__content__bottom-price {
+        display: flex;
+        align-items: center;
+        font-size: 13px;
+        font-weight: 500; }
+        .card-items__content__bottom-price svg {
+          margin-right: 6px; }
+        .card-items__content__bottom-price .price-color {
+          font-size: 20px;
+          font-weight: 700;
+          color: #16a34a; }
+
+.loc-item {
+  height: 200px; }
+  .loc-item__link {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 2; }
+    .loc-item__link:hover ~ .loc-item__img {
+      transform: scale(1.1); }
+  .loc-item__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.7);
+    transition: 0.3s all; }
+  .loc-item__text {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    color: #FFFFFF;
+    z-index: 1; }
+    .loc-item__text__title {
+      font-weight: 700;
+      text-align: center; }
+
+.reviews .card {
+  display: flex;
+  flex-direction: column;
+  height: 320px; }
+  .reviews .card .review-info {
+    display: flex;
+    gap: 10px;
+    font-size: 14px; }
+  .reviews .card .review-content {
+    display: -webkit-box;
+    -webkit-line-clamp: 7;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis; }
+  .reviews .card .review-content-link {
+    margin-top: auto; }
+
+.site-main-article__top__item__count {
+  font-size: 20px;
+  font-weight: 600; }
+
+.site-main-article__top__item__order {
+  max-width: 200px; }
+
+
+/*# sourceMappingURL=main.min.css.map*/

@@ -1,0 +1,69 @@
+<?php
+
+function seo_pages_obj() {
+    $seo_pages_obj = [
+        'home' => [
+            "title" => "Отдых в России, глэмпинги, базы отдыха, отели | Путешественник",
+            "description" => "Путешественник помогает найти и забронировать лучшие места для отдыха в России. Глэмпинги в лесу, на море и в горах с лучшими ценами.",
+            "canonical" => "https://traveling-best.ru/",
+            "ldjson" => '{"@context":"https://schema.org","@graph":[{"@type":"CollectionPage","@id":"https://traveling-best.ru/glampings/","url":"https://traveling-best.ru/glampings/","name":"Глэмпинги | Путешественник","isPartOf":{"@id":"https://traveling-best.ru/#website"},"primaryImageOfPage":{"@id":"https://traveling-best.ru/glampings/#primaryimage"},"image":{"@id":"https://traveling-best.ru/glampings/#primaryimage"},"thumbnailUrl":"https://traveling-best.ru/wp-content/uploads/2025/03/xl.webp","description":"В сервисе поиска Путешественник представлен полный каталог глэмпингов с фото, ценами и отзывами. Найдите свой идеальный отдых!","breadcrumb":{"@id":"https://traveling-best.ru/glampings/#breadcrumb"},"inLanguage":"ru-RU"},{"@type":"ImageObject","inLanguage":"ru-RU","@id":"https://traveling-best.ru/glampings/#primaryimage","url":"https://traveling-best.ru/wp-content/uploads/2025/03/xl.webp","contentUrl":"https://traveling-best.ru/wp-content/uploads/2025/03/xl.webp","width":600,"height":800},{"@type":"BreadcrumbList","@id":"https://traveling-best.ru/glampings/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Главная страница","item":"https://traveling-best.ru/"},{"@type":"ListItem","position":2,"name":"Глэмпинги"}]},{"@type":"WebSite","@id":"https://traveling-best.ru/#website","url":"https://traveling-best.ru/","name":"Путешественник","description":"","publisher":{"@id":"https://traveling-best.ru/#organization"},"potentialAction":[{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://traveling-best.ru/?s={search_term_string}"},"query-input":{"@type":"PropertyValueSpecification","valueRequired":true,"valueName":"search_term_string"}}],"inLanguage":"ru-RU"},{"@type":"Organization","@id":"https://traveling-best.ru/#organization","name":"Путешественник","url":"https://traveling-best.ru/","logo":{"@type":"ImageObject","inLanguage":"ru-RU","@id":"https://traveling-best.ru/#/schema/logo/image/","url":"https://traveling-best.ru/wp-content/uploads/2025/02/cropped-cropped-logo-new.png","contentUrl":"https://traveling-best.ru/wp-content/uploads/2025/02/cropped-cropped-logo-new.png","width":512,"height":512,"caption":"Путешественник"},"image":{"@id":"https://traveling-best.ru/#/schema/logo/image/"}}]}'
+        ],
+        'contact' => [
+            "title" => "Контакты | Путешественник",
+            "description" => "Есть вопрос или предложение? Мы будем рады ответить вам по указанным контактам! Ваш сервис поиска глэмпингов Путешественник",
+            "canonical" => "https://traveling-best.ru/contacts/",
+            "ldjson" => '{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://traveling-best.ru/contacts/","url":"https://traveling-best.ru/contacts/","name":"Контакты | Путешественник","isPartOf":{"@id":"https://traveling-best.ru/#website"},"datePublished":"2024-10-21T12:50:15+00:00","dateModified":"2025-02-26T10:46:38+00:00","description":"Есть вопрос или предложение? Мы будем рады ответить вам по указанным контактам! Ваш сервис поиска глэмпингов Путешественник","breadcrumb":{"@id":"https://traveling-best.ru/contacts/#breadcrumb"},"inLanguage":"ru-RU","potentialAction":[{"@type":"ReadAction","target":["https://traveling-best.ru/contacts/"]}]},{"@type":"BreadcrumbList","@id":"https://traveling-best.ru/contacts/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Главная страница","item":"https://traveling-best.ru/"},{"@type":"ListItem","position":2,"name":"Контакты"}]},{"@type":"WebSite","@id":"https://traveling-best.ru/#website","url":"https://traveling-best.ru/","name":"Путешественник","description":"","publisher":{"@id":"https://traveling-best.ru/#organization"},"potentialAction":[{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://traveling-best.ru/?s={search_term_string}"},"query-input":{"@type":"PropertyValueSpecification","valueRequired":true,"valueName":"search_term_string"}}],"inLanguage":"ru-RU"},{"@type":"Organization","@id":"https://traveling-best.ru/#organization","name":"Путешественник","url":"https://traveling-best.ru/","logo":{"@type":"ImageObject","inLanguage":"ru-RU","@id":"https://traveling-best.ru/#/schema/logo/image/","url":"https://traveling-best.ru/wp-content/uploads/2025/02/cropped-cropped-logo-new.png","contentUrl":"https://traveling-best.ru/wp-content/uploads/2025/02/cropped-cropped-logo-new.png","width":512,"height":512,"caption":"Путешественник"},"image":{"@id":"https://traveling-best.ru/#/schema/logo/image/"}}]}'
+        ],
+        'glampings' => [
+            "title" => "Глэмпинги | Путешественник",
+            "description" => "В сервисе поиска Путешественник представлен полный каталог глэмпингов с фото, ценами и отзывами. Найдите свой идеальный отдых!",
+            "canonical" => "https://traveling-best.ru/glampings/",
+            "ldjson" => '{"@context":"https://schema.org","@graph":[{"@type":"CollectionPage","@id":"https://traveling-best.ru/glampings/","url":"https://traveling-best.ru/glampings/","name":"Глэмпинги | Путешественник","isPartOf":{"@id":"https://traveling-best.ru/#website"},"primaryImageOfPage":{"@id":"https://traveling-best.ru/glampings/#primaryimage"},"image":{"@id":"https://traveling-best.ru/glampings/#primaryimage"},"thumbnailUrl":"https://traveling-best.ru/wp-content/uploads/2025/03/xl.webp","description":"В сервисе поиска Путешественник представлен полный каталог глэмпингов с фото, ценами и отзывами. Найдите свой идеальный отдых!","breadcrumb":{"@id":"https://traveling-best.ru/glampings/#breadcrumb"},"inLanguage":"ru-RU"},{"@type":"ImageObject","inLanguage":"ru-RU","@id":"https://traveling-best.ru/glampings/#primaryimage","url":"https://traveling-best.ru/wp-content/uploads/2025/03/xl.webp","contentUrl":"https://traveling-best.ru/wp-content/uploads/2025/03/xl.webp","width":600,"height":800},{"@type":"BreadcrumbList","@id":"https://traveling-best.ru/glampings/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Главная страница","item":"https://traveling-best.ru/"},{"@type":"ListItem","position":2,"name":"Глэмпинги"}]},{"@type":"WebSite","@id":"https://traveling-best.ru/#website","url":"https://traveling-best.ru/","name":"Путешественник","description":"","publisher":{"@id":"https://traveling-best.ru/#organization"},"potentialAction":[{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://traveling-best.ru/?s={search_term_string}"},"query-input":{"@type":"PropertyValueSpecification","valueRequired":true,"valueName":"search_term_string"}}],"inLanguage":"ru-RU"},{"@type":"Organization","@id":"https://traveling-best.ru/#organization","name":"Путешественник","url":"https://traveling-best.ru/","logo":{"@type":"ImageObject","inLanguage":"ru-RU","@id":"https://traveling-best.ru/#/schema/logo/image/","url":"https://traveling-best.ru/wp-content/uploads/2025/02/cropped-cropped-logo-new.png","contentUrl":"https://traveling-best.ru/wp-content/uploads/2025/02/cropped-cropped-logo-new.png","width":512,"height":512,"caption":"Путешественник"},"image":{"@id":"https://traveling-best.ru/#/schema/logo/image/"}}]}'
+        ],
+        'locations' => [
+            "title" => "Отдых рядом – найти в любом регионе | Путешественник",
+            "description" => "Путешественник поможет найти глэмпинг рядом с домом или провести отпуск в глэмпинге любого регионе страны. Выбирайте и путешествуйте!",
+            "canonical" => "https://traveling-best.ru/location/",
+            "ldjson" => '{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://traveling-best.ru/location/","url":"https://traveling-best.ru/location/","name":"Отдых рядом – найти в любом регионе | Путешественник","isPartOf":{"@id":"https://traveling-best.ru/#website"},"datePublished":"2024-10-20T08:45:32+00:00","dateModified":"2025-03-25T11:01:12+00:00","description":"Путешественник поможет найти глэмпинг рядом с домом или провести отпуск в глэмпинге любого регионе страны. Выбирайте и путешествуйте!","breadcrumb":{"@id":"https://traveling-best.ru/location/#breadcrumb"},"inLanguage":"ru-RU","potentialAction":[{"@type":"ReadAction","target":["https://traveling-best.ru/location/"]}]},{"@type":"BreadcrumbList","@id":"https://traveling-best.ru/location/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Главная страница","item":"https://traveling-best.ru/"},{"@type":"ListItem","position":2,"name":"Каталог регионов"}]},{"@type":"WebSite","@id":"https://traveling-best.ru/#website","url":"https://traveling-best.ru/","name":"Путешественник","description":"","publisher":{"@id":"https://traveling-best.ru/#organization"},"potentialAction":[{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://traveling-best.ru/?s={search_term_string}"},"query-input":{"@type":"PropertyValueSpecification","valueRequired":true,"valueName":"search_term_string"}}],"inLanguage":"ru-RU"},{"@type":"Organization","@id":"https://traveling-best.ru/#organization","name":"Путешественник","url":"https://traveling-best.ru/","logo":{"@type":"ImageObject","inLanguage":"ru-RU","@id":"https://traveling-best.ru/#/schema/logo/image/","url":"https://traveling-best.ru/wp-content/uploads/2025/02/cropped-cropped-logo-new.png","contentUrl":"https://traveling-best.ru/wp-content/uploads/2025/02/cropped-cropped-logo-new.png","width":512,"height":512,"caption":"Путешественник"},"image":{"@id":"https://traveling-best.ru/#/schema/logo/image/"}}]}'
+        ],
+        'location' => [
+            "title" => "Отдых рядом – найти в любом регионе | Путешественник",
+            "description" => "Путешественник поможет найти глэмпинг рядом с домом или провести отпуск в глэмпинге любого регионе страны. Выбирайте и путешествуйте!",
+            "canonical" => "https://traveling-best.ru/location/",
+            "ldjson" => '{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://traveling-best.ru/location/","url":"https://traveling-best.ru/location/","name":"Отдых рядом – найти в любом регионе | Путешественник","isPartOf":{"@id":"https://traveling-best.ru/#website"},"datePublished":"2024-10-20T08:45:32+00:00","dateModified":"2025-03-25T11:01:12+00:00","description":"Путешественник поможет найти глэмпинг рядом с домом или провести отпуск в глэмпинге любого регионе страны. Выбирайте и путешествуйте!","breadcrumb":{"@id":"https://traveling-best.ru/location/#breadcrumb"},"inLanguage":"ru-RU","potentialAction":[{"@type":"ReadAction","target":["https://traveling-best.ru/location/"]}]},{"@type":"BreadcrumbList","@id":"https://traveling-best.ru/location/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Главная страница","item":"https://traveling-best.ru/"},{"@type":"ListItem","position":2,"name":"Каталог регионов"}]},{"@type":"WebSite","@id":"https://traveling-best.ru/#website","url":"https://traveling-best.ru/","name":"Путешественник","description":"","publisher":{"@id":"https://traveling-best.ru/#organization"},"potentialAction":[{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://traveling-best.ru/?s={search_term_string}"},"query-input":{"@type":"PropertyValueSpecification","valueRequired":true,"valueName":"search_term_string"}}],"inLanguage":"ru-RU"},{"@type":"Organization","@id":"https://traveling-best.ru/#organization","name":"Путешественник","url":"https://traveling-best.ru/","logo":{"@type":"ImageObject","inLanguage":"ru-RU","@id":"https://traveling-best.ru/#/schema/logo/image/","url":"https://traveling-best.ru/wp-content/uploads/2025/02/cropped-cropped-logo-new.png","contentUrl":"https://traveling-best.ru/wp-content/uploads/2025/02/cropped-cropped-logo-new.png","width":512,"height":512,"caption":"Путешественник"},"image":{"@id":"https://traveling-best.ru/#/schema/logo/image/"}}]}'
+        ],
+    ];
+    return $seo_pages_obj;
+}
+
+function seo_pages_render($mod, $cur_page, $pagesCount) {
+    $home_url = home_url();
+    $seo_obj = seo_pages_obj()[$mod];
+    $pages = '';
+    if ($cur_page) {
+        $pages = ($cur_page !=1)? ' - Страница ' . $cur_page . ' из ' . $pagesCount . '' : '';
+    }
+    $prev = '';
+    $next = '';
+    if ($cur_page > 1) {
+        if ($cur_page == 2) {
+            $prev = "\n".'    <link rel="prev" href="' . $home_url . '/glampings/" />';
+        } else {
+            $prev = "\n".'    <link rel="prev" href="' . $home_url . '/glampings/page/' . $cur_page-1 . '/" />';
+        }
+	    $next = "\n".'    <link rel="next" href="' . $home_url . '/glampings/page/' . $cur_page+1 . '/" />';
+    }
+    $content = '<title>' . $seo_obj['title'] . $pages . '</title>
+	<meta name="description" content="' . $seo_obj['description'] . $pages . '" />
+	<link rel="canonical" href="' . $seo_obj['canonical'] . '" />' . $prev . $next . '
+	<meta property="og:locale" content="ru_RU" />
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content="' . $seo_obj['title'] . '" />
+	<meta property="og:description" content="' . $seo_obj['description'] . $pages . '" />
+	<meta property="og:url" content="' . $seo_obj['canonical'] . '" />
+	<meta property="og:site_name" content="Путешественник" />
+	<meta property="article:modified_time" content="2025-03-26T17:44:06+00:00" />
+	<meta name="twitter:card" content="summary_large_image" />
+    <script type="application/ld+json" class="yoast-schema-graph">' . $seo_obj['ldjson'] . '</script>' . "\n";
+    return $content;
+}

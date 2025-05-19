@@ -1,0 +1,87 @@
+#topnav .logo .l-light, #topnav .logo .logo-light-mode {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#topnav .logo .logo-text {
+    font-size: 18px;
+    color: #FFFFFF;
+    letter-spacing: 0;
+}
+
+#topnav.nav-sticky .logo .logo-text {
+    color: #3c723d;
+}
+
+.footer .logo-footer {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #FFFFFF;
+}
+
+.preloader-remove {
+    visibility: hidden;
+    opacity: 0;
+}
+
+.header-search-btn i {
+    color: rgba(255, 255, 255, .5);
+}
+
+.nav-sticky .header-search-btn i {
+    color: #212529;
+}
+
+button {
+    outline: none;
+}
+
+button:active, button:focus {
+    border: none;
+    outline: none;
+}
+
+button::-moz-focus-inner {
+	border: 0;
+}
+
+.header-search-btn.btn {
+    border: none;
+    outline: none;
+}
+
+.header-search-btn.btn.show {
+    border: none;
+    outline: none;
+}
+
+.bg-half-40 {
+    padding: 40px 0;
+    background-size: cover;
+    align-self: center;
+    position: relative;
+    background-position: center center;
+}
+
+.loc-page {
+    max-height: 200px;
+    list-style: none;
+    padding-left: 0;
+    overflow: auto;
+}
+
+@media (max-width: 991px) {
+    #topnav .logo .logo-text {
+        font-size: 18px;
+        color: #3c723d;
+    }
+}
+
+@media (max-width: 440px) {
+    .pagination .page-item .page-link {
+        padding: 4px 10px;
+        font-size: 12px;
+    }
+}
