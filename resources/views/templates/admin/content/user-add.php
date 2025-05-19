@@ -27,7 +27,7 @@
 
                         <div class="mb-3">
                             <label for="email" class="form-label">E-mail <span class="text-danger">*</span></label>
-                            <input type="email" id="email" name="email" class="form-control" placeholder="E-mail" required>
+                            <input type="email" id="email" name="email" class="form-control" placeholder="E-mail" autocomplete="new-email" required>
                             <div id="name" class="invalid-feedback">Заполните E-mail пользователя.</div>
                         </div>
 
@@ -41,7 +41,7 @@
                         <div class="mb-3">
                             <label for="password" class="form-label">Пароль</label>
                             <div class="input-group input-group-merge">
-                                <input type="password" name="password" id="password" class="form-control" placeholder="Введите пароль">
+                                <input type="password" name="password" id="password" class="form-control" placeholder="Введите пароль" autocomplete="new-password">
                                 <div class="input-group-text" data-password="false">
                                     <span class="password-eye"></span>
                                 </div>

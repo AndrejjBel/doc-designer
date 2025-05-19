@@ -111,7 +111,7 @@ if ($site_settings) {
                 <?php echo csrf_field();?>
 
                 <div class="mb-0">
-                    <button type="button" name="submit" class="btn btn-info" onclick="formSiteSettings(this)">Сохранить</button>
+                    <button type="button" name="submit" class="btn btn-primary" onclick="formSiteSettings(this)">Сохранить</button>
                 </div>
 
             </form>

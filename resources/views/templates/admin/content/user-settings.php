@@ -110,7 +110,7 @@ if ($data['mod'] == 'dashboard') {
                                         <?php echo csrf_field();?>
                                         <ul class="pager wizard mb-0 list-inline">
                                             <li class="next list-inline-item float-end">
-                                                <button type="button" name="submit" class="btn btn-info">Сохранить</button>
+                                                <button type="button" name="submit" class="btn btn-primary">Сохранить</button>
                                             </li>
                                         </ul>
                                     </form>
@@ -159,7 +159,7 @@ if ($data['mod'] == 'dashboard') {
                                         <?php echo csrf_field();?>
                                         <ul class="list-inline wizard mb-0">
                                             <li class="next list-inline-item float-end">
-                                                <button type="button" name="submit" class="btn btn-info">Сохранить</button>
+                                                <button type="button" name="submit" class="btn btn-primary">Сохранить</button>
                                             </li>
                                         </ul>
                                     </form>

@@ -34,81 +34,75 @@ return [
                     ]
                 ]
             ],
-            [
-                'name' => 'Лендинги',
-                'link' => 'sidebarLandings',
-                'icon' => 'ri-pages-fill',
-                'children' => [
-                    [
-                        'name' => 'Все лендинги',
-                        'link' => '/admin/landings',
-                        'class_li' => '',
-                        'children' => []
-                    ],
-                    [
-                        'name' => 'Добавить лендинг',
-                        'link' => '/admin/landing-add',
-                        'class_li' => '',
-                        'children' => []
-                    ]
-                ]
-            ],
             // [
             //     'name' => 'Лендинги',
-            //     'link' => '/admin/landings',
+            //     'link' => 'sidebarLandings',
             //     'icon' => 'ri-pages-fill',
-            //     'children' => []
+            //     'children' => [
+            //         [
+            //             'name' => 'Все лендинги',
+            //             'link' => '/admin/landings',
+            //             'class_li' => '',
+            //             'children' => []
+            //         ],
+            //         [
+            //             'name' => 'Добавить лендинг',
+            //             'link' => '/admin/landing-add',
+            //             'class_li' => '',
+            //             'children' => []
+            //         ]
+            //     ]
             // ],
-            [
-                'name' => 'Товары',
-                'link' => 'sidebarProducts',
-                'icon' => 'ri-store-3-fill',
-                'children' => [
-                    [
-                        'name' => 'Все товары',
-                        'link' => '/admin/products',
-                        'class_li' => '',
-                        'children' => []
-                    ],
-                    [
-                        'name' => 'Добавить товар',
-                        'link' => '/admin/product-add',
-                        'class_li' => '',
-                        'children' => []
-                    ],
-                    [
-                        'name' => 'Редактировать товар',
-                        'link' => '/admin/product-edit',
-                        'class_li' => 'd-none',
-                        'children' => []
-                    ]
-                ]
-            ],
-            [
-                'name' => 'Заказы',
-                'link' => 'sidebarOrders',
-                'icon' => 'ri-shopping-basket-2-fill',
-                'children' => [
-                    [
-                        'name' => 'Все заказы',
-                        'link' => '/admin/orders',
-                        'class_li' => '',
-                        'children' => []
-                    ],
-                    [
-                        'name' => 'Добавить заказ',
-                        'link' => '/admin/order-add',
-                        'class_li' => 'pe-none',
-                        'children' => []
-                    ],
-                    [
-                        'name' => 'Редактировать заказ',
-                        'link' => '/admin/order-edit',
-                        'class_li' => 'd-none',
-                        'children' => []
-                    ]
-                ]
-            ],
+            // [
+            //     'name' => 'Товары',
+            //     'link' => 'sidebarProducts',
+            //     'icon' => 'ri-store-3-fill',
+            //     'children' => [
+            //         [
+            //             'name' => 'Все товары',
+            //             'link' => '/admin/products',
+            //             'class_li' => '',
+            //             'children' => []
+            //         ],
+            //         [
+            //             'name' => 'Добавить товар',
+            //             'link' => '/admin/product-add',
+            //             'class_li' => '',
+            //             'children' => []
+            //         ],
+            //         [
+            //             'name' => 'Редактировать товар',
+            //             'link' => '/admin/product-edit',
+            //             'class_li' => 'd-none',
+            //             'children' => []
+            //         ]
+            //     ]
+            // ],
+            // [
+            //     'name' => 'Заказы',
+            //     'link' => 'sidebarOrders',
+            //     'icon' => 'ri-shopping-basket-2-fill',
+            //     'children' => [
+            //         [
+            //             'name' => 'Все заказы',
+            //             'link' => '/admin/orders',
+            //             'class_li' => '',
+            //             'children' => []
+            //         ],
+            //         [
+            //             'name' => 'Добавить заказ',
+            //             'link' => '/admin/order-add',
+            //             'class_li' => 'pe-none',
+            //             'children' => []
+            //         ],
+            //         [
+            //             'name' => 'Редактировать заказ',
+            //             'link' => '/admin/order-edit',
+            //             'class_li' => 'd-none',
+            //             'children' => []
+            //         ]
+            //     ]
+            // ],
             [
                 'name' => 'Профиль',
                 'link' => '/admin/user-settings',

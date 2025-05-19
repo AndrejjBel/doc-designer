@@ -27,3 +27,4 @@ if (file_exists($maintenance = __DIR__ .'/../resources/maintenance.php')) {
 // Initialization.
 // Инициализация.
 require __DIR__ . '/../vendor/phphleb/framework/bootstrap.php';
+// require __DIR__ . '/../vendor/autoload.php';
