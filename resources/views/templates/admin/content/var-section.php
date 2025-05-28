@@ -279,11 +279,11 @@ if ($data['mod'] == 'dashboard') {
 
     // $id = 35;
 
-    $home_url = config('main', 'home_url');
-
-    echo '<pre>';
-    var_dump($home_url);
-    echo '</pre>';
+    // $home_url = config('main', 'home_url');
+    //
+    // echo '<pre>';
+    // var_dump($home_url);
+    // echo '</pre>';
 
     insertTemplate('/templates/admin/content/footer', ['data' => $data]);
     ?>
