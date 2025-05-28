@@ -836,6 +836,301 @@ function sidebarLanding() {
 }
 sidebarLanding();
 
+function sectionsVarsLink(elem) {
+    document.querySelector('.vars-title').innerText = elem.children[0].children[0].innerText;
+    const collapseVar = new bootstrap.Collapse('#collapseVar', {toggle: false});
+    collapseVar.hide();
+    let formData = new FormData();
+    formData.append('action', 'change_vars');
+    formData.append('var_id', elem.dataset.id);
+    formData.append('_token', document.querySelector('input[name="_token"]').value);
+    url = '/admin/fetch';
+    fetch(url, {
+        method: "POST",
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Ошибка запроса');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.dir(data);
+        varsTableChange(data);
+        elem.classList.add("active");
+    })
+    .catch(error => {
+        console.dir(error);
+    });
+}
+
+function varsTableChange(vars) {
+    const listVars = document.querySelectorAll('.list-vars a');
+    const tbody = document.querySelector('.vars-table tbody');
+    if ( !listVars.length ) return;
+    for (var variable of listVars) {
+        variable.classList.remove("active");
+    }
+    tbody.innerHTML = '';
+    if (vars.length) {
+        vars.forEach((item) => {
+            tbody.insertAdjacentHTML(
+                'beforeend',
+                `<tr id="var${item.id}">
+                <td>${item.id}</td>
+                <td>${item.title}</td>
+                <td style="width: 40%;">${item.descr}</td>
+                <td>...</td>
+                <td><a href="javascript: void(0);"
+                class="text-reset fs-16 px-1 js-var-edit"
+                data-id="${item.id}"
+                onclick="varsTableEdit(this)"
+                title="Редактировать">
+                    <i class="ri-edit-2-line"></i>
+                </a><a href="javascript: void(0);"
+                class="text-reset fs-16 px-1 ms-1 js-var-delete"
+                data-id="${item.id}"
+                onclick="varsTableDelete(this)"
+                data-bs-toggle="modal"
+                data-bs-target="#delete-var-modal"
+                title="Удалить">
+                    <i class="ri-delete-bin-line text-danger"></i>
+                </a></td>
+                </tr>`
+            );
+        });
+    } else {
+        let text = `<tr>
+            <td></td>
+            <td></td>
+            <td><h4 class="fs-16 mt-3 fl-upp">Переменные еще не созданы</h4></td>
+            <td></td>
+            <td></td>
+        </tr>`;
+        tbody.innerHTML = text;
+    }
+}
+
+function selectChange(elem) {
+    elem.classList.remove('is-invalid');
+}
+
+function inputChange(elem) {
+    elem.classList.remove('is-invalid');
+}
+
+function myModal(modaiId) {
+    const modal = document.getElementById(modaiId);
+    const myModal = new bootstrap.Modal(modal, {
+        keyboard: false
+    });
+    return myModal;
+}
+
+function formReset(modalId, formId) {
+    let form = document.getElementById(formId);
+    let modal = document.getElementById(modalId);
+    if (modal) {
+        modal.addEventListener('hidden.bs.modal', (e) => {
+            form.reset();
+            for (var variable of form.elements) {
+                variable.classList.remove('is-invalid');
+            }
+        });
+    }
+}
+formReset('modal-vargr-add', 'group_section');
+formReset('modal-var-add', 'form_var_add');
+
+function varsGrAdd() {
+    const grAddBtn = document.querySelector('#grAddBtn');
+    if (grAddBtn) {
+        const grAddModal = myModal('modal-vargr-add');
+        const warningWrap = document.querySelector('#warning-wrap');
+        const form = document.getElementById('group_section');
+
+        grAddBtn.addEventListener('click', (e) => {
+            grAddBtn.style.pointerEvents = 'none';
+            let formData = new FormData(form);
+            formData.append('action', 'create_vargr');
+            formData.append('_token', document.querySelector('input[name="_token"]').value);
+            url = '/admin/fetch';
+
+            fetch(url, {
+                method: "POST",
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Ошибка запроса');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.dir(data);
+                if (data.type == 'success') {
+                    grAddModal.hide();
+                    alertAction(warningWrap, 'Раздел создан', 'success');
+                    grAddBtn.style.pointerEvents = '';
+                    setTimeout(function(){
+                        warningWrap.innerHTML = '';
+                    }, 5000);
+                } else {
+                    if (data.parentid) {
+                        form.elements.parentid.classList.add('is-invalid');
+                        grAddBtn.style.pointerEvents = '';
+                        alertAction(warningWrap, data.parentid, 'danger');
+                        setTimeout(function(){
+                            warningWrap.innerHTML = '';
+                        }, 5000);
+                    }
+                    if (data.title) {
+                        form.elements.title.classList.add('is-invalid');
+                        grAddBtn.style.pointerEvents = '';
+                        alertAction(warningWrap, data.title, 'danger');
+                        setTimeout(function(){
+                            warningWrap.innerHTML = '';
+                        }, 5000);
+                    }
+                }
+            })
+            .catch(error => {
+                console.dir(error);
+            });
+        });
+    }
+}
+varsGrAdd();
+
+function varAdd() {
+    const varAddBtn = document.querySelector('#varAddBtn');
+
+    if (varAddBtn) {
+        const varAddModal = myModal('modal-var-add');
+        const warningWrap = document.querySelector('#warning-wrap');
+        const form = document.getElementById('form_var_add');
+
+        varAddBtn.addEventListener('click', (e) => {
+            varAddBtn.style.pointerEvents = 'none';
+            let formData = new FormData(form);
+            formData.append('action', 'create_var');
+            formData.append('_token', document.querySelector('input[name="_token"]').value);
+            url = '/admin/fetch';
+
+            fetch(url, {
+                method: "POST",
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Ошибка запроса');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.dir(data);
+                if (data.type == 'success') {
+                    varAddModal.hide();
+                    alertAction(warningWrap, 'Переменная создана', 'success');
+                    varAddBtn.style.pointerEvents = '';
+                    setTimeout(function(){
+                        warningWrap.innerHTML = '';
+                    }, 5000);
+                } else {
+                    if (data.parentid) {
+                        form.elements.parentid.classList.add('is-invalid');
+                        varAddBtn.style.pointerEvents = '';
+                        alertAction(warningWrap, data.parentid, 'danger');
+                        setTimeout(function(){
+                            warningWrap.innerHTML = '';
+                        }, 5000);
+                    }
+                    if (data.title) {
+                        form.elements.title.classList.add('is-invalid');
+                        varAddBtn.style.pointerEvents = '';
+                        alertAction(warningWrap, data.title, 'danger');
+                        setTimeout(function(){
+                            warningWrap.innerHTML = '';
+                        }, 5000);
+                    }
+                }
+            })
+            .catch(error => {
+                console.dir(error);
+            });
+        });
+    }
+}
+varAdd();
+
+function varsTableDelete(elem) {
+    const deleteVarModal = document.getElementById('delete-var-modal');
+    const deleteVarTitle = document.querySelectorAll('.delete-var-title');
+    const deleteVarBtn = document.querySelector('#delete-var');
+    if (deleteVarBtn) {
+        deleteVarBtn.dataset.id = elem.dataset.id;
+        if (elem.dataset.par) {
+            deleteVarBtn.dataset.par = elem.dataset.par;
+        }
+        deleteVarModal.addEventListener('hidden.bs.modal', (e) => {
+            deleteVarBtn.dataset.id = 0;
+            deleteVarBtn.dataset.par = '';
+        })
+    }
+    if (deleteVarTitle.length) {
+        deleteVarTitle.forEach((item) => {
+            item.innerText = document.getElementById('title'+elem.dataset.id).innerText;
+        });
+        deleteVarModal.addEventListener('hidden.bs.modal', (e) => {
+            deleteVarTitle.forEach((item) => {
+                item.innerText = '';
+            });
+        })
+    }
+}
+
+function varsDelete(elem) {
+    const warningWrap = document.querySelector('#warning-wrap');
+    console.dir(elem.dataset.id);
+    console.dir(elem.dataset.par);
+
+    let formData = new FormData();
+    formData.append('action', 'delete_var');
+    formData.append('var_id', elem.dataset.id);
+    if (elem.dataset.par) {
+        formData.append('root', elem.dataset.par);
+    }
+    formData.append('_token', document.querySelector('input[name="_token"]').value);
+    url = '/admin/fetch';
+
+    fetch(url, {
+        method: "POST",
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Ошибка запроса');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.dir(data);
+        alertAction(warningWrap, data.message.text, 'success');
+        document.querySelector('#var'+elem.dataset.id).remove();
+        setTimeout(function(){
+            warningWrap.innerHTML = '';
+        }, 5000);
+    })
+    .catch(error => {
+        console.dir(error);
+    });
+}
+
+function varsTableEdit(elem) {
+    console.dir(elem.dataset.id);
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     var eventCalllback = function (e) {
         var el = e.target,

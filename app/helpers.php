@@ -1,8 +1,7 @@
 <?php
 use Hleb\Static\Request;
 use App\Models\{
-    PostModel,
-    OrdersModel,
+    VarsModel,
     Admin\AdminModel,
     Myorm\MyormModel,
     User\UsersModel
@@ -685,8 +684,9 @@ function mini_cart_products($data) {
     }
 }
 
-function navigation_admin_left_html($nav) {
-    $nav = config('navigation', $nav.'_nav');
+function navigation_admin_left_html($nav, $vars) {
+    // $nav = config('navigation', $nav.'_nav');
+    $nav = nav_obj($vars);
     $id = ($nav['container_id'])? ' id="' . $nav['container_id'] . '"' : '';
     $class = ($nav['container_class'])? ' class="' . $nav['container_class'] . '"' : '';
     $content = '<' . $nav['container'] . $id . $class . '>';
@@ -706,7 +706,7 @@ function navigation_admin_left_html($nav) {
                 } else {
                     $content .= '<li>';
                 }
-                $content .= '<a href="' . $children['link'] . '">' . $children['name'] . '</a>';
+                $content .= '<a href="' . $children['link'] . '" title="' . $children['name'] . '">' . $children['name'] . '</a>';
                 $content .= '</li>';
             }
             $content .= '</ul>';
@@ -762,7 +762,7 @@ function cost_of_request($model, $type) {
     $separator = '-';
     $m_arr = explode($separator, $model);
     $m_str = $m_arr[0].$separator.$m_arr[1].$separator.$m_arr[2];
-    
+
     return cost_type_arr($m_str, $type);
 }
 
@@ -783,6 +783,11 @@ function cost_type_arr($model, $type) {
         ];
     }
     return $cost[$model];
+}
+
+function paVars($id) {
+    $vars_parent = VarsModel::getVarsParentIdGr($id);
+    return $vars_parent;
 }
 
 //Отправка в Телеграм

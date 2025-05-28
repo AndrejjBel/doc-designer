@@ -456,6 +456,8 @@ return [
     */
     'custom.function.files' => [
         '/app/helpers.php',
+        '/app/nav.php',
+        '/app/inc.php'
     ],
 
     /*

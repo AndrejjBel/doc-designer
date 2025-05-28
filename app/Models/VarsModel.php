@@ -5,7 +5,7 @@ namespace App\Models;
 use Hleb\Base\Model;
 use Hleb\Static\DB;
 
-class GlampingModel extends Model
+class VarsModel extends Model
 {
     public static function create(array $params): int
     {
@@ -66,30 +66,6 @@ class GlampingModel extends Model
                 post_modified      = :post_modified
                         WHERE id   = :id";
 
-        return DB::run($sql, $params);
-    }
-
-    public static function editThumb($params)
-    {
-        $sql = "UPDATE glampings SET post_thumb_img = :post_thumb_img WHERE id = :id";
-        return DB::run($sql, $params);
-    }
-
-    public static function editGallery($params)
-    {
-        $sql = "UPDATE glampings SET post_gallery_img = :post_gallery_img WHERE id = :id";
-        return DB::run($sql, $params);
-    }
-
-    public static function editAcc($params)
-    {
-        $sql = "UPDATE glampings SET post_meta_acc = :post_meta_acc WHERE id = :id";
-        return DB::run($sql, $params);
-    }
-
-    public static function editStatus($params)
-    {
-        $sql = "UPDATE glampings SET post_status = :post_status WHERE id = :id";
         return DB::run($sql, $params);
     }
 
@@ -237,73 +213,104 @@ class GlampingModel extends Model
         return  DB::run($sql, ['post_status' => $post_status])->fetchAll();
     }
 
-    public static function getPostsAll()
+    // Vars
+    public static function create_vars_group(array $params): int
+    {
+        $sql = "INSERT INTO vars(parentid,
+                                    isgr,
+                                    title)
+
+                                VALUES(:parentid,
+                                    :isgr,
+                                    :title)";
+
+        DB::run($sql, $params);
+        $sql_last_id =  DB::run("SELECT LAST_INSERT_ID() as last_id")->fetch();
+        return $sql_last_id['last_id'];
+    }
+
+    public static function create_var(array $params): int
+    {
+        $sql = "INSERT INTO vars(parentid,
+                                    isgr,
+                                    title,
+                                    descr,
+                                    active,
+                                    type,
+                                    typedata,
+                                    captholder,
+                                    exthtml,
+                                    extdata)
+
+                                VALUES(:parentid,
+                                    :isgr,
+                                    :title,
+                                    :descr,
+                                    :active,
+                                    :type,
+                                    :typedata,
+                                    :captholder,
+                                    :exthtml,
+                                    :extdata)";
+
+        DB::run($sql, $params);
+        $sql_last_id =  DB::run("SELECT LAST_INSERT_ID() as last_id")->fetch();
+        return $sql_last_id['last_id'];
+    }
+
+    public static function getVarsAllTest()
     {
         $string = "ORDER BY post_title ASC";
         $sql = "SELECT * FROM glampings $string";
         return DB::run($sql)->fetchAll();
     }
 
-    public static function getPostsHome($limit=8, $post_status='publish', $order='views', $order_by='DESC')
+    public static function getVarsAll()
     {
-        $where = "WHERE post_status = :post_status";
-        $params = [
-            'post_status' => $post_status,
-            'limit' => $limit
-        ];
-        $string = "ORDER BY $order $order_by LIMIT";
-        $sql = "SELECT post_title, post_url, post_thumb_img, post_price, post_meta, rating, rating_data, views
-                FROM glampings
-                $where
-                $string
-                :limit";
-        return DB::run($sql, $params)->fetchAll();
+        $sql = "SELECT * FROM vars";
+        return DB::run($sql)->fetchAll();
     }
 
-    public static function restapi_create(array $params): int
+    public static function getVarsParent($parentid)
     {
-        $sql = "INSERT INTO glampings(post_title,
-                                    post_content,
-                                    post_slug,
-                                    post_url,
-                                    post_status,
-                                    post_author,
-                                    post_term,
-                                    post_tags,
-                                    post_thumb_img,
-                                    post_gallery_img,
-                                    post_price,
-                                    post_working,
-                                    post_seo,
-                                    post_meta,
-                                    post_meta_acc,
-                                    views,
-                                    temp_data,
-                                    post_date)
+        $sql = "SELECT * FROM vars WHERE parentid = :parentid";
+        return  DB::run($sql, ['parentid' => $parentid])->fetchAll();
+    }
 
-                                VALUES(:post_title,
-                                    :post_content,
-                                    :post_slug,
-                                    :post_url,
-                                    :post_status,
-                                    :post_author,
-                                    :post_term,
-                                    :post_tags,
-                                    :post_thumb_img,
-                                    :post_gallery_img,
-                                    :post_price,
-                                    :post_working,
-                                    :post_seo,
-                                    :post_meta,
-                                    :post_meta_acc,
-                                    :views,
-                                    :temp_data,
-                                    :post_date)";
+    public static function getVarsParentId($parentid)
+    {
+        $sql = "SELECT id FROM vars WHERE parentid = :parentid";
+        return  DB::run($sql, ['parentid' => $parentid])->fetchAll();
+    }
 
-        DB::run($sql, $params);
+    public static function getVarsParentIdGr($parentid, $isgr=1)
+    {
+        $sql = "SELECT id FROM vars WHERE parentid = :parentid AND isgr = :isgr";
+        return  DB::run($sql, ['parentid' => $parentid, 'isgr' => $isgr])->fetchAll();
+    }
 
-        $sql_last_id =  DB::run("SELECT LAST_INSERT_ID() as last_id")->fetch();
+    public static function getVarsParentSections($parentid, $isgr=1)
+    {
+        $string = "ORDER BY title ASC";
+        $sql = "SELECT * FROM vars WHERE parentid = :parentid AND isgr = :isgr $string";
+        return  DB::run($sql, ['parentid' => $parentid, 'isgr' => $isgr])->fetchAll();
+    }
 
-        return $sql_last_id['last_id'];
+    public static function getVarForId($var_id)
+    {
+        $sql = "SELECT * FROM vars WHERE id = :id";
+        return DB::run($sql, ['id' => $var_id])->fetch();
+    }
+
+    public static function delete_var($var_id)
+    {
+        $sql = "DELETE FROM vars WHERE id = :id";
+        return DB::run($sql, ['id' => $var_id]);
+    }
+
+    public static function delete_var_parent($parent_id)
+    {
+        $sql = "DELETE FROM vars WHERE id IN (:parent_id)";
+        return DB::run($sql, ['parent_id' => $parent_id]);
     }
 }

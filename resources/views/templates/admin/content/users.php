@@ -122,9 +122,11 @@
     // $type = 'completion';
     //
     // $cost = cost_of_request($m, $type);
-    //
+
+    // echo __DIR__;
+
     // echo '<pre>';
-    // var_dump($cost);
+    // var_dump(vars_sections());
     // echo '</pre>';
     ?>
 

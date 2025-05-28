@@ -1,5 +1,12 @@
 <?php
 insertTemplate('/templates/header-auth', ['data' => $data]);
+$site_settings = json_decode(site_settings('site_settings'));
+$site_title = '';
+if ($site_settings) {
+    if (isset($site_settings->site_title)) {
+        $site_title = $site_settings->site_title;
+    }
+}
 $form_warning = '';
 $form_warning_disp = ' d-none';
 $form_warning_type = '';
@@ -38,8 +45,8 @@ if (isset($_GET['pass'])) {
                     <div class="card bg-transparent mb-0">
                         <div class="auth-brand">
                             <a href="/" class="logo-light d-flex gap-2 align-items-center">
-                                <img src="../public/images/logo-txtgen1.png" alt="logo" height="22">
-                                <span class="fs-4">TxtGen</span>
+                                <img src="../public/images/favicon/android-chrome-512x512.png" alt="logo" height="22">
+                                <span class="fs-4">Конструктор документов</span>
                             </a>
                         </div>
 
@@ -63,7 +70,9 @@ if (isset($_GET['pass'])) {
                                 </div>
 
                                 <div class="mb-3">
-                                    <!-- <a href="/forgot-password" class="float-end fs-12">Забыли пароль?</a> -->
+                                    <?php if (isset($site_settings->signin_vision)) { ?>
+                                        <a href="/forgot-password" class="float-end fs-12">Забыли пароль?</a>
+                                    <?php } ?>
                                     <label for="password" class="form-label">Пароль</label>
                                     <div class="input-group input-group-merge">
                                         <input type="password" name="password" id="password" class="form-control" placeholder="Введите пароль">
@@ -89,11 +98,13 @@ if (isset($_GET['pass'])) {
                     </div>
                 </div>
 
-                <!-- <div class="row mt-3">
-                    <div class="col-12 text-center">
-                        <p class="text-muted bg-body">Нет учетной записи? <a href="/signin" class="text-muted ms-1 link-offset-3 text-decoration-underline"><b>Регистрация</b></a></p>
+                <?php if (isset($site_settings->signin_vision)) { ?>
+                    <div class="row mt-3">
+                        <div class="col-12 text-center">
+                            <p class="text-muted bg-body">Нет учетной записи? <a href="/signin" class="text-muted ms-1 link-offset-3 text-decoration-underline"><b>Регистрация</b></a></p>
+                        </div>
                     </div>
-                </div> -->
+                <?php } ?>
 
             </div>
         </div>

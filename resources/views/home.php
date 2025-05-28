@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Maintenance | Doc designer</title>
+    <title>Обслуживание | Конструктор документов</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Сайт находится на обслуживании" name="description" />
 
@@ -196,6 +196,11 @@
                                 <img src="../public/images/svg/maintenance.svg" height="150" alt="File not found Image">
                                 <h3 class="mt-4">Сайт находится на обслуживании</h3>
                                 <p class="text-muted">Мы делаем систему еще круче. Скоро вернемся.</p>
+                                <?php if (is_login()) { ?>
+                                    <a href="/admin" class="btn btn-primary">В админку</a>
+                                <?php } else { ?>
+                                    <a href="/login" class="btn btn-primary">Вход</a>
+                                <?php } ?>
                             </div>
                         </div>
                     </div>
@@ -207,7 +212,7 @@
 
     <footer class="footer footer-alt fw-medium">
         <span class="bg-body">
-            <script>document.write(new Date().getFullYear())</script> © Doc designer
+            <script>document.write(new Date().getFullYear())</script> © Конструктор документов
         </span>
     </footer>
     <script src="../public/js/admin/vendor.min.js"></script>

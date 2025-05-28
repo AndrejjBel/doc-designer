@@ -1,5 +1,6 @@
 <?php
 $currUser = userAllData();
+$home_url = home_url();
 ?>
 <div class="navbar-custom">
     <div class="topbar container-fluid">
@@ -7,18 +8,18 @@ $currUser = userAllData();
             <div class="logo-topbar">
                 <a href="/" class="logo-light">
                     <span class="logo-lg">
-                        <img src="../public/images/logo.png" alt="logo">
+                        <img src="<?php echo $home_url;?>/public/images/logo.png" alt="logo">
                     </span>
                     <span class="logo-sm">
-                        <img src="../public/images/logo-sm.png" alt="small logo">
+                        <img src="<?php echo $home_url;?>/public/images/logo-sm.png" alt="small logo">
                     </span>
                 </a>
                 <a href="/" class="logo-dark">
                     <span class="logo-lg">
-                        <img src="../public/images/logo-dark.png" alt="dark logo">
+                        <img src="<?php echo $home_url;?>/public/images/logo-dark.png" alt="dark logo">
                     </span>
                     <span class="logo-sm">
-                        <img src="../public/images/logo-sm.png" alt="small logo">
+                        <img src="<?php echo $home_url;?>/public/images/logo-sm.png" alt="small logo">
                     </span>
                 </a>
             </div>
@@ -44,7 +45,7 @@ $currUser = userAllData();
             <li class="dropdown">
                 <a class="nav-link dropdown-toggle arrow-none nav-user px-2" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                     <span class="account-user-avatar">
-                        <img src="../public/images/no-avatar.png" alt="user-image" width="32" class="rounded-circle">
+                        <img src="<?php echo $home_url;?>/public/images/no-avatar.png" alt="user-image" width="32" class="rounded-circle">
                     </span>
                     <span class="d-lg-flex flex-column gap-1 d-none">
                         <h5 class="my-0"><?php echo ($currUser['first_name'])? $currUser['first_name'] : $currUser['username'];?></h5>

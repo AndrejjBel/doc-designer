@@ -2,6 +2,12 @@ html[data-sidenav-size=condensed] .wrapper .content-page {
     min-height: calc(100vh - var(--ct-topbar-height));
 }
 
+html[data-sidenav-size=condensed] .wrapper .leftside-menu .side-nav .side-nav-item:hover>.collapse>ul a {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .text-logo {
     color: #FFFFFF;
 }
@@ -238,6 +244,27 @@ td .status-value {
     color: #d89e70;
 }
 
+.list-group-item h5::first-letter {
+    text-transform: uppercase;
+}
+
+.parent-var-table {
+    font-weight: 900;
+}
+
+.table-sm .parent-var-title {
+    padding: .5rem .5rem .5rem 30px;
+}
+
+.fl-upp::first-letter {
+    text-transform: uppercase;
+}
+
+.delete-var-title {
+    font-size: 1.2em;
+    font-weight: 900;
+}
+
 @media (max-width: 867px) {
     .post-gallery .filepond--item {
         width: calc((100% - 2em) / 2);
@@ -248,5 +275,9 @@ td .status-value {
     .add-post-info {
         top: 90px;
         right: 10px;
+    }
+
+    .table-sm .parent-var-title {
+        padding: .5rem .5rem .5rem 20px;
     }
 }

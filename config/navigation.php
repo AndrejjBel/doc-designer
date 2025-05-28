@@ -3,6 +3,23 @@
  * Структура элементов навигации сайта и админки
  *
 */
+
+$vars = [
+    [
+        'name' => 'Все переменные',
+        'link' => '/admin/vars',
+        'class_li' => '',
+        'children' => []
+    ],
+    [
+        'name' => 'Добавить переменную',
+        'link' => '/admin/vars-add',
+        'class_li' => '',
+        'children' => []
+    ]
+];
+
+// $vars = vars_sections();
 return [
     'admin_nav' => [
         'container'       => 'ul',
@@ -14,6 +31,12 @@ return [
                 'link' => '/admin',
                 'icon' => 'bi bi-speedometer2', // ri-dashboard-3-fill
                 'children' => []
+            ],
+            [
+                'name' => 'Переменные',
+                'link' => 'sidebarVars',
+                'icon' => 'bi bi-hash', // ri-dashboard-3-fill
+                'children' => $vars
             ],
             [
                 'name' => 'Пользователи',
