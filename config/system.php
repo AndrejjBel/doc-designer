@@ -66,6 +66,7 @@ return [
     │
     */
     'project.paths' => [
+        'home' => 'home-url',
         'logs' => '/storage/logs',
         // ,,, //
     ],

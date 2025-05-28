@@ -1,5 +1,5 @@
 <?php
-$home_url = home_url();
+$home_url = config('main', 'home_url');
 $meta_robots = '';
 // $site_settings = json_decode(site_settings('site_settings'));
 // if ($site_settings) {
