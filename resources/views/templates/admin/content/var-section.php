@@ -277,10 +277,10 @@ if ($data['mod'] == 'dashboard') {
 
     // $randomCode = random_int(1000, 9999);
 
-    $id = 35;
-    echo '<pre>';
-    var_dump(paVars($id));
-    echo '</pre>';
+    // $id = 35;
+    // echo '<pre>';
+    // var_dump(paVars($id));
+    // echo '</pre>';
 
     insertTemplate('/templates/admin/content/footer', ['data' => $data]);
     ?>
