@@ -271,6 +271,12 @@ class VarsModel extends Model
         return DB::run($sql)->fetchAll();
     }
 
+    public static function getVarsAllJson()
+    {
+        $sql = "SELECT id, parentid, isgr, title, descr FROM vars";
+        return DB::run($sql)->fetchAll();
+    }
+
     public static function getVarsParent($parentid)
     {
         $sql = "SELECT * FROM vars WHERE parentid = :parentid";

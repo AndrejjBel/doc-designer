@@ -138,7 +138,6 @@ function options_vars($items) {
 
 function options_vars_group($items, $gr_id) {
     $items_new = array_multisort_value($items, 'title', SORT_ASC);
-    // usort($items, "cmp");
     $content = '<option value="no">Выберите группу</option>';
     $content .= '<option value="0">Корневая группа</option>';
     foreach ($items_new as $item) {
@@ -177,6 +176,116 @@ function count_var_root($vars, $root_id) {
         }
     }
     return $count;
+}
+
+function products_group_options($items, $prod_gr=0) {
+    $items_new = array_multisort_value($items, 'title', SORT_ASC);
+    $content = '';
+    foreach ($items_new as $item) {
+        if ($item['parentid'] == 0) {
+            $content .= '<optgroup label="' . $item['title'] . '">';
+
+            foreach ($items_new as $item_par) {
+                if ($item_par['parentid'] == $item["id"] && $item_par['isgr'] == 1) {
+                    if ($prod_gr == $item_par['id']) {
+                        $content .= '<option value="' . $item_par['id'] . '" selected>' . $item_par['title'] . '</option>';
+                    } else {
+                        $content .= '<option value="' . $item_par['id'] . '">' . $item_par['title'] . '</option>';
+                    }
+                }
+            }
+        }
+    }
+    $content .= '</optgroup>';
+    return $content;
+}
+
+function vars_products_create($items, $varsProduct, $vars_prod, $product_id=0) {
+    $vars = explode(',', $vars_prod);
+    // foreach ($varsProduct as $var) {
+    //     $vars[] = $var['varid'];
+    // }
+    $items_new = array_multisort_value($items, 'title', SORT_ASC);
+    $content = '';
+    foreach ($items_new as $item) {
+        if ($item['parentid'] != 0 && $item['isgr'] == 1) {
+            if (count_var($items_new, $item['id'])) {
+                $content .= '<div id="cr' . $item['id'] . '" class="gr-vars" data-grid-cr="' . $item['parentid'] . '">';
+                $content .= '<div class="h4 mt-2">' . $item['title'] . '</div>';
+
+                foreach ($items_new as $item_par) {
+                    if ($item_par['parentid'] == $item["id"] && $item_par['isgr'] == 0) {
+                        if (in_array($item_par["id"], $vars)) {
+                            $content .= '<button type="button"
+                                class="btn btn-outline-secondary w-100 text-start btn-var-prod"
+                                data-varid-cr="' . $item_par["id"] . '"
+                                data-parid-cr="' . $item_par["parentid"] . '"
+                                data-prodid-cr="' . $product_id . '"
+                                onclick="btnVarAddProd(this)"
+                                disabled>';
+                            $content .= '<strong>' . $item_par['title'] . '</strong> - ';
+                            $content .= $item_par['descr'];
+                            $content .= '</button>';
+                        } else {
+                            $content .= '<button type="button"
+                                class="btn btn-outline-secondary w-100 text-start btn-var-prod"
+                                data-varid-cr="' . $item_par["id"] . '"
+                                data-parid-cr="' . $item_par["parentid"] . '"
+                                data-prodid-cr="' . $product_id . '"
+                                onclick="btnVarAddProd(this)">';
+                            $content .= '<strong>' . $item_par['title'] . '</strong> - ';
+                            $content .= $item_par['descr'];
+                            $content .= '</button>';
+                        }
+                    }
+                }
+                $content .= '</div>';
+            }
+        }
+    }
+    return $content;
+}
+
+function vars_for_product_create($varsProduct, $varsArr, $product_id, $vars_prod) {
+    // $vars = [];
+    // foreach ($varsProduct as $var) {
+    //     $vars[] = $var['varid'];
+    // }
+    $search = explode(',', $vars_prod);
+    $newVars = array_filter($varsArr, function($_array) use ($search){
+        return in_array($_array['id'], $search);
+    });
+
+    $varsArrNew = array_multisort_value($varsArr, 'title', SORT_ASC);
+    $items_new = array_multisort_value($newVars, 'title', SORT_ASC);
+    $content = '';
+    foreach ($varsArrNew as $item) {
+        if ($item['parentid'] != 0 && $item['isgr'] == 1) {
+            if (count_var($items_new, $item['id'])) {
+                $content .= '<div id="pr' . $item['id'] . '" class="gr-vars" data-grid-pr="' . $item['parentid'] . '">';
+                $content .= '<div class="h4 mt-2">' . $item['title'] . '</div>';
+
+                foreach ($items_new as $item_par) {
+                    if ($item_par['parentid'] == $item["id"]) {
+                        $content .= '<button type="button" class="btn btn-outline-secondary w-100 text-start btn-var-prod" data-varid-pr="' . $item_par["id"] . '" data-parid-pr="' . $item_par["parentid"] . '">';
+                        $content .= '<strong>' . $item_par['title'] . '</strong> - ';
+                        $content .= $item_par['descr'];
+                        $content .= '<span class="btn-var-del-prod float-end"
+                            data-varid-pr="' . $item_par["id"] . '"
+                            data-parid-pr="' . $item['id'] . '"
+                            data-prodid-pr="' . $product_id . '"
+                            title="Удалить переменную"
+                            onclick="btnVarDelProd(this)">
+                        <i class="ri-delete-bin-line text-danger"></i>
+                        </span>';
+                        $content .= '</button>';
+                    }
+                }
+                $content .= '</div>';
+            }
+        }
+    }
+    return $content;
 }
 
 function cmp($a, $b) {

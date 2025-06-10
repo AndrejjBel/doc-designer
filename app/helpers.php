@@ -1,11 +1,17 @@
 <?php
 use Hleb\Static\Request;
 use App\Models\{
+    ProductsModel,
     VarsModel,
     Admin\AdminModel,
     Myorm\MyormModel,
     User\UsersModel
 };
+
+$site_settings = json_decode(site_settings('site_settings'));
+define('LIMIT_POSTS_ADMIN', ($site_settings->post_limit_admin)? (int)$site_settings->post_limit_admin : 12);
+define('LIMIT_POSTS_FRONT', ($site_settings->post_limit_site)? (int)$site_settings->post_limit_site : 12);
+define('SITE_SETTINGS', $site_settings);
 
 /**
  * Gets the URL of the site's main page
@@ -790,6 +796,81 @@ function paVars($id) {
     return $vars_parent;
 }
 
+function getGroupsProd($prod_arr, $id) {
+    $title = '';
+    $title_par = '';
+    $search = [$id];
+    $newArray = array_filter($prod_arr, function($_array) use ($search){
+        return in_array($_array['id'], $search);
+    });
+    reset($newArray);
+    $new = current($newArray);
+    if ($new) {
+        $title = $new['title'];
+
+        if ($new['parentid']) {
+            $search_par = [$new['parentid']];
+            $newArray_par = array_filter($prod_arr, function($_array) use ($search_par){
+                return in_array($_array['id'], $search_par);
+            });
+            reset($newArray_par);
+            $new_par = current($newArray_par);
+            $title_par = $new_par['title'];
+        }
+    }
+
+    if ($title_par || $title) {
+        $res = implode("<br>", [$title_par, $title]);
+    } else {
+        $res = '<span class="text-danger">Нет группы</span>';
+    }
+
+    return $res;
+}
+
+function productGroup($arr, $value=0) {
+    echo '<option value="0">Все группы</option>';
+    foreach ($arr as $cat) {
+        if ($cat['parentid'] == 0) {
+            echo '<option value="' . $cat['id'] . '"' . selected($value, $cat['id']) . '>' . $cat['title'] . '</option>';
+        }
+    }
+}
+
+function varPageGroupTitile($vars, $var_id) {
+    $search = [$var_id];
+    $newArray = array_filter($vars, function($_array) use ($search){
+        return in_array($_array['id'], $search);
+    });
+    reset($newArray);
+    $new = current($newArray);
+    return $new['title'];
+}
+
+function varsForProduct($varsProduct, $varsArr) {
+    $vars = explode(',', $varsProduct);
+    // foreach ($varsProduct as $var) {
+    //     $vars[] = $var['varid'];
+    // }
+    $search = $vars;
+    $newVars = array_filter($varsArr, function($_array) use ($search){
+        return in_array($_array['id'], $search);
+    });
+
+    $content = '';
+    foreach ($newVars as $var) {
+        $content .= '<div class="vars-item d-flex gap-2 align-items-start mb-1" data-vit="' . $var['id'] . '">';
+        $content .= '<button type="button"
+            class="btn btn-sm btn-outline-secondary flex-grow-0 flex-shrink-0 text-truncate"
+            data-clipboard-text="#' . $var['title'] . '#">
+            #' . $var['title'] . '#
+            </button>';
+        $content .= '<span>' . $var['descr'] . '</span>';
+        $content .= '</div>';
+    }
+    echo $content;
+}
+
 //Отправка в Телеграм
 function message_to_telegram($text, $chatid) {
     $tg_token = '5820237672:AAFAuLq18Zqy0kPW77E5Dk37_UH7xWpfgYM';
@@ -809,4 +890,27 @@ function message_to_telegram($text, $chatid) {
         )
     );
     curl_exec($ch);
+}
+
+function prodVarsAdd() {
+    $products = ProductsModel::getProductsNogr();
+    $products_ids = [];
+    foreach ($products as $product) {
+        $products_ids[] = $product['id'];
+    }
+
+    foreach ($products_ids as $product) {
+        $vars_prod = ProductsModel::getVarsForProduct($product);
+        $vars = [];
+        foreach ($vars_prod as $var) {
+            $vars[] = $var['varid'];
+        }
+
+        ProductsModel::editVars([
+            'id' => $product,
+            'vars' => implode(',', $vars)
+        ]);
+    }
+
+    return $products_ids;
 }

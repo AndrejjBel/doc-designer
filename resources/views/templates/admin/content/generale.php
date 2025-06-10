@@ -19,7 +19,7 @@
                 <div class="col-12">
                     <div class="mb-4">
 
-                        <h1 class="page-title">Консоль</h1>                        
+                        <h1 class="page-title">Консоль</h1>
 
                     </div>
                 </div>
@@ -29,6 +29,13 @@
 
     </div>
 
-    <?php insertTemplate('/templates/admin/content/footer', ['data' => $data]);?>
+    <?php insertTemplate('/templates/admin/content/footer', ['data' => $data]);
+
+    // echo '<pre>';
+    // var_dump($data['products']);
+    // echo '</pre>';
+
+
+    ?>
 
 </div>

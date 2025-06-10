@@ -16,14 +16,13 @@ class AuthController extends Controller
                 $db = MyormModel::dbc();
                 $auth = new \Delight\Auth\Auth($db);
     			if ($_POST['actions'] === 'login') {
-    				if ($_POST['remember'] == 1) {
-    					// keep logged in for one year
-    					$rememberDuration = (int) (60 * 60 * 24 * 365.25);
-    				}
-    				else {
-    					// do not keep logged in after session ends
-    					$rememberDuration = null;
-    				}
+                    $rememberDuration = null;
+                    if (array_key_exists('remember', $_POST)) {
+                        if ($_POST['remember'] == 1) {
+        					// keep logged in for one year
+        					$rememberDuration = (int) (60 * 60 * 24 * 365.25);
+        				}
+                    }
     				try {
                         if (filter_var($_POST['login'], FILTER_VALIDATE_EMAIL)) {
                             $auth->login($_POST['login'], $_POST['password'], $rememberDuration);

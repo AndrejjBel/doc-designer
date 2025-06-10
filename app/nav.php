@@ -21,6 +21,26 @@ function nav_obj($vars_obj) {
         'class_li' => '',
         'children' => []
     ];
+    $products = [
+        [
+            'name' => 'Все шаблоны',
+            'link' => '/admin/products',
+            'class_li' => '',
+            'children' => []
+        ],
+        [
+            'name' => 'Создать шаблон',
+            'link' => '/admin/product-add',
+            'class_li' => '',
+            'children' => []
+        ],
+        [
+            'name' => 'Редактировать шаблон',
+            'link' => '/admin/product-edit',
+            'class_li' => 'd-none',
+            'children' => []
+        ]
+    ];
     // $vars[] = [
     //     'name' => 'Добавить группу',
     //     'link' => '/admin/vars-add',
@@ -37,6 +57,12 @@ function nav_obj($vars_obj) {
                 'link' => '/admin',
                 'icon' => 'bi bi-speedometer2', // ri-dashboard-3-fill
                 'children' => []
+            ],
+            [
+                'name' => 'Шаблоны',
+                'link' => 'sidebarProducts',
+                'icon' => 'ri-store-2-line', // ri-dashboard-3-fill
+                'children' => $products
             ],
             [
                 'name' => 'Переменные',

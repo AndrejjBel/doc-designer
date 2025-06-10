@@ -17,10 +17,10 @@ if ($data['mod'] == 'dashboard') {
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="/<?php echo $data['mod']?>"><?php echo $br_gen;?></a></li>
-                                <li class="breadcrumb-item active">Переменные</li>
+                                <li class="breadcrumb-item active">Группа - <?php echo varPageGroupTitile($data['vars'], $data['var_id']);?></li>
                             </ol>
                         </div>
-                        <h4 class="page-title">Переменные</h4>
+                        <h4 class="page-title">Группа - <?php echo varPageGroupTitile($data['vars'], $data['var_id']);?></h4>
                     </div>
                 </div>
             </div>
@@ -267,12 +267,15 @@ if ($data['mod'] == 'dashboard') {
 
     // $array = $data['vars'];
     // $array_pi = $data['vars_parent'];
-    //
-    // $search = [$array_pi[0]['id']];
-    // $newArray = array_filter($array, function($_array) use ($search){
-    //     return in_array($_array['parentid'], $search);
+
+    // $search = [$data['var_id']];
+    // $newArray = array_filter($data['vars'], function($_array) use ($search){
+    //     return in_array($_array['id'], $search);
     // });
     //
+    // reset($newArray);
+    // $new = current($newArray);
+
     // $array_new = array_multisort_value($newArray, 'title', SORT_ASC);
 
     // $randomCode = random_int(1000, 9999);
@@ -280,9 +283,9 @@ if ($data['mod'] == 'dashboard') {
     // $id = 35;
 
     // $home_url = config('main', 'home_url');
-    //
+
     // echo '<pre>';
-    // var_dump($home_url);
+    // var_dump($new);
     // echo '</pre>';
 
     insertTemplate('/templates/admin/content/footer', ['data' => $data]);

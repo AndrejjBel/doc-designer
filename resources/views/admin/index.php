@@ -1,10 +1,15 @@
 <?php
 use App\Models\{
-    VarsModel
+    VarsModel,
+    ProductsModel
 };
 $vars = VarsModel::getVarsAll();
-$data['site_settings'] = json_decode(site_settings('site_settings'));
+$varsJson = VarsModel::getVarsAllJson();
+$products_gr = ProductsModel::getProductsNav();
+$data['site_settings'] = SITE_SETTINGS;
 $data['vars'] = $vars;
+$data['varsJson'] = $varsJson;
+$data['products_gr'] = $products_gr;
 insertTemplate('/templates/admin/header', ['data' => $data]);
 insertTemplate('/templates/admin/navbar', ['data' => $data]);
 insertTemplate('/templates/admin/leftside-menu', ['data' => $data]);

@@ -10,7 +10,7 @@ use App\Controllers\{
     Admin\UsersController,
     Admin\UserAddController,
     Admin\UserEditController,
-    Admin\AdminProductsController,
+    Admin\ProductsController,
     Admin\ProductAddController,
     Admin\ProductEditController,
     Admin\AdminOrdersController,
@@ -20,6 +20,10 @@ use App\Controllers\{
 
 Route::toGroup()->prefix('admin')->middleware(AdminMiddleware::class);
     Route::get('/')->controller(AdminController::class)->name('admin.generale');
+
+    Route::get('/products')->controller(ProductsController::class)->name('admin.products');
+    Route::get('/product-add')->controller(ProductsController::class, 'product_add')->name('admin.product-add');
+    Route::get('/product-edit')->controller(ProductsController::class, 'product_edit')->name('admin.product-edit');
 
     Route::get('/vars/{id}/')->controller(VarsController::class, 'vars_item')->name('admin.var');
     Route::get('/vars-group')->controller(VarsController::class, 'vars_group')->name('admin.vars-group');

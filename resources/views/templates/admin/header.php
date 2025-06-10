@@ -28,6 +28,11 @@ $meta_robots = '';
     <link rel="icon" type="image/png" sizes="32x32" href="<?php echo $home_url;?>/public/images/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="<?php echo $home_url;?>/public/images/favicon/favicon-16x16.png">
 
+    <script type="text/javascript">
+        var varsAll = '';
+        var varsYes = '';
+    </script>
+
     <script src="<?php echo $home_url;?>/public/js/admin/config.min.js"></script>
 
     <?php if (in_array($data['temp'], ['product-add', 'product-edit'])) { ?>
@@ -42,7 +47,9 @@ $meta_robots = '';
     <script src="<?php echo $home_url;?>/public/js/admin/vendor.min.js"></script>
     <script src="<?php echo $home_url;?>/public/js/admin/app.min.js" defer></script>
 
+    <script src="<?php echo $home_url;?>/public/js/clipboard/clipboard.js" defer></script>
     <script src="<?php echo $home_url;?>/public/js/sortable/sortable.js" defer></script>
+    <script src="<?php echo $home_url;?>/public/js/cookie/cookie.min.js" defer></script>
     <script src="<?php echo $home_url;?>/public/js/admin/admin.js?ver=<?php echo filemtime( HLEB_GLOBAL_DIR . '/public/js/admin/admin.js' );?>" defer></script>
 </head>
 

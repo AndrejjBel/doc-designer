@@ -33,6 +33,12 @@ return [
                 'children' => []
             ],
             [
+                'name' => 'Шаблоны',
+                'link' => 'sidebarProducts',
+                'icon' => 'bi bi-hash', // ri-dashboard-3-fill
+                'children' => [] //$vars
+            ],
+            [
                 'name' => 'Переменные',
                 'link' => 'sidebarVars',
                 'icon' => 'bi bi-hash', // ri-dashboard-3-fill

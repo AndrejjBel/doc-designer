@@ -201,99 +201,69 @@ function productAddEdit() {
     if ( !form ) return;
     const btn = form.elements.submit;
     const warningWrap = document.querySelector('#warning-wrap');
-    let typeActions = btn.dataset.type
+    let typeActions = btn.dataset.type;
 
     const quillWrap = document.querySelector('#snow-editor');
     const quill = new Quill(quillWrap, {
         modules: {
+            history: {
+                delay: 2000,
+                maxStack: 500,
+                userOnly: true
+            },
             toolbar: toolbarOptions()
         },
-        placeholder: 'Описание...',
+        // placeholder: 'Описание...',
         theme: 'snow',
         bounds: quillWrap,
     });
 
-    const postThumbnail = document.querySelector('input#post_thumbnail');
-    const postGallery = document.querySelector('input#post_gallery');
-    const postTitle = document.querySelector('input#post_title');
-    const postSlug = document.querySelector('input#post_slug');
-    const postLink = document.querySelector('#post-link a');
-    const postMetaTitle = document.querySelector('input#post_meta_title');
-    const postMetaDescription = document.querySelector('input#post_meta_description');
+    const undoButton = document.querySelector('.ql-undo');
+    const redoButton = document.querySelector('.ql-redo');
+    const iconLeft = `<svg viewBox="0 0 512 512" width="16" height="16">
+    <path class="ql-fill" d="M48.5 224L40 224c-13.3 0-24-10.7-24-24L16 72c0-9.7 5.8-18.5 14.8-22.2s19.3-1.7 26.2 5.2L98.6 96.6c87.6-86.5 228.7-86.2 315.8 1c87.5 87.5 87.5 229.3 0 316.8s-229.3 87.5-316.8 0c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0c62.5 62.5 163.8 62.5 226.3 0s62.5-163.8 0-226.3c-62.2-62.2-162.7-62.5-225.3-1L185 183c6.9 6.9 8.9 17.2 5.2 26.2s-12.5 14.8-22.2 14.8L48.5 224z"/>
+    </svg>`;
+    const iconRight = `<svg viewBox="0 0 512 512" width="16" height="16">
+    <path class="ql-fill" d="M463.5 224l8.5 0c13.3 0 24-10.7 24-24l0-128c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8l119.5 0z"/>
+    </svg>`;
 
-    const thumbnail = document.querySelector('.post-thumbnail-wrap');
-    if (!thumbnail.children.length) {
-        thumbnail.nextElementSibling.classList.add('activate');
-    }
-    console.dir(thumbnail);
+    undoButton.innerHTML = iconLeft;
+    redoButton.innerHTML = iconRight;
 
-    const galeryPath = document.querySelector('input[name="add-gallery-imgs"]');
+    undoButton.addEventListener('click', () => {
+        quill.history.undo();
+    });
 
-    if (typeActions == 'add') {
-        postTitle.addEventListener('blur', (e) => {
-            postMetaTitle.value = postTitle.value;
-        });
+    redoButton.addEventListener('click', () => {
+        quill.history.redo();
+    });
 
-        quill.on('editor-change', (eventName) => {
-            if (eventName === 'text-change') {
-                let length = quill.getLength();
-                postMetaDescription.value = quill.getText(0, length).replace(/\r?\n|\r/g, ' ');
-            }
-        });
+    const varsItems = document.querySelectorAll('.vars-product button');
+    let vars = [];
+    for (var item of varsItems) {
+        vars.push(item.dataset.varidPr);
     }
 
-    const dataThumbnail = document.querySelector('.post-thumbnail input[type="file"]');
-    const dataGallery = document.querySelector('.post-gallery input[type="file"]');
-
-    // FilePond.registerPlugin(
-    //     FilePondPluginImagePreview,
-    //     FilePondPluginImageExifOrientation,
-    //     FilePondPluginFileValidateSize,
-    //     FilePondPluginImageEdit,
-    //     FilePondPluginImageResize,
-    //     // FilePondPluginFileEncode
-    // );
-
-    // const thumbnail = FilePond.create(postThumbnail,
-    //     {
-    //         labelIdle: 'Перетащите файлы или <span class="filepond--label-action"> Загрузите </span>',
-    //         imagePreviewHeight: 150
-    //     }
-    // );
-    // const gallery = FilePond.create(postGallery,
-    //     {
-    //         labelIdle: 'Перетащите файлы или <span class="filepond--label-action"> Загрузите </span>',
-    //         imagePreviewHeight: 150
-    //     }
-    // );
+    document.querySelector('form#add-edit-product input#title').addEventListener('input', (e) => {
+        document.querySelector('form#add-edit-product input#title').classList.remove('is-invalid');
+    });
 
     btn.addEventListener('click', (e) => {
         e.preventDefault();
         btn.style.pointerEvents = 'none';
-        let url = '/product-admin-add';
-        if (typeActions == 'edit') {
-            url = '/product-admin-edit';
+        const varsItems = document.querySelectorAll('.vars-product button');
+        let vars = [];
+        for (var item of varsItems) {
+            vars.push(item.dataset.varidPr);
         }
+
+        let url = '/admin/fetch';
         const length = quill.getLength();
         const html = quill.getSemanticHTML(0, length);
-        // console.dir(html);
-
-        // let thumbnailFiles = thumbnail.getFiles();
-        // let galleryFiles = gallery.getFiles();
-        // console.dir(galleryFiles);
-
-        let imagesWrap = document.querySelector('.post-gallery-img');
-
-        console.dir(images('.post-gallery-img'));
-        let thumbnail = JSON.stringify(images('.post-thumbnail-wrap'));
-        let imagesItems = JSON.stringify(images('.post-gallery-img'));
 
         let formData = new FormData(form);
-        formData.append('action', 'edit_product');
-        formData.append('post_id', btn.dataset.id);
-        formData.append('editor_html', html);
-        formData.append('thumbnail', thumbnail);
-        formData.append('imagesItems', imagesItems);
+        formData.append('descr', html);
+        formData.append('vars', vars.join());
 
         fetch(url, {
             method: "POST",
@@ -306,25 +276,21 @@ function productAddEdit() {
             return response.json();
         })
         .then(data => {
-            btn.style.pointerEvents = '';
             console.dir(data);
-            if (data.type == 'success') {
-                alertAction(warningWrap, data.success.text, 'success', ' onclick="locRel()"');
-                if (typeActions == 'add') {
-                    setTimeout(function(){
-                        location.reload();
-                    }, 6000);
-                }
+            if (data.message.result == 'success') {
+                let url = '/admin/products';
+                alertAction(warningWrap, data.message.text, 'success', ' onclick="locUrlAddProd()"');
+                setTimeout(function(){
+                    window.location = '/admin/products';
+                }, 6000);
             }
-            if (data.type == 'error') {
-                if (data.error.user) {
-                    window.location.href = '/';
-                }
-                if (data.error.post_title) {
-                    postTitle.classList.add('is-invalid');
-                    alertAction(warningWrap, data.error.post_title, 'danger');
-                    btn.style.pointerEvents = '';
-                }
+            if (data.message.result == 'error') {
+                btn.style.pointerEvents = '';
+                alertAction(warningWrap, data.error.text, 'danger');
+                document.querySelector('form#add-edit-product input#'+data.error.type).classList.add('is-invalid');
+                setTimeout(function(){
+                    warningWrap.innerHTML = '';
+                }, 6000);
             }
         })
         .catch(error => {
@@ -334,6 +300,10 @@ function productAddEdit() {
     });
 }
 productAddEdit();
+
+function locUrlAddProd() {
+    window.location = '/admin/products';
+}
 
 function images(items) {
     let images = document.querySelector(items);
@@ -422,6 +392,8 @@ function uploadImages(elem, form) {
 function toolbarOptions() {
     const options = [
         // [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+        ['undo', 'redo'],
+
         [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
 
         [{ 'font': [] }],
@@ -435,7 +407,8 @@ function toolbarOptions() {
         [{ 'direction': 'rtl' }],                         // text direction
 
         [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-        [{ 'align': [] }]
+        [{ 'align': [] }],
+        ['image']
     ];
     return options;
 }
@@ -1090,6 +1063,32 @@ function varsTableDelete(elem) {
     }
 }
 
+function productTableDelete(elem) {
+    const deleteVarModal = document.getElementById('delete-product-modal');
+    const deleteVarTitle = document.querySelectorAll('.delete-product-title');
+    const deleteVarBtn = document.querySelector('#delete-product');
+    if (deleteVarBtn) {
+        deleteVarBtn.dataset.id = elem.dataset.id;
+        if (elem.dataset.par) {
+            deleteVarBtn.dataset.par = elem.dataset.par;
+        }
+        deleteVarModal.addEventListener('hidden.bs.modal', (e) => {
+            deleteVarBtn.dataset.id = 0;
+            deleteVarBtn.dataset.par = '';
+        })
+    }
+    if (deleteVarTitle.length) {
+        deleteVarTitle.forEach((item) => {
+            item.innerText = document.getElementById('title'+elem.dataset.id).innerText;
+        });
+        deleteVarModal.addEventListener('hidden.bs.modal', (e) => {
+            deleteVarTitle.forEach((item) => {
+                item.innerText = '';
+            });
+        })
+    }
+}
+
 function varsDelete(elem) {
     const warningWrap = document.querySelector('#warning-wrap');
     console.dir(elem.dataset.id);
@@ -1127,8 +1126,466 @@ function varsDelete(elem) {
     });
 }
 
+function productDelete(elem) {
+    const warningWrap = document.querySelector('#warning-wrap');
+    console.dir(elem.dataset.id);
+    console.dir(elem.dataset.par);
+
+    let formData = new FormData();
+    formData.append('action', 'delete_product');
+    formData.append('product_id', elem.dataset.id);
+    if (elem.dataset.par) {
+        formData.append('root', elem.dataset.par);
+    }
+    formData.append('_token', document.querySelector('input[name="_token"]').value);
+    url = '/admin/fetch';
+
+    fetch(url, {
+        method: "POST",
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Ошибка запроса');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.dir(data);
+        alertAction(warningWrap, data.message.text, 'success');
+        document.querySelector('#prod'+elem.dataset.id).remove();
+        setTimeout(function(){
+            warningWrap.innerHTML = '';
+        }, 5000);
+    })
+    .catch(error => {
+        console.dir(error);
+    });
+}
+
 function varsTableEdit(elem) {
     console.dir(elem.dataset.id);
+}
+
+function productStatusChange(elem) {
+    const warningWrap = document.querySelector('#warning-wrap');
+    let id = elem.dataset.id;
+    let status = elem.dataset.status;
+    let text = elem.innerText;
+    let newStatus = '';
+
+    if (status == 1) {
+        newStatus = 0;
+    } else if (status == 0) {
+        newStatus = 1;
+    }
+
+    let formData = new FormData();
+    formData.append('action', 'productStatusChange');
+    formData.append('product_id', id);
+    formData.append('status', newStatus);
+    formData.append('_token', document.querySelector('input[name="_token"]').value);
+    url = '/admin/fetch';
+
+    fetch(url, {
+        method: "POST",
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Ошибка запроса');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.dir(data);
+        if (data.result = 'success') {
+            alertAction(warningWrap, 'Статус изменен', 'success');
+            if (text == 'Активен') {
+                elem.innerText = 'Выкл';
+                elem.classList.remove('btn-soft-success');
+                elem.classList.add('btn-soft-danger');
+                elem.dataset.status = 0;
+            } else if (text == 'Выкл') {
+                elem.innerText = 'Активен';
+                elem.classList.remove('btn-soft-danger');
+                elem.classList.add('btn-soft-success');
+                elem.dataset.status = 1;
+            }
+            setTimeout(function(){
+                warningWrap.innerHTML = '';
+            }, 5000);
+        } else {
+            alertAction(warningWrap, 'Произошла ошибка, попробуйте позже', 'danger');
+            setTimeout(function(){
+                warningWrap.innerHTML = '';
+            }, 5000);
+        }
+    })
+    .catch(error => {
+        console.dir(error);
+    });
+}
+
+function filtrProdBtn() {
+    const group = document.querySelector('#productGroup');
+    const chapter = document.querySelector('#productСhapter');
+    setCookie('docDesProd', {group: group.value, chapter: chapter.value});
+    location.reload();
+}
+
+function btnFilterClose() {
+    deleteCookie('docDesProd');
+    location.reload();
+}
+
+function filterActions() {
+    const group = document.querySelector('#productGroup');
+    if (!group) return;
+    let ddp = getCookie('docDesProd', true);
+    const btnFilterClose = document.querySelector('.btn-filter-close');
+    if (ddp) {
+        if (Number(ddp.group) || Number(ddp.chapter)) {
+            btnFilterClose.classList.add('active');
+            filterGroupChange(group, Number(ddp.chapter));
+        }
+    }
+    // else {
+    //     console.dir('No');
+    // }
+}
+filterActions();
+
+function filterGroupChange(elem, chapterId=0) {
+    const chapter = document.querySelector('#productСhapter');
+    let formData = new FormData();
+    formData.append('action', 'filterGroupChange');
+    formData.append('group', elem.value);
+    formData.append('_token', document.querySelector('input[name="_token"]').value);
+    url = '/admin/fetch';
+
+    if (elem.value == 0) {
+        chapter.innerHTML = '';
+        chapter.insertAdjacentHTML(
+            'beforeEnd',
+            `<option value="0">Все разделы</option>`
+        );
+    } else {
+        fetch(url, {
+            method: "POST",
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Ошибка запроса');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.dir(data);
+            chapter.innerHTML = '';
+            if (data.length) {
+                let select = 0;
+                chapter.insertAdjacentHTML(
+                    'beforeEnd',
+                    `<option value="0">Все разделы</option>`
+                );
+                data.forEach((item) => {
+                    if (Number(chapterId) == item.id) {
+                        select = ' selected';
+                    } else {
+                        select = '';
+                    }
+                    chapter.insertAdjacentHTML(
+                        'beforeEnd',
+                        `<option value="${item.id}"${select}>${item.title}</option>`
+                    );
+                });
+            } else {
+                chapter.insertAdjacentHTML(
+                    'beforeEnd',
+                    `<option value="0">Все разделы</option>`
+                );
+            }
+        })
+        .catch(error => {
+            console.dir(error);
+        });
+    }
+}
+
+function tabContentText() {
+    document.querySelector('html').dataset.sidenavSize = 'condensed';
+}
+
+function radioActions(elem) {
+    console.dir(elem.value);
+    let editor = document.querySelector('#snow-editor');
+    editor.classList.remove('h600');
+    editor.classList.remove('h-full');
+    if (elem.value != 'h400') {
+        editor.classList.add(elem.value);
+        localStorage.setItem('hEditor', elem.value);
+    } else {
+        localStorage.removeItem('hEditor');
+    }
+}
+
+function editorHeight() {
+    const editor = document.querySelector('#snow-editor');
+    const hEditor = localStorage.getItem('hEditor');
+    if (hEditor) {
+        editor.classList.add(hEditor);
+        document.querySelector('input#'+hEditor).checked = true;
+    }
+}
+editorHeight();
+
+function clipboardActions(elemClass) {
+    const warningWrap = document.querySelector('#warning-wrap-offcanvas');
+    const clipboard = new ClipboardJS(elemClass, {
+        container: document.getElementById('offcanvasVars'),
+    });
+
+    clipboard.on('success', function (e) {
+        // console.info('Action:', e.action);
+        // console.info('Text:', e.text);
+        // console.info('Trigger:', e.trigger);
+
+        e.clearSelection();
+        warningWrap.innerHTML = '';
+        alertAction(warningWrap, 'Скопирован текст: '+e.text, 'success');
+        setTimeout(function(){
+            warningWrap.innerHTML = '';
+        }, 5000);
+    });
+}
+clipboardActions('.vars-item .btn');
+
+function filtrItemsSearch(inputId, items, itemClass) {
+    const itemDiv = document.querySelector(itemClass);
+    let arr = [];
+    for (var item in items) {
+        if (items.hasOwnProperty(item)) {
+            arr.push(items[item]);
+        }
+    }
+    let arrYes = [];
+    if (varsYes) {
+        for (var item in JSON.parse(varsYes)) {
+            if (JSON.parse(varsYes).hasOwnProperty(item)) {
+                arrYes.push(JSON.parse(varsYes)[item]);
+            }
+        }
+    }
+    const inputIt = document.querySelector('#'+inputId);
+    if (inputId) {
+        inputIt.addEventListener('input', (e) => {
+            const newItems = arr.filter((item) => {
+                return (item.title.toLowerCase().includes(e.target.value.toLowerCase()) || item.descr.toLowerCase().includes(e.target.value.toLowerCase()));
+            })
+            renderFiltrItems(arr, newItems, arrYes, itemDiv);
+            // console.dir(arr);
+            // console.dir(newItems);
+            // console.dir(arrYes);
+        })
+    }
+}
+if (varsAll) {
+    filtrItemsSearch('search-vars', JSON.parse(varsAll), '.vars-all');
+}
+
+function renderFiltrItems(arr, items, itemsYes, itemDiv) {
+    const arrYes = [];
+    for (var item in itemsYes) {
+        if (itemsYes.hasOwnProperty(item)) {
+            arrYes.push(itemsYes[item]);
+        }
+    }
+    let arrYesNew = [];
+    arrYes.forEach((item) => {
+        arrYesNew.push(item['varid']);
+    });
+
+    arr.sort((a,b) => a.title.localeCompare(b.title));
+    let content = '';
+    arr.forEach((item) => {
+        if (item.parentid != 0 && item.isgr == 1) {
+            if (count_var(items, item.id)) {
+                content += `<div id="cr${item.id}" class="gr-vars" data-grid-cr="${item.parentid}">`;
+                content += `<div class="h4 mt-2">${item.title}</div>`;
+
+                items.forEach((item_par) => {
+                    if (item_par.parentid == item.id && item_par.isgr == 0) {
+                        if (in_array(item_par.id, arrYesNew)) {
+                            content += `<button type="button"
+                                class="btn btn-outline-secondary w-100 text-start btn-var-prod"
+                                data-varid-cr="${item_par.id}"
+                                data-parid-cr="${item_par.parentid}"
+                                disabled>`;
+                            content += `<strong>${item_par.title}</strong> - `;
+                            content += `${item_par.descr}`;
+                            content += `</button>`;
+                        } else {
+                            content += `<button type="button"
+                                class="btn btn-outline-secondary w-100 text-start btn-var-prod"
+                                data-varid-cr="${item_par.id}"
+                                data-parid-cr="${item_par.parentid}"
+                                onclick="btnVarAddProd(this)">`;
+                            content += `<strong>${item_par.title}</strong> - `;
+                            content += `${item_par.descr}`;
+                            content += `</button>`;
+                        }
+                    }
+                });
+                content += `</div>`;
+            }
+        }
+    });
+
+    itemDiv.innerHTML = '';
+    itemDiv.insertAdjacentHTML(
+        "beforeend",
+        content
+    );
+}
+
+function btnVarAddProd(elem) {
+    let wrapProd = document.querySelector('.vars-product');
+    let wrap = document.querySelector('#pr'+elem.dataset.paridCr);
+    let varsList = document.querySelector('.vars-list');
+    let btn = `<button type="button" class="btn btn-outline-secondary w-100 text-start btn-var-prod"
+        data-varid-pr="${elem.dataset.varidCr}" data-parid-pr="${elem.dataset.paridCr}">
+        ${elem.innerHTML}
+        <span class="btn-var-del-prod float-end" data-varid-pr="${elem.dataset.varidCr}" data-parid-pr="${elem.dataset.paridCr}" data-prodid-pr="${getUrlSearch('id')}" title="Удалить переменную" onclick="btnVarDelProd(this)">
+        <i class="ri-delete-bin-line text-danger"></i>
+        </span>
+        </button>`;
+    if (wrap) {
+        wrap.insertAdjacentHTML(
+            "beforeend",
+            btn
+        );
+    } else {
+        let newWrap = `<div id="pr${elem.dataset.paridCr}" class="gr-vars"><div class="h4 mt-2">${elem.parentElement.children[0].innerText}</div></div>`;
+        wrapProd.insertAdjacentHTML(
+            "beforeend",
+            newWrap
+        );
+        document.querySelector('#pr'+elem.dataset.paridCr).insertAdjacentHTML(
+            "beforeend",
+            btn
+        );
+    }
+    elem.disabled = true;
+
+    const vars = JSON.parse(varsAll);
+    const varsArr = [];
+    for (var item in vars) {
+        if (vars.hasOwnProperty(item)) {
+            varsArr.push(vars[item]);
+        }
+    }
+    const newVar = varsArr.filter((item) => {
+        return (item.id == elem.dataset.varidCr);
+    })[0];
+
+    varsList.insertAdjacentHTML(
+        "beforeend",
+        `<div class="vars-item d-flex gap-2 align-items-start mb-1" data-vit="${newVar.id}">
+        <button type="button" class="btn btn-sm btn-outline-secondary flex-grow-0 flex-shrink-0 text-truncate" data-clipboard-text="#${newVar.title}#">
+        #${newVar.title}#
+        </button>
+        <span>${newVar.descr}</span>
+        </div>`
+    );
+}
+
+function btnVarDelProd(elem) {
+    let countBtn = 0;
+    countBtn = elem.parentElement.parentElement.querySelectorAll('button').length-1;
+    elem.parentElement.remove();
+    document.querySelector('button[data-varid-cr="'+elem.dataset.varidPr+'"]').disabled = false;
+    if (!countBtn) {
+        document.querySelector('#pr'+elem.dataset.paridPr).remove();
+    }
+    document.querySelector('.vars-item[data-vit="'+elem.dataset.varidPr+'"]').remove();
+}
+
+// if (varsAll) {
+//     console.dir(JSON.parse(varsAll));
+// }
+
+function getUrlSearch(name){
+   if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+      return decodeURIComponent(name[1]);
+}
+// console.dir(getUrlSearch('id'));
+
+function count_var(vars, var_id) {
+    const arr = [];
+    for (var item in vars) {
+        if (vars.hasOwnProperty(item)) {
+            arr.push(vars[item]);
+        }
+    }
+    let count = 0;
+    arr.forEach((item) => {
+        if (item.parentid == var_id) {
+            count++;
+        }
+    });
+    return count;
+}
+
+function count_var_root(vars, root_id) {
+    const arr = [];
+    for (var item in vars) {
+        if (vars.hasOwnProperty(item)) {
+            arr.push(vars[item]);
+        }
+    }
+    let parents = [];
+    let count = 0;
+    arr.forEach((item) => {
+        if (item.parentid == root_id) {
+            parents.push(item.id);
+        }
+    });
+    arr.forEach((item) => {
+        if (inArray(item.parentid, parents)) {
+            count++;
+        }
+    });
+    return count;
+}
+
+function in_array(value, array) {
+    for(var i=0; i<array.length; i++){
+        if(value == array[i]) return true;
+    }
+    return false;
+}
+
+
+function arrayCompare(a1, a2) {
+    if (a1.length != a2.length) return false;
+    var length = a2.length;
+    for (var i = 0; i < length; i++) {
+        if (a1[i] !== a2[i]) return false;
+    }
+    return true;
+}
+function inArray(needle, haystack) {
+    var length = haystack.length;
+    for(var i = 0; i < length; i++) {
+        if(typeof haystack[i] == 'object') {
+            if(arrayCompare(haystack[i], needle)) return true;
+        } else {
+            if(haystack[i] == needle) return true;
+        }
+    }
+    return false;
 }
 
 document.addEventListener("DOMContentLoaded", function () {

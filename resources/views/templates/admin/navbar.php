@@ -8,18 +8,18 @@ $home_url = home_url();
             <div class="logo-topbar">
                 <a href="/" class="logo-light">
                     <span class="logo-lg">
-                        <img src="<?php echo $home_url;?>/public/images/logo.png" alt="logo">
+                        <img src="<?php echo $home_url;?>/public/images/favicon/android-chrome-512x512.png" alt="logo">
                     </span>
                     <span class="logo-sm">
-                        <img src="<?php echo $home_url;?>/public/images/logo-sm.png" alt="small logo">
+                        <img src="<?php echo $home_url;?>/public/images/favicon/android-chrome-512x512.png" alt="small logo">
                     </span>
                 </a>
                 <a href="/" class="logo-dark">
                     <span class="logo-lg">
-                        <img src="<?php echo $home_url;?>/public/images/logo-dark.png" alt="dark logo">
+                        <img src="<?php echo $home_url;?>/public/images/favicon/android-chrome-512x512.png" alt="dark logo">
                     </span>
                     <span class="logo-sm">
-                        <img src="<?php echo $home_url;?>/public/images/logo-sm.png" alt="small logo">
+                        <img src="<?php echo $home_url;?>/public/images/favicon/android-chrome-512x512.png" alt="small logo">
                     </span>
                 </a>
             </div>

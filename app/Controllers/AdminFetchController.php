@@ -6,7 +6,8 @@ use Hleb\Base\Controller;
 use Hleb\Constructor\Data\View;
 use Hleb\Static\Request;
 use App\Models\{
-    VarsModel
+    VarsModel,
+    ProductsModel
 };
 
 class AdminFetchController extends Controller
@@ -28,6 +29,21 @@ class AdminFetchController extends Controller
         }
         if ($allPost['action'] == 'delete_var') {
             $this->delete_var($allPost);
+        }
+        if ($allPost['action'] == 'productStatusChange') {
+            $this->productStatusChange($allPost);
+        }
+        if ($allPost['action'] == 'filterGroupChange') {
+            $this->filterGroupChange($allPost);
+        }
+        if ($allPost['action'] == 'edit_product') {
+            $this->edit_product($allPost);
+        }
+        if ($allPost['action'] == 'add_product') {
+            $this->add_product($allPost);
+        }
+        if ($allPost['action'] == 'delete_product') {
+            $this->delete_product($allPost);
         }
     }
 
@@ -147,5 +163,149 @@ class AdminFetchController extends Controller
             $message['text'] = 'Переменная удалена';
         }
         echo json_encode(['res' => $fin, 'message' => $message, 'post' => $allPost], JSON_UNESCAPED_UNICODE);
+    }
+
+    public function productStatusChange($allPost)
+    {
+        $res = ProductsModel::editStatus([
+            'id' => $allPost['product_id'],
+            'active' => $allPost['status']
+        ]);
+        if ($res) {
+            $result = 'success';
+        } else {
+            $result = 'error';
+        }
+        echo json_encode(['result' => $result], JSON_UNESCAPED_UNICODE);
+    }
+
+    public function filterGroupChange($allPost)
+    {
+        $res = ProductsModel::getProductsGroupParent([
+            'parentid' => $allPost['group']
+        ]);
+        echo json_encode($res, JSON_UNESCAPED_UNICODE);
+    }
+
+    public function edit_product($allPost)
+    {
+        $message = [];
+
+        $favor = 0;
+        $active = 0;
+        if (array_key_exists('favor', $allPost)) {
+            $favor = 1;
+        }
+        if (array_key_exists('active', $allPost)) {
+            $active = 1;
+        }
+
+        $pContent = htmlspecialchars_decode($allPost['descr']);
+        $pContent = strip_tags($pContent);
+        $pContent = str_replace("&nbsp;", '', $pContent);
+        if ($pContent) {
+            $post_content = htmlspecialchars_decode($allPost['descr']);
+            $post_content = str_replace("&nbsp;", ' ', $post_content);
+        } else {
+            $post_content = '';
+        }
+
+        $res = ProductsModel::edit([
+            'id'          => $allPost['product_id'],
+            'isgr'        => 0,
+            'parentid'    => $allPost['parentid'],
+            'title'       => $allPost['title'],
+            'description' => $allPost['description'] ?? '',
+            'favor'       => $favor,
+            'descr'       => $post_content,
+            'price'       => $allPost['price'] ?? 0,
+            'active'      => $active,
+            'allsit'      => $allPost['allsit'] ?? '',
+            'vars'        => $allPost['vars'] ?? ''
+        ]);
+
+        if ($res) {
+            $message['result'] = 'success';
+            $message['text'] = 'Изменения сохранены успешно';
+        } else {
+            $message['result'] = 'error';
+            $message['text'] = 'Ошибка, попробуйте позже';
+        }
+
+        $message['post'] = $allPost;
+
+        echo json_encode($message, JSON_UNESCAPED_UNICODE);
+    }
+
+    public function add_product($allPost)
+    {
+        $message = [];
+        $error = [];
+
+        if (!$allPost['title']) {
+            $message['result'] = 'error';
+            $error['type'] = 'title';
+            $error['text'] = 'Заполните Наименование шаблона';
+        }
+
+        if (count($error)) {
+            $message['result'] = 'error';
+        } else {
+            $favor = 0;
+            $active = 0;
+            if (array_key_exists('favor', $allPost)) {
+                $favor = 1;
+            }
+            if (array_key_exists('active', $allPost)) {
+                $active = 1;
+            }
+
+            $pContent = htmlspecialchars_decode($allPost['descr']);
+            $pContent = strip_tags($pContent);
+            $pContent = str_replace("&nbsp;", '', $pContent);
+            if ($pContent) {
+                $post_content = htmlspecialchars_decode($allPost['descr']);
+                $post_content = str_replace("&nbsp;", ' ', $post_content);
+            } else {
+                $post_content = '';
+            }
+
+            $res = ProductsModel::create([
+                'isgr'        => 0,
+                'parentid'    => $allPost['parentid'],
+                'title'       => $allPost['title'],
+                'description' => $allPost['description'],
+                'favor'       => $favor,
+                'descr'       => $post_content,
+                'price'       => $allPost['price'],
+                'active'      => $active,
+                'allsit'      => $allPost['allsit'],
+                'vars'        => $allPost['vars']
+            ]);
+
+            if ($res) {
+                $message['result'] = 'success';
+                $message['text'] = 'Шаблон создан успешно';
+            } else {
+                $message['result'] = 'error';
+                $message['text'] = 'Ошибка, попробуйте позже';
+            }
+        }
+
+        $message['post'] = $allPost;
+        $result = ['error' => $error,'message' => $message];
+
+        echo json_encode($result, JSON_UNESCAPED_UNICODE);
+    }
+
+    public function delete_product($allPost)
+    {
+        $id = $allPost['product_id'];
+        $message = [];
+
+        $del_var = ProductsModel::delete_var($id);
+        $message['text'] = 'Шаблон удален';
+
+        echo json_encode(['message' => $message], JSON_UNESCAPED_UNICODE);
     }
 }
