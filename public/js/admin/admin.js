@@ -1037,6 +1037,70 @@ function varAdd() {
 }
 varAdd();
 
+function grPrAdd() {
+    const grPrAddBtn = document.querySelector('#grPrAddBtn');
+
+    if (grPrAddBtn) {
+        const myModalPrAdd = document.getElementById('modal-productsgr-add');
+        const prAddModal = myModal('modal-productsgr-add');
+        const warningWrap = document.querySelector('#warning-wrap');
+        const form = document.querySelector('#group_prod_section');
+
+        myModalPrAdd.addEventListener('hidden.bs.modal', event => {
+            form.reset();
+        });
+
+        grPrAddBtn.addEventListener('click', (e) => {
+            grPrAddBtn.style.pointerEvents = 'none';
+            let formData = new FormData(form);
+            formData.append('action', 'create_group_prod');
+            formData.append('_token', document.querySelector('input[name="_token"]').value);
+            url = '/admin/fetch';
+
+            fetch(url, {
+                method: "POST",
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Ошибка запроса');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.dir(data);
+                grPrAddBtn.style.pointerEvents = '';
+                if (data.type == 'success') {
+                    prAddModal.hide();
+                    alertAction(warningWrap, 'Группа шаблонов создана', 'success');
+                    setTimeout(function(){
+                        warningWrap.innerHTML = '';
+                    }, 5000);
+                } else {
+                    if (data.parentid) {
+                        form.elements.parentid.classList.add('is-invalid');
+                        alertAction(warningWrap, data.parentid, 'danger');
+                        setTimeout(function(){
+                            warningWrap.innerHTML = '';
+                        }, 5000);
+                    }
+                    if (data.title) {
+                        form.elements.title.classList.add('is-invalid');
+                        alertAction(warningWrap, data.title, 'danger');
+                        setTimeout(function(){
+                            warningWrap.innerHTML = '';
+                        }, 5000);
+                    }
+                }
+            })
+            .catch(error => {
+                console.dir(error);
+            });
+        });
+    }
+}
+grPrAdd();
+
 function varsTableDelete(elem) {
     const deleteVarModal = document.getElementById('delete-var-modal');
     const deleteVarTitle = document.querySelectorAll('.delete-var-title');

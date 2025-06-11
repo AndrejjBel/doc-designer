@@ -200,6 +200,19 @@ function products_group_options($items, $prod_gr=0) {
     return $content;
 }
 
+function products_group_options_add($items) {
+    $items_new = array_multisort_value($items, 'title', SORT_ASC);
+    $content = '';
+    $content .= '<option value="no">Выберите группу</option>';
+    $content .= '<option value="0">Корневая группа</option>';
+    foreach ($items_new as $item) {
+        if ($item['parentid'] == 0) {
+            $content .= '<option value="' . $item['id'] . '">' . $item['title'] . '</option>';
+        }
+    }
+    return $content;
+}
+
 function vars_products_create($items, $varsProduct, $vars_prod, $product_id=0) {
     $vars = explode(',', $vars_prod);
     // foreach ($varsProduct as $var) {

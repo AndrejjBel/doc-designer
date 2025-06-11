@@ -44,7 +44,7 @@ if ($data['mod'] == 'dashboard') {
                     </select>
                 </div>
 
-                <div class="col-md-4 d-flex align-items-end justify-content-end justify-content-md-start filter-item">
+                <div class="col-6 col-md-2 d-flex align-items-end justify-content-start filter-item">
                     <div class="filter-btns d-flex gap-2 align-items-center">
                         <button class="btn btn-sm btn-soft-danger btn-filter-close"
                             type="button"
@@ -58,6 +58,24 @@ if ($data['mod'] == 'dashboard') {
                             type="button"
                             name="button"
                             onclick="filtrProdBtn()">Фильтр</button>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-2 d-flex align-items-end justify-content-end filter-item">
+                    <div class="filter-btns d-flex gap-2 align-items-center">
+                        <button class="btn btn-sm btn-soft-danger btn-filter-close"
+                            type="button"
+                            name="button"
+                            onclick="btnFilterClose()"
+                            title="Сбросить фильтр">
+                            <i class="ri-filter-off-line"></i>
+                        </button>
+                        <button id="filter-products-btn"
+                            class="btn btn-sm btn-soft-success"
+                            type="button"
+                            name="button"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modal-productsgr-add">Добавить раздел</button>
                     </div>
                 </div>
             </div>
@@ -152,6 +170,49 @@ if ($data['mod'] == 'dashboard') {
 
         </div>
 
+    </div>
+
+    <div class="modal fade" id="modal-productsgr-add" tabindex="-1" aria-labelledby="varPrAddLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="varPrAddLabel">Создать группу/раздел</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="group_prod_section">
+                        <div class="row">
+                            <div class="col-12 mb-1 mb-lg-4">
+                                <div class="form-group">
+                                    <label class="mb-1">Группа</label>
+                                    <select class="form-select" id="parentid" name="parentid" onchange="selectChange(this)">
+                                        <?php echo products_group_options_add($data['products_gr']);?>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-12 mb-1 mb-lg-4">
+                                <div class="form-group">
+                                    <label class="mb-1">Имя раздела <span class="text-danger">*</span></label>
+                                    <input id="title" type="text" class="form-control" value="" name="title" oninput="inputChange(this)" placeholder="Введите имя раздела">
+                                </div>
+                            </div>
+
+                            <div class="col-12 mb-1 mb-lg-4">
+                                <div class="form-group">
+                                    <label for="description" class="form-label">Описание раздела</label>
+                                    <textarea class="form-control" id="description" name="description" rows="2"></textarea>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Отмена</button>
+                    <button id="grPrAddBtn" type="button" class="btn btn-primary">Сохранить</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div id="delete-product-modal" class="modal fade" tabindex="-1" aria-labelledby="delete-product-modalLabel" aria-hidden="true">

@@ -39,6 +39,9 @@ class AdminFetchController extends Controller
         if ($allPost['action'] == 'edit_product') {
             $this->edit_product($allPost);
         }
+        if ($allPost['action'] == 'create_group_prod') {
+            $this->create_group_prod($allPost);
+        }
         if ($allPost['action'] == 'add_product') {
             $this->add_product($allPost);
         }
@@ -307,5 +310,37 @@ class AdminFetchController extends Controller
         $message['text'] = 'Шаблон удален';
 
         echo json_encode(['message' => $message], JSON_UNESCAPED_UNICODE);
+    }
+
+    public function create_group_prod($allPost)
+    {
+        $message = [];
+
+        if ($allPost['parentid'] == 'no') {
+            $message['parentid'] = 'Выберите группу';
+        }
+
+        if (!$allPost['title']) {
+            $message['title'] = 'Заполните имя раздела';
+        }
+
+        if ( count( $message ) > 0 ) {
+            $message['type'] = 'error';
+        } else {
+            $last_post_id = ProductsModel::create_gr([
+                'isgr'        => 1,
+                'parentid'    => $allPost['parentid'],
+                'title'       => $allPost['title'],
+                'description' => $allPost['description']
+            ]);
+            if ($last_post_id) {
+                $message['type'] = 'success';
+                $message['id'] = $last_post_id;
+            } else {
+                $message['type'] = 'error';
+            }
+        }
+
+        echo json_encode($message, JSON_UNESCAPED_UNICODE);
     }
 }

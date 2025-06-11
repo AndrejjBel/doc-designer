@@ -35,6 +35,22 @@ class ProductsModel extends Model
         return $sql_last_id['last_id'];
     }
 
+    public static function create_gr(array $params): int
+    {
+        $sql = "INSERT INTO products(isgr,
+                                parentid,
+                                title,
+                                description)
+
+                                VALUES(:isgr,
+                                    :parentid,
+                                    :title,
+                                    :description)";
+        DB::run($sql, $params);
+        $sql_last_id =  DB::run("SELECT LAST_INSERT_ID() as last_id")->fetch();
+        return $sql_last_id['last_id'];
+    }
+
     public static function create_def(array $params): int
     {
         $sql = "INSERT INTO products(isgr,
