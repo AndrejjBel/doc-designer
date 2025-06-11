@@ -92,7 +92,7 @@ if ($data['mod'] == 'dashboard') {
                                         $status = 1;
                                     } else {
                                         $text_status = 'Выкл';
-                                        $class_btn = ' btn-soft-danger w-100';
+                                        $class_btn = ' btn-soft-danger';
                                         $status = 0;
                                     }
                                     ?>
@@ -101,7 +101,7 @@ if ($data['mod'] == 'dashboard') {
                                         <td id="title<?php echo $product['id'];?>"><?php echo $product['title'];?></td>
                                         <td class="groups-product"><?php echo getGroupsProd($data['products_gr'], $product['parentid']);?></td>
                                         <td class="actions-products">
-                                            <button class="btn btn-sm<?php echo $class_btn;?>"
+                                            <button class="btn btn-sm  w-100<?php echo $class_btn;?>"
                                                 data-id="<?php echo $product['id'];?>"
                                                 data-status="<?php echo $status;?>"
                                                 type="button"
