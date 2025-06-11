@@ -1047,6 +1047,8 @@ function grPrAdd() {
         const form = document.querySelector('#group_prod_section');
 
         myModalPrAdd.addEventListener('hidden.bs.modal', event => {
+            form.elements.parentid.classList.remove('is-invalid');
+            form.elements.title.classList.remove('is-invalid');
             form.reset();
         });
 
