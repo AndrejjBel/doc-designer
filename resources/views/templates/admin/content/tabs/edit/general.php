@@ -38,6 +38,20 @@
         </div>
     </div>
 
+    <div class="col-12 calc">
+        <div class="col-12 col-md-5 col-lg-4 mb-3">
+            <label for="allsit" class="form-label">Калькулятор</label>
+            <select class="form-select" name="calc">
+                <option value="0"<?php echo selected(0, $product['calc']);?>>Нет калькулятора</option>
+                <option value="1"<?php echo selected(1, $product['calc']);?>>Неустойка по строительству ДДУ</option>
+                <option value="2"<?php echo selected(2, $product['calc']);?>>Неустойка за любые услуги</option>
+                <option value="3"<?php echo selected(3, $product['calc']);?>>Неустойка за бракованный товар</option>
+                <option value="4"<?php echo selected(4, $product['calc']);?>>Неустойка за не поставленный товар</option>
+                <option value="5"<?php echo selected(5, $product['calc']);?>>Процент за пользование чужими деньгами</option>
+            </select>
+        </div>
+    </div>
+
     <div class="col-12 col-md-8 mb-3">
         <label for="allsit" class="form-label">Ссылка</label>
         <input type="text" id="allsit" name="allsit" class="form-control" value="<?php echo $product['allsit'];?>">

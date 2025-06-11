@@ -277,14 +277,14 @@ function productAddEdit() {
         })
         .then(data => {
             console.dir(data);
-            if (data.message.result == 'success') {
+            if (data.result == 'success') {
                 let url = '/admin/products';
-                alertAction(warningWrap, data.message.text, 'success', ' onclick="locUrlAddProd()"');
+                alertAction(warningWrap, data.text, 'success', ' onclick="locUrlAddProd()"');
                 setTimeout(function(){
                     window.location = '/admin/products';
                 }, 6000);
             }
-            if (data.message.result == 'error') {
+            if (data.result == 'error') {
                 btn.style.pointerEvents = '';
                 alertAction(warningWrap, data.error.text, 'danger');
                 document.querySelector('form#add-edit-product input#'+data.error.type).classList.add('is-invalid');

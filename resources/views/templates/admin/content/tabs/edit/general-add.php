@@ -38,6 +38,20 @@
         </div>
     </div>
 
+    <div class="col-12 calc">
+        <div class="col-12 col-md-5 col-lg-4 mb-3">
+            <label for="allsit" class="form-label">Калькулятор</label>
+            <select class="form-select" name="calc">
+                <option value="0">Нет калькулятора</option>
+                <option value="1">Неустойка по строительству ДДУ</option>
+                <option value="2">Неустойка за любые услуги</option>
+                <option value="3">Неустойка за бракованный товар</option>
+                <option value="4">Неустойка за не поставленный товар</option>
+                <option value="5">Процент за пользование чужими деньгами</option>
+            </select>
+        </div>
+    </div>
+
     <div class="col-12 col-md-8 mb-3">
         <label for="allsit" class="form-label">Ссылка</label>
         <input type="text" id="allsit" name="allsit" class="form-control" value="">

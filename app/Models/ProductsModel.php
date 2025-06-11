@@ -17,6 +17,7 @@ class ProductsModel extends Model
                                 descr,
                                 price,
                                 active,
+                                calc,
                                 allsit,
                                 vars)
 
@@ -28,6 +29,7 @@ class ProductsModel extends Model
                                     :descr,
                                     :price,
                                     :active,
+                                    :calc,
                                     :allsit,
                                     :vars)";
         DB::run($sql, $params);
@@ -106,6 +108,7 @@ class ProductsModel extends Model
                     descr        = :descr,
                     price        = :price,
                     active       = :active,
+                    calc         = :calc,
                     allsit       = :allsit,
                     vars         = :vars
                         WHERE id  = :id";

@@ -223,6 +223,7 @@ class AdminFetchController extends Controller
             'descr'       => $post_content,
             'price'       => $allPost['price'] ?? 0,
             'active'      => $active,
+            'calc'        => $allPost['calc'],
             'allsit'      => $allPost['allsit'] ?? '',
             'vars'        => $allPost['vars'] ?? ''
         ]);
@@ -282,6 +283,7 @@ class AdminFetchController extends Controller
                 'descr'       => $post_content,
                 'price'       => $allPost['price'],
                 'active'      => $active,
+                'calc'        => $allPost['calc'],
                 'allsit'      => $allPost['allsit'],
                 'vars'        => $allPost['vars']
             ]);
