@@ -349,8 +349,30 @@ td .status-value {
     font-size: 12px;
 }
 
-.btn-var-del-prod {
+.btn-var-del-prod,
+.btn-bloks-del {
     padding: 0 4px;
+}
+
+.btn-bloks-del.inactive {
+    display: none;
+}
+
+.var-label {
+    cursor: pointer;
+}
+
+.var-label:not(:first-child) {
+	margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.calc-fields {
+    display: none;
+}
+
+.calc-fields.active {
+    display: flex;
 }
 
 @media (max-width: 867px) {

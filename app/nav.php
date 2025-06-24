@@ -41,6 +41,26 @@ function nav_obj($vars_obj) {
             'children' => []
         ]
     ];
+    $pages = [
+        [
+            'name' => 'Все страницы',
+            'link' => '/admin/pages',
+            'class_li' => '',
+            'children' => []
+        ],
+        [
+            'name' => 'Создать страницу',
+            'link' => '/admin/page-add',
+            'class_li' => '',
+            'children' => []
+        ],
+        [
+            'name' => 'Редактировать страницу',
+            'link' => '/admin/page-edit',
+            'class_li' => 'd-none',
+            'children' => []
+        ]
+    ];
     // $vars[] = [
     //     'name' => 'Добавить группу',
     //     'link' => '/admin/vars-add',
@@ -57,6 +77,12 @@ function nav_obj($vars_obj) {
                 'link' => '/admin',
                 'icon' => 'bi bi-speedometer2', // ri-dashboard-3-fill
                 'children' => []
+            ],
+            [
+                'name' => 'Страницы',
+                'link' => 'sidebarPages',
+                'icon' => 'ri-pages-line', // ri-dashboard-3-fill
+                'children' => $pages
             ],
             [
                 'name' => 'Шаблоны',

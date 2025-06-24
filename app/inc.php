@@ -109,6 +109,8 @@ function table_vars($array, $var_id) {
         $content .= '<a href="javascript: void(0);"
             class="text-reset fs-16 px-1 js-var-edit"
             data-id="' . $item["id"] . '"
+            data-bs-toggle="modal"
+            data-bs-target="#modal-var-add"
             onclick="varsTableEdit(this)"
             title="Редактировать">
             <i class="ri-edit-2-line"></i>

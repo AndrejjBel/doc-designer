@@ -1,5 +1,6 @@
 <?php
 $currUser = userAllData();
+$home_url = home_url();
 $home_link = '/';
 if ($data['mod'] == 'home') {
     $home_link = 'javascript:void(0)';
@@ -12,8 +13,9 @@ if (is_admin_allowed()) {
 ?>
 <header class="d-flex gap-1 align-items-center justify-content-between pb-3 mb-5 border-bottom">
     <a href="/" class="d-flex align-items-center text-body-emphasis text-decoration-none">
-        <img src="../public/images/logo-txtgen1.png" class="logo-img me-2" alt="">
-        <span class="fs-4">TxtGen</span>
+        <img src="<?php echo $home_url;?>/public/images/favicon/android-chrome-512x512.png" class="logo-img me-2" alt="logo">
+        <!-- <img src="../public/images/logo-txtgen1.png" class="logo-img me-2" alt=""> -->
+        <span class="fs-4">ВЕРНЫЙ МЕТОД</span>
     </a>
     <?php if (is_login()) { ?>
         <div class="header-right d-flex gap-2 align-items-center">
@@ -21,10 +23,6 @@ if (is_admin_allowed()) {
                 <a href="<?php echo $link_lk;?>">
                     <h6 class="mb-0"><?php echo ($currUser['first_name'])? $currUser['first_name'] : $currUser['username'];?></h6>
                 </a>
-            </div>
-            <div class="d-flex gap-1 mb-0">
-                <h6 class="d-none d-sm-block mb-0">Баланс: </h6>
-                <h6 class="mb-0"><?php //echo round($user_balance, 2);?></h6>
             </div>
             <form action="/logout" method="post" accept-charset="utf-8" class="dropdown-item">
                 <input type="hidden" name="actions" value="logOut">

@@ -57,6 +57,12 @@
                                 aria-expanded="true"
                                 class="nav-link">Текст шаблона</a>
                             </li> <!-- onclick="tabContentText()" -->
+                            <li class="nav-item">
+                                <a href="#calc"
+                                data-bs-toggle="tab"
+                                aria-expanded="true"
+                                class="nav-link">Калькулятор</a>
+                            </li>
                         </ul>
 
                         <div class="tab-content mb-5">
@@ -68,6 +74,9 @@
                             </div>
                             <div class="tab-pane" id="text">
                                 <?php insertTemplate('/templates/admin/content/tabs/edit/text', ['product' => $data['product']]);?>
+                            </div>
+                            <div class="tab-pane" id="calc">
+                                <?php insertTemplate('/templates/admin/content/tabs/edit/calc', ['product' => $data['product'], 'vars' => $data['vars']]);?>
                             </div>
                         </div>
 
@@ -91,10 +100,10 @@
     // foreach ($data['varsProduct'] as $var) {
     //     $vars[] = $var['varid'];
     // }
-    // $search = $vars;
-    // $newVars = array_filter($data['vars'], function($_array) use ($search){
+    // $search = [251];
+    // $newVars = array_shift(array_filter($data['vars'], function($_array) use ($search){
     //     return in_array($_array['id'], $search);
-    // });
+    // }));
 
     // echo '<pre>';
     // var_dump($newVars);
@@ -105,7 +114,7 @@
 
 <div class="offcanvas offcanvas-end offcanvas-vars" tabindex="-1" id="offcanvasVars" aria-labelledby="offcanvasVarsLabel">
     <div class="offcanvas-header">
-        <h5 id="offcanvasVarsLabel">Переменные</h5>
+        <h4 id="offcanvasVarsLabel">Переменные</h4>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
 

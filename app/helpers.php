@@ -13,6 +13,9 @@ define('LIMIT_POSTS_ADMIN', ($site_settings->post_limit_admin)? (int)$site_setti
 define('LIMIT_POSTS_FRONT', ($site_settings->post_limit_site)? (int)$site_settings->post_limit_site : 12);
 define('SITE_SETTINGS', $site_settings);
 
+define('SITE_NCRST', 60); // Recommended number of characters Seo title
+define('SITE_NCRSD', 150); // Recommended number of characters Seo description
+
 /**
  * Gets the URL of the site's main page
  *
@@ -848,32 +851,67 @@ function varPageGroupTitile($vars, $var_id) {
 }
 
 function varsForProduct($varsProduct, $varsArr) {
-    $vars = explode(',', $varsProduct);
-    // foreach ($varsProduct as $var) {
-    //     $vars[] = $var['varid'];
-    // }
-    $search = $vars;
-    $newVars = array_filter($varsArr, function($_array) use ($search){
-        return in_array($_array['id'], $search);
-    });
-
     $content = '';
-    foreach ($newVars as $var) {
-        $content .= '<div class="vars-item d-flex gap-2 align-items-start mb-1" data-vit="' . $var['id'] . '">';
-        $content .= '<button type="button"
-            class="btn btn-sm btn-outline-secondary flex-grow-0 flex-shrink-0 text-truncate"
-            data-clipboard-text="#' . $var['title'] . '#">
-            #' . $var['title'] . '#
-            </button>';
-        $content .= '<span>' . $var['descr'] . '</span>';
-        $content .= '</div>';
+    if ($varsProduct) {
+        $vars = explode(',', $varsProduct);
+        $search = $vars;
+        $newVars = array_filter($varsArr, function($_array) use ($search){
+            return in_array($_array['id'], $search);
+        });
+
+        // $content = '';
+        foreach ($vars as $var_id) {
+            $search = [$var_id];
+            $var = array_shift(array_filter($varsArr, function($_array) use ($search){
+                return in_array($_array['id'], $search);
+            }));
+            $label = '';
+            if ($var['typedata'] == 9) {
+                $content .= '<div class="vars-item d-flex gap-2 align-items-start mb-1 var-label" data-vid="' . $var['id'] . '">';
+                $content .= '<h4 class="product-title text-success">' . $var['descr'] . '</h4>';
+                // $content .= '<span>' . $var['descr'] . '</span>';
+                $content .= '</div>';
+            } else {
+                $content .= '<div class="vars-item d-flex gap-2 align-items-start mb-1" data-vid="' . $var['id'] . '">';
+                $content .= '<button type="button"
+                    class="btn btn-sm btn-outline-secondary flex-grow-0 flex-shrink-0 text-truncate"
+                    data-clipboard-text="#' . $var['title'] . '#">#' . $var['title'] . '#
+                    </button>';
+                $content .= '<span>' . $var['descr'] . '</span>';
+                $content .= '</div>';
+            }
+        }
+    }
+    echo $content;
+}
+
+function varsForProductOptions($varsProduct, $varsArr, $value=0) {
+    $content = '<option value="0">Выберите переменную</option>';
+    if ($varsProduct) {
+        $vars = explode(',', $varsProduct);
+        $search = $vars;
+        $newVars = array_filter($varsArr, function($_array) use ($search){
+            return in_array($_array['id'], $search);
+        });
+
+        // $content = '<option value="0">Выберите переменную</option>';
+        foreach ($vars as $var_id) {
+            $search = [$var_id];
+            $var = array_shift(array_filter($varsArr, function($_array) use ($search){
+                return in_array($_array['id'], $search);
+            }));
+            $label = '';
+            if ($var['typedata'] != 9) {
+                $content .= '<option value="' . $var['id'] . '"' . selected($value, $var['id']) . '>#' . $var['title'] . '# ' . $var['descr'] . '</option>';
+            }
+        }
     }
     echo $content;
 }
 
 //Отправка в Телеграм
 function message_to_telegram($text, $chatid) {
-    $tg_token = '5820237672:AAFAuLq18Zqy0kPW77E5Dk37_UH7xWpfgYM';
+    $tg_token = $site_settings->tg_token;
     $ch = curl_init();
     curl_setopt_array(
         $ch,

@@ -13,6 +13,7 @@ use App\Controllers\{
     Admin\ProductsController,
     Admin\ProductAddController,
     Admin\ProductEditController,
+    Admin\PagesController,
     Admin\AdminOrdersController,
     Admin\UploadController,
     Admin\VarsController
@@ -20,6 +21,10 @@ use App\Controllers\{
 
 Route::toGroup()->prefix('admin')->middleware(AdminMiddleware::class);
     Route::get('/')->controller(AdminController::class)->name('admin.generale');
+
+    Route::get('/pages')->controller(PagesController::class)->name('admin.pages');
+    Route::get('/page-add')->controller(PagesController::class, 'page_add')->name('admin.page-add');
+    Route::get('/page-edit')->controller(PagesController::class, 'page_edit')->name('admin.page-edit');
 
     Route::get('/products')->controller(ProductsController::class)->name('admin.products');
     Route::get('/product-add')->controller(ProductsController::class, 'product_add')->name('admin.product-add');

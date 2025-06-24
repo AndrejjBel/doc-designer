@@ -258,6 +258,24 @@ class VarsModel extends Model
         return $sql_last_id['last_id'];
     }
 
+    public static function edit_var($params)
+    {
+        $sql = "UPDATE vars SET
+                        parentid   = :parentid,
+                        isgr       = :isgr,
+                        title      = :title,
+                        descr      = :descr,
+                        active     = :active,
+                        type       = :type,
+                        typedata   = :typedata,
+                        captholder = :captholder,
+                        exthtml    = :exthtml,
+                        extdata    = :extdata
+                            WHERE id = :id";
+
+        return DB::run($sql, $params);
+    }
+
     public static function getVarsAllTest()
     {
         $string = "ORDER BY post_title ASC";
@@ -273,7 +291,13 @@ class VarsModel extends Model
 
     public static function getVarsAllJson()
     {
-        $sql = "SELECT id, parentid, isgr, title, descr FROM vars";
+        $sql = "SELECT id, parentid, isgr, title, descr, type, typedata, extdata FROM vars";
+        return DB::run($sql)->fetchAll();
+    }
+
+    public static function getVarsAllJsonFront()
+    {
+        $sql = "SELECT id, parentid, isgr, title, descr, type, typedata, captholder, extdata FROM vars";
         return DB::run($sql)->fetchAll();
     }
 

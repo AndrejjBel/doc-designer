@@ -15,11 +15,11 @@
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="/admin">Консоль</a></li>
-                                <li class="breadcrumb-item"><a href="/admin/products">Шаблоны</a></li>
-                                <li class="breadcrumb-item active">Создать шаблон</li>
+                                <li class="breadcrumb-item"><a href="/admin/pages">Страницы</a></li>
+                                <li class="breadcrumb-item active">Создать страницу</li>
                             </ol>
                         </div>
-                        <h4 class="page-title">Создать шаблон</h4>
+                        <h4 class="page-title">Создать страницу</h4>
                         <!-- <h4 class="product-title"><?php //echo $data['product']['title'];?></h4> -->
                     </div>
                 </div>
@@ -27,7 +27,7 @@
 
             <div class="row">
                 <div class="col-12">
-                    <form id="add-edit-product" class="mb-5" enctype="multipart/form-data">
+                    <form id="add-edit-page" class="mb-5" enctype="multipart/form-data">
                         <ul class="nav nav-tabs nav-bordered mb-3">
                             <li class="nav-item">
                                 <a href="#general"
@@ -36,60 +36,36 @@
                                 class="nav-link active">Основное</a>
                             </li>
                             <li class="nav-item">
-                                <a href="#vars"
-                                data-bs-toggle="tab"
-                                aria-expanded="true"
-                                class="nav-link">Переменные</a>
-                            </li>
-                            <li class="nav-item">
                                 <a href="#text"
                                 data-bs-toggle="tab"
                                 aria-expanded="true"
-                                class="nav-link">Текст шаблона</a>
-                            </li> <!-- onclick="tabContentText()" -->
-                            <li class="nav-item">
-                                <a href="#calc"
-                                data-bs-toggle="tab"
-                                aria-expanded="true"
-                                class="nav-link">Калькулятор</a>
+                                class="nav-link">Структура страницы</a>
                             </li>
                         </ul>
 
                         <?php if ($data['duplicate']) { ?>
                             <div class="tab-content mb-5">
                                 <div class="tab-pane show active" id="general">
-                                    <?php insertTemplate('/templates/admin/content/tabs/edit/general', ['mod' => $data['mod'], 'product' => $data['product'], 'products_gr' => $data['products_gr']]);?>
-                                </div>
-                                <div class="tab-pane" id="vars">
-                                    <?php insertTemplate('/templates/admin/content/tabs/edit/vars', ['product' => $data['product'], 'product_id' => $data['duplicate'], 'vars' => $data['vars'], 'varsProduct' => $data['varsProduct']]);?>
+                                    <?php insertTemplate('/templates/admin/content/tabs/edit/page-general', ['mod' => $data['mod'], 'product' => $data['product'], 'products_gr' => $data['products_gr']]);?>
                                 </div>
                                 <div class="tab-pane" id="text">
                                     <?php insertTemplate('/templates/admin/content/tabs/edit/text', ['product' => $data['product']]);?>
-                                </div>
-                                <div class="tab-pane" id="calc">
-                                    <?php insertTemplate('/templates/admin/content/tabs/edit/calc', ['product' => $data['product']]);?>
                                 </div>
                             </div>
                         <?php } else { ?>
                             <div class="tab-content mb-5">
                                 <div class="tab-pane show active" id="general">
-                                    <?php insertTemplate('/templates/admin/content/tabs/edit/general-add', ['mod' => $data['mod'], 'products_gr' => $data['products_gr']]);?>
-                                </div>
-                                <div class="tab-pane" id="vars">
-                                    <?php insertTemplate('/templates/admin/content/tabs/edit/vars-add', ['vars' => $data['vars']]);?>
+                                    <?php insertTemplate('/templates/admin/content/tabs/edit/page-general-add', ['mod' => $data['mod'], 'products_gr' => $data['products_gr']]);?>
                                 </div>
                                 <div class="tab-pane" id="text">
-                                    <?php insertTemplate('/templates/admin/content/tabs/edit/text-add', ['mod' => $data['mod']]);?>
-                                </div>
-                                <div class="tab-pane" id="calc">
-                                    <?php insertTemplate('/templates/admin/content/tabs/edit/calc-add', ['mod' => $data['mod']]);?>
+                                    <?php insertTemplate('/templates/admin/content/tabs/edit/content-add', ['mod' => $data['mod']]);?>
                                 </div>
                             </div>
                         <?php } ?>
 
-                        <input type="hidden" name="action" value="add_product">
-                        <input type="hidden" name="post_type" value="products">
-                        <input type="hidden" name="product_id" id="product_id" value="<?php //echo $data['product_id'];?>">
+                        <input type="hidden" name="action" value="add_page">
+                        <input type="hidden" name="post_type" value="page">
+                        <input type="hidden" name="page_id" id="page_id" value="<?php //echo $data['product_id'];?>">
                         <?php echo csrf_field();?>
                         <button type="submit" name="submit" data-type="add"  data-id="<?php //echo $data['product_id'];?>" class="btn btn-primary">Сохранить</button>
                     </form>

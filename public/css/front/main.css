@@ -72,6 +72,27 @@ button::-moz-focus-inner {
     overflow: auto;
 }
 
+.ql-editor p:not(.ql-indent-8) {
+    text-indent: 30px;
+}
+
+.fielddok {
+    cursor: pointer;
+    color: #dba7a7;
+}
+
+.text-blure {
+    filter: blur(5px);
+}
+
+.fields-list label {
+    font-size: 14px;
+}
+
+.var-label:not(:first-child) {
+	margin-top: 1.5rem;
+}
+
 @media (max-width: 991px) {
     #topnav .logo .logo-text {
         font-size: 18px;

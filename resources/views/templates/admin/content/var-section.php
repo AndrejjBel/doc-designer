@@ -223,6 +223,7 @@ if ($data['mod'] == 'dashboard') {
                                 </div>
                             </div>
                         </div>
+                        <input type="hidden" name="var_id" value="">
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -285,10 +286,14 @@ if ($data['mod'] == 'dashboard') {
     // $home_url = config('main', 'home_url');
 
     // echo '<pre>';
-    // var_dump($new);
+    // var_dump($data['vars']);
     // echo '</pre>';
 
     insertTemplate('/templates/admin/content/footer', ['data' => $data]);
     ?>
+
+    <script type="text/javascript">
+        varsAll = '<?php echo json_encode($data['varsJson'], JSON_FORCE_OBJECT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);?>';
+    </script>
 
 </div>

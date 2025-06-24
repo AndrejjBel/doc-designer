@@ -13,17 +13,29 @@
     <link rel="icon" type="image/png" sizes="32x32" href="../public/images/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="../public/images/favicon/favicon-16x16.png">
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/suggestions-jquery@22.6.0/dist/css/suggestions.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/suggestions-jquery@22.6.0/dist/js/jquery.suggestions.min.js"></script>
+
 
     <!-- Css -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
     <link href="../public/assets/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="../public/css/admin/app.min.css" rel="stylesheet" type="text/css" id="app-style" /> -->
+    <link href="../public/css/admin/quill.snow.css" rel="stylesheet" type="text/css" />
 
     <link href="../public/css/main.css?ver=<?php echo filemtime( HLEB_GLOBAL_DIR . '/public/css/main.css' );?>" rel="stylesheet" type="text/css">
+    <link href="../public/css/front/main.css?ver=<?php echo filemtime( HLEB_GLOBAL_DIR . '/public/css/front/main.css' );?>" rel="stylesheet" type="text/css">
 
     <!-- JAVASCRIPT -->
     <script src="../public/assets/js/color-modes.js" defer></script>
     <script src="../public/assets/dist/js/bootstrap.bundle.min.js" defer></script>
+    <!-- <script src="../public/js/syncscroll/syncscroll.js?ver=<?php echo filemtime( HLEB_GLOBAL_DIR . '/public/js/syncscroll/syncscroll.js' );?>" defer></script> -->
     <script src="../public/js/main.js?ver=<?php echo filemtime( HLEB_GLOBAL_DIR . '/public/js/main.js' );?>" defer></script>
+
+    <script type="text/javascript">
+        varsAll = '<?php echo addslashes(json_encode($data['varsJson'], JSON_FORCE_OBJECT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE));?>';
+    </script>
 
 </head>
 <body class="<?php echo (array_key_exists('body_classes', $data))? $data['body_classes'] : '';?>">

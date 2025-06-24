@@ -238,11 +238,11 @@ function productAddEdit() {
         quill.history.redo();
     });
 
-    const varsItems = document.querySelectorAll('.vars-product button');
-    let vars = [];
-    for (var item of varsItems) {
-        vars.push(item.dataset.varidPr);
-    }
+    // const varsItems = document.querySelectorAll('.vars-product button');
+    // let vars = [];
+    // for (var item of varsItems) {
+    //     vars.push(item.dataset.varidPr);
+    // }
 
     document.querySelector('form#add-edit-product input#title').addEventListener('input', (e) => {
         document.querySelector('form#add-edit-product input#title').classList.remove('is-invalid');
@@ -251,10 +251,12 @@ function productAddEdit() {
     btn.addEventListener('click', (e) => {
         e.preventDefault();
         btn.style.pointerEvents = 'none';
-        const varsItems = document.querySelectorAll('.vars-product button');
+        // const varsItems = document.querySelectorAll('.vars-product button');
+        const varsItems = document.querySelectorAll('.vars-list .vars-item');
         let vars = [];
         for (var item of varsItems) {
-            vars.push(item.dataset.varidPr);
+            // vars.push(item.dataset.varidPr);
+            vars.push(item.dataset.vid);
         }
 
         let url = '/admin/fetch';
@@ -278,10 +280,15 @@ function productAddEdit() {
         .then(data => {
             console.dir(data);
             if (data.result == 'success') {
+                btn.style.pointerEvents = '';
                 let url = '/admin/products';
                 alertAction(warningWrap, data.text, 'success', ' onclick="locUrlAddProd()"');
                 setTimeout(function(){
-                    window.location = '/admin/products';
+                    if (btn.dataset.type == 'edit') {
+                        warningWrap.innerHTML = '';
+                    } else if (btn.dataset.type == 'add') {
+                        window.location = '/admin/products';
+                    }
                 }, 6000);
             }
             if (data.result == 'error') {
@@ -300,6 +307,29 @@ function productAddEdit() {
     });
 }
 productAddEdit();
+
+function calcFieldsActions(elem) {
+    const calcFields = document.querySelector('.calc-fields');
+    if ( !calcFields ) return;
+    if (elem.value != 0) {
+        calcFields.classList.add('active');
+    } else {
+        calcFields.classList.remove('active');
+    }
+}
+
+function calcFieldsStart(elem) {
+    const calc = document.querySelector('select[name="'+elem+'"] ');
+    const calcFields = document.querySelector('.calc-fields');
+    if ( !calc ) return;
+    if (calc.value != 0) {
+        calcFields.classList.add('active');
+    } else {
+        calcFields.classList.remove('active');
+    }
+    console.dir(calc.value);
+}
+calcFieldsStart('calc');
 
 function locUrlAddProd() {
     window.location = '/admin/products';
@@ -858,6 +888,8 @@ function varsTableChange(vars) {
                 <td><a href="javascript: void(0);"
                 class="text-reset fs-16 px-1 js-var-edit"
                 data-id="${item.id}"
+                data-bs-toggle="modal"
+                data-bs-target="#modal-var-add"
                 onclick="varsTableEdit(this)"
                 title="Редактировать">
                     <i class="ri-edit-2-line"></i>
@@ -983,11 +1015,17 @@ function varAdd() {
         const varAddModal = myModal('modal-var-add');
         const warningWrap = document.querySelector('#warning-wrap');
         const form = document.getElementById('form_var_add');
+        const formVarId = form.querySelector('input[name="var_id"]');
+        console.dir(formVarId);
 
         varAddBtn.addEventListener('click', (e) => {
             varAddBtn.style.pointerEvents = 'none';
             let formData = new FormData(form);
-            formData.append('action', 'create_var');
+            if (formVarId.value) {
+                formData.append('action', 'edit_var');
+            } else {
+                formData.append('action', 'create_var');
+            }
             formData.append('_token', document.querySelector('input[name="_token"]').value);
             url = '/admin/fetch';
 
@@ -1005,7 +1043,11 @@ function varAdd() {
                 console.dir(data);
                 if (data.type == 'success') {
                     varAddModal.hide();
-                    alertAction(warningWrap, 'Переменная создана', 'success');
+                    if (formVarId.value) {
+                        alertAction(warningWrap, data.text, 'success');
+                    } else {
+                        alertAction(warningWrap, 'Переменная создана', 'success');
+                    }
                     varAddBtn.style.pointerEvents = '';
                     setTimeout(function(){
                         warningWrap.innerHTML = '';
@@ -1230,7 +1272,38 @@ function productDelete(elem) {
 }
 
 function varsTableEdit(elem) {
-    console.dir(elem.dataset.id);
+    const form = document.querySelector('#form_var_add');
+    const vars = JSON.parse(varsAll);
+    const varsArr = [];
+    for (var item in vars) {
+        if (vars.hasOwnProperty(item)) {
+            varsArr.push(vars[item]);
+        }
+    }
+    let varIt = varsArr.filter((item) => {
+        return (item.id == elem.dataset.id);
+    })[0];
+    console.dir(varIt);
+
+    form.elements.title.value = varIt.title;
+    form.elements.descr.value = (varIt.descr)? varIt.descr : '';
+    form.elements.captholder.value = (varIt.captholder)? varIt.captholder : '';
+    form.elements.extdata.value = (varIt.extdata)? varIt.extdata : '';
+    form.elements.var_id.value = varIt.id;
+
+    let selectTd = document.getElementById('typedata');
+    if (selectTd.querySelector(`option[value='${varIt.typedata}']`)) {
+        selectTd.value = varIt.typedata;
+    } else {
+        console.warn('Опция с таким значением не найдена:', varIt.typedata);
+    }
+
+    let selectT = document.getElementById('type');
+    if (selectT.querySelector(`option[value='${varIt.type}']`)) {
+        selectT.value = varIt.type;
+    } else {
+        console.warn('Опция с таким значением не найдена:', varIt.type);
+    }
 }
 
 function productStatusChange(elem) {
@@ -1407,10 +1480,10 @@ function editorHeight() {
 }
 editorHeight();
 
-function clipboardActions(elemClass) {
-    const warningWrap = document.querySelector('#warning-wrap-offcanvas');
+function clipboardActions(elemClass, containerId, warningWrapSel) {
+    const warningWrap = document.querySelector(warningWrapSel);
     const clipboard = new ClipboardJS(elemClass, {
-        container: document.getElementById('offcanvasVars'),
+        container: document.getElementById(containerId),
     });
 
     clipboard.on('success', function (e) {
@@ -1426,7 +1499,8 @@ function clipboardActions(elemClass) {
         }, 5000);
     });
 }
-clipboardActions('.vars-item .btn');
+clipboardActions('.vars-item .btn', 'offcanvasVars', '#warning-wrap-offcanvas');
+clipboardActions('.vars-item .btn', 'vars-list-calc', '#warning-wrap');
 
 function filtrItemsSearch(inputId, items, itemClass) {
     const itemDiv = document.querySelector(itemClass);
@@ -1445,11 +1519,11 @@ function filtrItemsSearch(inputId, items, itemClass) {
         }
     }
     const inputIt = document.querySelector('#'+inputId);
-    if (inputId) {
+    if (inputIt) {
         inputIt.addEventListener('input', (e) => {
             const newItems = arr.filter((item) => {
                 return (item.title.toLowerCase().includes(e.target.value.toLowerCase()) || item.descr.toLowerCase().includes(e.target.value.toLowerCase()));
-            })
+            });
             renderFiltrItems(arr, newItems, arrYes, itemDiv);
             // console.dir(arr);
             // console.dir(newItems);
@@ -1519,7 +1593,8 @@ function renderFiltrItems(arr, items, itemsYes, itemDiv) {
 function btnVarAddProd(elem) {
     let wrapProd = document.querySelector('.vars-product');
     let wrap = document.querySelector('#pr'+elem.dataset.paridCr);
-    let varsList = document.querySelector('.vars-list');
+    let varsList = document.querySelectorAll('.vars-list');
+    let calcFieldsSelect = document.querySelectorAll('.calc-fields select');
     let btn = `<button type="button" class="btn btn-outline-secondary w-100 text-start btn-var-prod"
         data-varid-pr="${elem.dataset.varidCr}" data-parid-pr="${elem.dataset.paridCr}">
         ${elem.innerHTML}
@@ -1556,15 +1631,38 @@ function btnVarAddProd(elem) {
         return (item.id == elem.dataset.varidCr);
     })[0];
 
-    varsList.insertAdjacentHTML(
-        "beforeend",
-        `<div class="vars-item d-flex gap-2 align-items-start mb-1" data-vit="${newVar.id}">
-        <button type="button" class="btn btn-sm btn-outline-secondary flex-grow-0 flex-shrink-0 text-truncate" data-clipboard-text="#${newVar.title}#">
-        #${newVar.title}#
-        </button>
-        <span>${newVar.descr}</span>
-        </div>`
-    );
+    console.dir(newVar);
+
+    if (newVar.typedata == 9) {
+        varsList.forEach((item) => {
+            item.insertAdjacentHTML(
+                "beforeend",
+                `<div class="vars-item d-flex gap-2 align-items-start mb-1 var-label" data-vid="${newVar.id}">
+                <h4 class="product-title text-success">${newVar.descr}</h4>
+                </div>`
+            );
+        });
+    } else {
+        varsList.forEach((item) => {
+            item.insertAdjacentHTML(
+                "beforeend",
+                `<div class="vars-item d-flex gap-2 align-items-start mb-1" data-vid="${newVar.id}">
+                <button type="button" class="btn btn-sm btn-outline-secondary flex-grow-0 flex-shrink-0 text-truncate" data-clipboard-text="#${newVar.title}#">
+                #${newVar.title}#
+                </button>
+                <span>${newVar.descr}</span>
+                </div>`
+            );
+        });
+
+        calcFieldsSelect.forEach((item) => {
+            item.insertAdjacentHTML(
+                "beforeend",
+                `<option value="${newVar.id}">#${newVar.title}# ${newVar.descr}</option>`
+            );
+        });
+
+    }
 }
 
 function btnVarDelProd(elem) {
@@ -1575,8 +1673,22 @@ function btnVarDelProd(elem) {
     if (!countBtn) {
         document.querySelector('#pr'+elem.dataset.paridPr).remove();
     }
-    document.querySelector('.vars-item[data-vit="'+elem.dataset.varidPr+'"]').remove();
+    document.querySelectorAll('.vars-item[data-vid="'+elem.dataset.varidPr+'"]').forEach((item) => {
+        item.remove();
+    });
+
 }
+
+function sortableVarsProd() {
+    const varsList = document.querySelector('.vars-list');
+    if (varsList) {
+        new Sortable(varsList, {
+            sort: true,
+            animation: 150
+        });
+    }
+}
+sortableVarsProd();
 
 // if (varsAll) {
 //     console.dir(JSON.parse(varsAll));

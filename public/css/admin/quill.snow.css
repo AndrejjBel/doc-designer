@@ -39,7 +39,7 @@
   tab-size: 4;
   -moz-tab-size: 4;
   text-align: left;
-  white-space: pre-wrap;
+  /* white-space: pre-wrap; */
   word-wrap: break-word;
 }
 .ql-editor > * {
@@ -283,7 +283,7 @@
   padding-right: 22.5em;
 }
 .ql-editor .ql-indent-8:not(.ql-direction-rtl) {
-  padding-left: 24em;
+  padding-left: 30em;
 }
 .ql-editor li.ql-indent-8:not(.ql-direction-rtl) {
   padding-left: 25.5em;
