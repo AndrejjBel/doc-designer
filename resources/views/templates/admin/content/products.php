@@ -237,7 +237,7 @@ if ($data['mod'] == 'dashboard') {
     <?php echo csrf_field();?>
 
     <?php insertTemplate('/templates/admin/content/footer', ['data' => $data]);
-    prodVarsAdd();
+    // prodVarsAdd();
 
     // $search = [14491];
     // $newArray = array_filter($data['products_gr'], function($_array) use ($search){
