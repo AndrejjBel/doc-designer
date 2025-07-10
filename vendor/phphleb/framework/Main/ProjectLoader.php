@@ -19,7 +19,6 @@ use Hleb\Main\Routes\Search\RouteAsyncFileManager;
 use \Hleb\Static\Csrf;
 use Hleb\HttpMethods\Intelligence\AsyncConsolidator;
 use Hleb\HttpMethods\Intelligence\Cookies\StandardCookies;
-use Hleb\Static\Log;
 use Hleb\Static\Request;
 use Hleb\Static\Response;
 use Hleb\Main\Routes\Search\RouteFileManager;
@@ -78,7 +77,7 @@ final class ProjectLoader
             self::updateDataIfModule($block);
             /** @see hl_check() - updateDataIfModule completed */
 
-            if (self::initBlock($block, $routes)) {
+            if (self::initBlock($block, $routes)){
                 return;
             }
         }
@@ -111,63 +110,52 @@ final class ProjectLoader
     public static function renderSimpleValue(string $value, string $address): array
     {
         $isSimple = false;
-        $contentType = 'text/plain';
+        $contentType = 'text/html';
         if (\str_starts_with($value, \Functions::PREVIEW_TAG)) {
             $value = \substr($value, \strlen(\Functions::PREVIEW_TAG));
-            $replacements = [];
-            if ($hasKeyReplacement = \str_contains($value, '{%')) {
-                foreach (DynamicParams::getDynamicUriParams() as $key => $param) {
-                    if ("{%$key%}" === $value) {
-                        return self::createSimpleCacheData($param, $contentType);
+            if (\str_contains($value, '{')) {
+                $replacements = [
+                    '{{ip}}' => DynamicParams::getRequest()->getUri()->getIp(),
+                    '{{method}}' => DynamicParams::getRequest()->getMethod(),
+                    '{{route}}' => $address,
+                ];
+                if (\str_contains($value, '%')) {
+                    foreach (DynamicParams::getDynamicUriParams() as $key => $param) {
+                        if ("{%$key%}" === $value) {
+                            $value = $param;
+                            $isSimple = true;
+                            $replacements = [];
+                            break;
+                        }
+                        $replacements["{%$key%}"] = (string)$param;
                     }
-                    $replacements["{%$key%}"] = (string)$param;
+                } else if(!\str_contains($value, '{{ip}}')){
+                    $isSimple = true;
                 }
+                $replacements and $value = \strtr($value, $replacements);
             }
-            $hasIp = false;
-            if (\str_contains($value, '{{')) {
-                $hasIp = \str_contains($value, '{{ip}}');
-                if ($hasIp) {
-                    $replacements['{{ip}}'] = DynamicParams::getRequest()->getUri()->getIp();
-                }
-                if (\str_contains($value, '{{method}}')) {
-                    $replacements['{{method}}'] = DynamicParams::getRequest()->getMethod();
-                }
-                if (\str_contains($value, '{{route}}')) {
-                    $replacements['{{route}}'] = $address;
-                }
+            if (DynamicParams::isDebug()) {
+                $value = \htmlspecialchars($value);
+            } else if (\str_starts_with($value, '{') && \str_ends_with($value, '}')) {
+                $contentType = 'application/json';
+            } else {
+                $contentType = 'text/plain';
             }
-            if (!$hasKeyReplacement && !$hasIp) {
-                $isSimple = true;
-            }
-            if ($replacements) {
-                $value = \strtr($value, $replacements);
-            }
+            Response::addHeaders(['Content-Type' => $contentType]);
         } else {
             $isSimple = true;
         }
-        if (\str_starts_with($value, '{') && \str_ends_with($value, '}')) {
-            $contentType = 'application/json';
-        }
 
-        return self::createSimpleCacheData($value, $contentType, $isSimple);
-    }
-
-    /**
-     * Transformation of final data into framework format.
-     *
-     * Преобразование конечных данных в формат фреймворка.
-     */
-    private static function createSimpleCacheData(string $value, string $contentType, bool $isSimple = true): array
-    {
         Response::addToBody($value);
-        Response::addHeaders(['Content-Type' => $contentType]);
 
-        if ($isSimple && SystemSettings::isAsync()) {
-            return [
-                'id' => DynamicParams::addressAsString(true),
-                'value' => $value,
-                'type' => $contentType,
-            ];
+        if (!DynamicParams::isDebug() && SystemSettings::isAsync()) {
+            if ($isSimple) {
+                return [
+                    'id' => DynamicParams::addressAsString(true),
+                    'value' => $value,
+                    'type' => $contentType,
+                ];
+            }
         }
         return [];
     }
@@ -175,38 +163,29 @@ final class ProjectLoader
 
     /**
      * Apply settings when a module is detected.
-     * For modules, the config can be either in the module or in a separate 'modules' config.
-     * The modules.php file must first be allowed in the 'custom.setting.files' setting.
      *
      * Применение настроек в случае обнаружения модуля.
-     * Для модулей конфигурация может быть как в модуле, так и в отдельном конфиге 'modules'.
-     * Предварительно файл modules.php должен быть разрешен в настройке 'custom.setting.files'.
      */
     private static function updateDataIfModule(array $block): void
     {
         if (isset($block['module'])) {
             $moduleName = $block['module']['name'];
-            $configModule = SystemSettings::getValue('modules', $moduleName);
-            if ($configModule) {
-                isset($configModule['main']) and SystemSettings::updateMainSettings($configModule['main']);
-                isset($configModule['database']) and SystemSettings::updateDatabaseSettings($configModule['database']);
-            } else {
-                $mainFile = SystemSettings::getRealPath("@modules/$moduleName/config/main.php");
-                if ($mainFile) {
-                    $main = (static function () use ($mainFile): array {
-                        return require $mainFile;
-                    })();
-                    SystemSettings::updateMainSettings($main);
-                }
-                $dbFile = SystemSettings::getRealPath("@modules/$moduleName/config/database.php");
-                if ($dbFile) {
-                    $database = (static function () use ($dbFile): array {
-                        return require $dbFile;
-                    })();
-                    SystemSettings::updateDatabaseSettings($database);
-                }
+            $mainFile = SystemSettings::getRealPath("@modules/$moduleName/config/main.php");
+            if ($mainFile) {
+                $main = (static function () use ($mainFile): array {
+                    return require $mainFile;
+                })();
+                SystemSettings::updateMainSettings($main);
             }
             SystemSettings::addModuleType((bool)SystemSettings::getRealPath("@modules/$moduleName/views"));
+
+            $dbFile = SystemSettings::getRealPath("@modules/$moduleName/config/database.php");
+            if ($dbFile) {
+                $database = (static function () use ($dbFile): array {
+                    return require $dbFile;
+                })();
+                SystemSettings::updateDatabaseSettings($database);
+            }
         }
     }
 
@@ -296,12 +275,13 @@ final class ProjectLoader
 
         // If $disabledInRoute is null, this means that the value is not set.
         // Если $disabledInRoute равен null, то это значит, что значение не задано.
+
         if ($disabledInRoute === false || SystemSettings::getValue('main', 'session.enabled')) {
             if (SystemSettings::isStandardMode()) {
                 if (\session_status() !== PHP_SESSION_ACTIVE) {
                     \session_name(SystemSettings::getSystemValue('session.name'));
                     $options = SystemSettings::getMainValue('session.options');
-                    if ($options) {
+                    if ($options){
                         \session_set_cookie_params($options);
                     } else {
                         $lifetime = SystemSettings::getSystemValue('max.session.lifetime');
@@ -315,7 +295,7 @@ final class ProjectLoader
                 }
                 StandardCookies::sync();
             } else {
-                AsyncConsolidator::initAsyncSessionAndCookies();
+               AsyncConsolidator::initAsyncSessionAndCookies();
             }
             if (\session_status() !== PHP_SESSION_ACTIVE) {
                 throw new CoreProcessException('SESSION not initialized!');
@@ -334,7 +314,7 @@ final class ProjectLoader
         $id = '_hl_flash_';
         if (isset($session[$id])) {
             foreach ($session[$id] as $key => &$data) {
-                $data['reps_left']--;
+                $data['reps_left'] --;
                 if ($data['reps_left'] < 0) {
                     unset($session[$id][$key]);
                     continue;
@@ -457,14 +437,7 @@ final class ProjectLoader
         DynamicParams::setRouteName($routes->getRouteName());
         DynamicParams::setRouteClassName($routes->getRouteClassName());
 
-        if (($protected = $routes->protected()) && \in_array('CSRF', $protected, true) && !Csrf::validate($token = Csrf::discover())) {
-            $message = 'Access to the protected route was prevented due to an invalid CSRF protection key';
-            if (empty($token)) {
-                $message = 'Access to the protected route is prevented unless the CSRF protection key is specified';
-            }
-            $level = SystemSettings::getCommonValue('system.log.level') ?: 'warning';
-            Log::log($level, $message, ['tag' => '#security_message']);
-
+        if (($protected = $routes->protected()) && \in_array('CSRF', $protected, true) && !Csrf::validate(Csrf::discover())) {
             (new BaseErrorPage(401, 'Protected from CSRF'))->insertInResponse();
             return true;
         }
@@ -475,6 +448,8 @@ final class ProjectLoader
         // Если это простой текст, то обработаем его здесь.
         if (empty($block['middlewares']) && empty($block['middleware-after']) && \is_string($block['data']['view'] ?? null)) {
             self::addToPlainCache(self::renderSimpleValue($block['data']['view'], $block['full-address']));
+            DynamicParams::setEndTime(\microtime(true));
+            self::addDebugPanelToResponse();
             return true;
         }
 

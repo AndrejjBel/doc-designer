@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Hleb\Main\Routes;
 
+use Hleb\Helpers\NameConverter;
+
 /**
  * @internal
  */
@@ -59,7 +61,7 @@ abstract class StandardRoute
 
     final public const NO_DEBUG_TYPE = 'noDebug';
 
-    final public const ALIAS_SUBTYPE = 'alias';
+    private ?NameConverter $nameConverter = null;
 
     /**
      * Registers a route method.

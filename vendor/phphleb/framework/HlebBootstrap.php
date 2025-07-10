@@ -23,7 +23,6 @@ use Hleb\Main\ProjectLoader;
 use Phphleb\Idnaconv\IdnaConvert;
 use Hleb\HttpMethods\External\SystemRequest;
 use Hleb\HttpMethods\External\Response as SystemResponse;
-use RuntimeException;
 use Throwable;
 
 /**
@@ -109,7 +108,7 @@ class HlebBootstrap
 
         // The current version of the framework.
         // Текущая версия фреймворка.
-        \defined('HLEB_CORE_VERSION') or \define('HLEB_CORE_VERSION', '2.0.75');
+        \defined('HLEB_CORE_VERSION') or \define('HLEB_CORE_VERSION', '2.0.63');
 
         $this->logger = $logger;
 
@@ -117,7 +116,11 @@ class HlebBootstrap
         // Регистрация обработчика ошибок.
         $this->setErrorHandler();
 
-        $this->initialParameters($config);
+        if ($config) {
+            $this->config = $this->checkConfig($config);
+        }
+
+        $this->initialParameters();
     }
 
     /**
@@ -186,49 +189,56 @@ class HlebBootstrap
      *
      * @throws Exception
      */
-    protected function initConfig(array $config): array
+    protected function getConfig(): array
     {
-        $c = $config;
-
+        if ($this->config) {
+            return $this->config;
+        }
         $moduleDirectory = $this->getModuleDirectoryName();
-        $dir = $this->globalDirectory;
 
-        if (!$c) {
-            require __DIR__ . '/Init/Review/basic.php';
-            $func = static function (string $path): array {
-                return require $path;
-            };
-            $c['common'] = $func($dir . '/config/common.php');
-            $c['database'] = $func($dir . '/config/database.php');
-            $c['system'] = $func($dir . '/config/system.php');
-            $c['main'] = $func($dir . '/config/main.php');
-        }
-        $c['system']['mode'] = $this->mode;
+        require __DIR__ . '/Init/Review/basic.php';
+
+        $dir = $this->globalDirectory;
+        $func = static function ($path): array {
+            return require $path;
+        };
+        $common = $func($dir . '/config/common.php');
+        $database = $func($dir . '/config/database.php');
+        $system = $func($dir . '/config/system.php');
+        $main = $func($dir . '/config/main.php');
+
+        $system['mode'] = $this->mode;
         if ($moduleDirectory) {
-            $c['system']['module.dir.name'] = $moduleDirectory;
+            $system['module.dir.name'] = $moduleDirectory;
         } else {
-            $this->moduleDirectory = $this->globalDirectory . DIRECTORY_SEPARATOR . $c['system']['module.dir.name'];
+            $this->moduleDirectory = $this->globalDirectory . DIRECTORY_SEPARATOR . $system['module.dir.name'];
         }
-        $c['system']['module.namespace'] = \ucfirst($c['system']['module.dir.name']);
-        $paths = $c['system']['project.paths'];
-        unset($c['system']['project.paths']);
+        $system['module.namespace'] = \ucfirst($system['module.dir.name']);
+        $paths = $system['project.paths'];
+        unset($system['project.paths']);
         foreach ($paths as &$path) {
             $path = $dir . '/' . \ltrim($path, '/\\');
         }
-        $c['path'] = \array_merge($paths, [
-            'global' => $dir,
-            'public' => $this->publicDirectory,
-            'vendor' => $this->vendorDirectory,
-            'modules' => $this->moduleDirectory,
-            'app' => $dir . '/app',
-            'storage' => $dir . '/storage',
-            'routes' => $dir . '/routes',
-            'resources' => $dir . '/resources',
-            'views' => $dir . '/resources/views',
-            'library' => $this->vendorDirectory . '/phphleb',
-            'framework' => $this->vendorDirectory . '/phphleb/framework',
-        ]);
-        $c['default.database'] = $c['database'];
+        $c = [
+            'common' => $common,
+            'main' => $main,
+            'database' => $database,
+            'default.database' => $database,
+            'path' => \array_merge($paths, [
+                'global' => $dir,
+                'public' => $this->publicDirectory,
+                'vendor' => $this->vendorDirectory,
+                'modules' => $this->moduleDirectory,
+                'app' => $dir . '/app',
+                'storage' => $dir . '/storage',
+                'routes' => $dir . '/routes',
+                'resources' => $dir . '/resources',
+                'views' => $dir . '/resources/views',
+                'library' => $this->vendorDirectory . '/phphleb',
+                'framework' => $this->vendorDirectory . '/phphleb/framework',
+            ]),
+            'system' => $system
+        ];
         if ($custom = $c['system']['custom.setting.files']) {
             foreach ($custom as $name => $file) {
                 if ($name && !isset($c[$name]) && \is_string($name)) {
@@ -236,6 +246,7 @@ class HlebBootstrap
                 }
             }
         }
+
         return ($this->config = $this->checkConfig($c));
     }
 
@@ -474,7 +485,6 @@ class HlebBootstrap
                 // 'twig.cache.inverted' => ['array'], // optional
                 // 'allowed.hosts' => ['array'], // not necessary yet
                 // 'config.debug' => ['boolean'], // hidden
-                // 'system.log.level' => ['string'], // optional
             ],
             'database' => [
                 'base.db.type' => ['string'],
@@ -551,12 +561,11 @@ class HlebBootstrap
      * @return SystemRequest
      * @throws Exception
      */
-    protected function buildRequest(?object &$request = null): SystemRequest
+    protected function buildRequest(?object $request = null): SystemRequest
     {
         $_SERVER['HTTP_HOST'] = $this->convertHost($_SERVER['HTTP_HOST']);
 
         $this->standardization();
-        $this->convertForcedMethod($_POST, $_SERVER);
         $protocol = \trim(\stristr($_SERVER["SERVER_PROTOCOL"], '/') ?: '', ' /') ?: '1.1';
 
         return new SystemRequest(
@@ -575,30 +584,6 @@ class HlebBootstrap
                 $_SERVER['REQUEST_SCHEME'],
                 $_SERVER['REMOTE_ADDR'],
             ));
-    }
-
-    /**
-     * If an adjusted method value is received from the form, then the previous method is replaced.
-     * Returns the modified method or null.
-     *
-     * Если из формы пришло скорректированное значение метода, то текущий метод заменяется.
-     * Возвращает измененный метод или null.
-     */
-    protected function convertForcedMethod(array &$post, array &$server, ?object &$request = null): ?string
-    {
-        if ($server['REQUEST_METHOD'] === 'POST' && isset($post['_method']) && \is_string($post['_method'])) {
-            $forced = \strtoupper($post['_method']);
-            if (!$forced || $forced === 'POST') {
-                return null;
-            }
-            if (!\in_array($forced, ['PUT', 'PATCH', 'DELETE'])) {
-                throw new RuntimeException('The `_method` value is incorrect.');
-            }
-            unset($post['_method']);
-            $server['REQUEST_METHOD'] = $forced;
-            return $forced;
-        }
-        return null;
     }
 
     /**
@@ -735,7 +720,7 @@ class HlebBootstrap
      *
      * @throws Exception
      */
-    private function initialParameters(array $config): void
+    private function initialParameters(): void
     {
         if ($this->publicDirectory !== null) {
             $this->publicDirectory = \rtrim($this->publicDirectory, '/\\');
@@ -748,14 +733,12 @@ class HlebBootstrap
                 \define('HLEB_PUBLIC_DIR', $this->publicDirectory);
             }
         }
-        if (!\function_exists('get_env')) {
-            require __DIR__ . '/Init/Review/basic.php';
-        }
+        require __DIR__ . '/Init/Review/basic.php';
 
         $this->globalDirectory = \rtrim($this->searchGlobalDirectory(), '/\\');
         $this->vendorDirectory = \rtrim($this->searchVendorDirectory(), '/\\');
 
-        $this->initConfig($config);
+        $this->config = $this->getConfig();
         if ($this->config['common']['config.debug'] ?? null) {
             \defined('HLEB_STRICT_UMASK') or @\umask(0000);
         }
@@ -894,9 +877,9 @@ class HlebBootstrap
                 }
             }
         }
-       if ($request->getUri()->getPath() === '/') {
-           return;
-       }
+        if ($request->getUri()->getPath() === '/') {
+            return;
+        }
         $urlValidator = $this->mode === self::ASYNC_MODE ? ($this->addressBar ??= new AddressBar()) : new AddressBar();
         $urlValidator->init(SystemSettings::getData(), $request);
         if ($urlValidator->check()->isUrlCompare()) {

@@ -2,6 +2,8 @@
 insertTemplate('/templates/header', ['data' => $data]);
 ?>
 
+<h4 class="text-center mb-5"><?php echo $data['page_data'][0]['title'];?></h4>
+
 <div class="product-btn">
     <button class="btn btn-sm btn-primary mt-2 mt-md-0"
     type="button"
@@ -72,5 +74,38 @@ insertTemplate('/templates/header', ['data' => $data]);
 // echo '<pre>';
 // var_dump($data['product']['calc']);
 // echo '</pre>';
+
+// $html = '<style type="text/css">
+// body {
+//     font-family: DejaVu Serif;
+//     margin-top: 10px;
+//     margin-bottom: 10px;
+//     position: relative;
+//     line-height: 1.2;
+// }
+// .ql-editor .ql-align-justify {
+//     text-align: justify;
+// }
+// .ql-editor p {
+//     margin: 0;
+//     padding-top: 0;
+//     padding-bottom: 0;
+// }
+// .ql-editor .ql-align-center {
+//     text-align: center;
+// }
+// .ql-indent-8 {
+//     padding-left: 25em;
+// }
+// .ql-align-justify {
+//     text-indent: 30px;
+// }
+// .ql-editor .ql-align-right {
+//     text-align: right;
+// }
+// </style>
+// <div class="product-block ql-editor">' . replace_vars_content($data['vars'], $data['product']['descr']) . '</div>';
+// $fname = 'test1';
+// html_to_pdf($html, $fname);
 
 insertTemplate('/templates/footer-pages', ['data' => $data]);

@@ -303,6 +303,130 @@ function vars_for_product_create($varsProduct, $varsArr, $product_id, $vars_prod
     return $content;
 }
 
+// Orders
+function orders_vars($name) {
+    $arr = [
+        'status' => [
+            1 => ['Ожидание оплаты', 'warning'],
+            2 => ['Оплачено', 'success'],
+            3 => ['Отменен', 'danger']
+        ],
+        'type' => [
+            1 => ['Наличные', 'success'],
+            2 => ['Безнал', 'info'],
+            3 => ['На карту', 'info'],
+            4 => ['Онлайн оплата', 'warning'],
+            5 => ['Без оплаты', 'secondary']
+        ],
+    ];
+    return $arr[$name];
+}
+
+function order_vars_html($name, $value) {
+    $res = orders_vars($name)[$value];
+    return '<span class="badge bg-' . $res[1] . '" data-name="' . $name . '">' . $res[0] . '</span>';
+}
+
+function order_upload($order_status, $link) {
+    $res = '<i class="bi bi-download text-danger mx-1"></i>';
+    if ($order_status == 2) {
+        $res = '<a href="' . $link . '" class="text-reset fs-16 mx-1" title="Скачать" download>
+            <i class="bi bi-download text-success"></i>
+        </a>';
+    }
+    return $res;
+}
+
+function ext_user_meta($user, $meta) {
+    if ($user) {
+        if (in_array($meta, ['phone', 'description'])) {
+            $user_meta = json_decode($user['meta'], true);
+            return $user_meta[$meta];
+        } else {
+            return $user[$meta];
+        }
+    } else {
+        return '';
+    }
+}
+
+function GetPaykLink($payment_data) {
+    $site_settings_pay = json_decode(site_settings('site_settings_pay'));
+
+	$user = $site_settings_pay->pay_user;
+	$password = $site_settings_pay->pay_pass;
+
+	# Basic-авторизация передаётся как base64
+	$base64=base64_encode("$user:$password");
+	$headers=Array();
+	array_push($headers,'Content-Type: application/x-www-form-urlencoded');
+
+	# Подготавливаем заголовок для авторизации
+	array_push($headers,'Authorization: Basic '.$base64);
+
+	# Укажите адрес ВАШЕГО сервера PayKeeper, адрес demo.paykeeper.ru - пример!
+	// $server_paykeeper="https://demo.paykeeper.ru";
+	$server_paykeeper="https://urist-master.server.paykeeper.ru";
+
+	# Параметры платежа, сумма - обязательный параметр
+	# Остальные параметры можно не задавать
+
+
+	# Готовим первый запрос на получение токена безопасности
+	$uri="/info/settings/token/";
+
+	# Для сетевых запросов в этом примере используется cURL
+	$curl=curl_init();
+
+	curl_setopt($curl,CURLOPT_RETURNTRANSFER,true);
+	curl_setopt($curl,CURLOPT_URL,$server_paykeeper.$uri);
+	curl_setopt($curl,CURLOPT_CUSTOMREQUEST,'GET');
+	curl_setopt($curl,CURLOPT_HTTPHEADER,$headers);
+	curl_setopt($curl,CURLOPT_HEADER,false);
+
+	# Инициируем запрос к API
+	$response=curl_exec($curl);
+	$php_array=json_decode($response,true);
+
+	# В ответе должно быть заполнено поле token, иначе - ошибка
+	if (isset($php_array['token'])) $token=$php_array['token']; else die();
+
+
+	# Готовим запрос 3.4 JSON API на получение счёта
+	$uri="/change/invoice/preview/";
+
+	# Формируем список POST параметров
+	$request = http_build_query(array_merge($payment_data, array ('token'=>$token)));
+
+	curl_setopt($curl,CURLOPT_RETURNTRANSFER,true);
+	curl_setopt($curl,CURLOPT_URL,$server_paykeeper.$uri);
+	curl_setopt($curl,CURLOPT_CUSTOMREQUEST,'POST');
+	curl_setopt($curl,CURLOPT_HTTPHEADER,$headers);
+	curl_setopt($curl,CURLOPT_HEADER,false);
+	curl_setopt($curl,CURLOPT_POSTFIELDS,$request);
+
+
+	$response=json_decode(curl_exec($curl),true);
+	# В ответе должно быть поле invoice_id, иначе - ошибка
+	if (isset($response['invoice_id'])) $invoice_id = $response['invoice_id']; else die();
+
+	# В этой переменной прямая ссылка на оплату с заданными параметрами
+	$link = "$server_paykeeper/bill/$invoice_id/";
+
+	# Теперь её можно использовать как угодно, например, выводим ссылку на оплату
+	return $link;
+
+    // Пример
+    // $bankrequest['pay_amount'] =  $check['summ'];
+    // $bankrequest['clientid'] =  $check['clientname'];
+    // $bankrequest['orderid'] =  $check['id'];
+    // $bankrequest['client_email'] =  $check['clientemail'];
+    // $bankrequest['service_name'] =  $prod['title'];
+    // $bankrequest['client_phone'] =  $inp_data['clientphone'];
+    // $bankschlink = GetPaykLink($bankrequest);
+
+}
+
 function cmp($a, $b) {
     return strcasecmp($a["title"], $b["title"]);
 }
@@ -329,4 +453,22 @@ if(!function_exists('mb_ucfirst')) {
 		$fc = mb_strtoupper(mb_substr($str, 0, 1));
 		return $fc . mb_substr($str, 1);
 	}
+}
+
+// encrypt - $code = encryptIt($str, 'your key');
+// decrypt - $str = decryptIt($code, 'your key');
+function encryptIt($str, $encryption_key=SITE_KEYCODE) {
+    $ciphering = "AES-256-CTR";
+    $options = 0;
+    $encryption_iv = '0123456789abcdef';
+    $encryption = openssl_encrypt($str, $ciphering, $encryption_key, $options, $encryption_iv);
+    return $encryption;
+}
+
+function decryptIt($encryption, $encryption_key=SITE_KEYCODE) {
+    $ciphering = "AES-256-CTR";
+    $options = 0;
+    $encryption_iv = '0123456789abcdef';
+    $encryption = openssl_decrypt($encryption, $ciphering, $encryption_key, $options, $encryption_iv);
+    return $encryption;
 }

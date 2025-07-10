@@ -1,4 +1,6 @@
-<?php ?>
+<?php
+$seo = json_decode($product['ceo']);
+?>
 
 <div class="row">
     <div class="col-12 col-md-6 mb-3">
@@ -40,22 +42,32 @@
 
     <div class="col-12 col-md-8 mb-3">
         <label for="link" class="form-label">Постоянная ссылка <span class="text-danger">*</span></label>
-        <div class="input-group mb-2">
-            <input type="text" id="allsit" name="allsit" class="form-control" value="<?php echo $product['allsit'];?>">
-            <a href="<?php echo $product['allsit'];?>" class="btn btn-success" title="Открыть на сайте">
+        <div class="input-group">
+            <input
+                type="text"
+                id="allsit"
+                name="allsit"
+                class="form-control"
+                value="<?php echo $product['allsit'];?>"
+                data-post-type="products" 
+                data-type="edit"
+                onblur="slugUnicActions(this)">
+            <a href="/products/<?php echo $product['allsit'];?>" class="btn btn-success" title="Открыть на сайте">
                 <i class="bi bi-box-arrow-up-right"></i>
             </a>
+            <div id="title" class="warning-feedback">Ссылка уникализирована</div>
         </div>
     </div>
 
-    <!-- <div class="col-12 col-md-8 mb-3">
-        <label for="allsit" class="form-label">Ссылка</label>
-        <input type="text" id="allsit" name="allsit" class="form-control" value="<?php //echo $product['allsit'];?>">
+    <div class="col-12 mb-3">
+        <label for="seo_title" class="form-label">Seo title</label>
+        <textarea class="form-control" id="seo_title" name="seo_title" rows="1" oninput="numberCharacters(this)"><?php echo ($seo)? $seo->title : '';?></textarea>
+        <span>Рекомендуемое количество символов <span class="number-characters-rec"><?php echo SITE_NCRST;?></span> / <span class="number-characters-curr text-success">0</span></span>
     </div>
 
-    <div class="col-12 col-md-4 mb-3 d-flex gap-1 align-items-end">
-        <a href="<?php //echo $product['allsit'];?>" class="btn btn-success" title="Открыть на сайте">
-            <i class="bi bi-box-arrow-up-right"></i>
-        </a>
-    </div> -->
+    <div class="col-12 mb-3">
+        <label for="seo_description" class="form-label">Seo description</label>
+        <textarea class="form-control" id="seo_description" name="seo_description" rows="1" oninput="numberCharacters(this)"><?php echo ($seo)? $seo->description : '';?></textarea>
+        <span>Рекомендуемое количество символов <span class="number-characters-rec"><?php echo SITE_NCRSD;?></span> / <span class="number-characters-curr text-success">0</span></span>
+    </div>
 </div>

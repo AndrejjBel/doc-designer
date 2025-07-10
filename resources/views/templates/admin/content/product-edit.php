@@ -106,7 +106,7 @@
     // }));
 
     // echo '<pre>';
-    // var_dump($newVars);
+    // var_dump($data['prodSlugNotId']);
     // echo '</pre>';
     ?>
 

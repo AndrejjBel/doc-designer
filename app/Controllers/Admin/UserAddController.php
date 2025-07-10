@@ -72,9 +72,9 @@ class UserAddController extends Controller
                         $headers  = 'MIME-Version: 1.0' . "\r\n";
                         $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
                         $headers .= 'To: <' . $to . '>' . "\r\n";
-                        $headers .= 'From: do.developer-creatsites.h1n.ru <admin@do.developer-creatsites.h1n.ru>' . "\r\n";
-                        $headers .= 'Cc: admin@do.developer-creatsites.h1n.ru' . "\r\n";
-                        $headers .= 'Bcc: admin@do.developer-creatsites.h1n.ru' . "\r\n";
+                        $headers .= 'From: administrator@urist-master.ru <administrator@urist-master.ru>' . "\r\n";
+                        $headers .= 'Cc: administrator@urist-master.ru' . "\r\n";
+                        $headers .= 'Bcc: administrator@urist-master.ru' . "\r\n";
                         mail($to, $subject, $message, $headers);
                     }
 

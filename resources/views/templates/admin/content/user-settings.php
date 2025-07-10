@@ -69,6 +69,17 @@ if ($data['mod'] == 'dashboard') {
                                                             value="<?php echo ($user['last_name'])? $user['last_name'] : '';?>">
                                                     </div>
                                                 </div>
+                                                <div class="row mb-3">
+                                                    <label class="col-md-3 col-form-label" for="fio">ФИО для платежей</label>
+                                                    <div class="col-md-9">
+                                                        <input type="text"
+                                                            id="fio"
+                                                            name="fio"
+                                                            class="form-control"
+                                                            placeholder="Иванов Иван Иванович"
+                                                            value="<?php echo ($user['fio'])? $user['fio'] : '';?>">
+                                                    </div>
+                                                </div>
 
                                                 <div class="row mb-3">
                                                     <label class="col-md-3 col-form-label" for="email">Email</label>

@@ -164,7 +164,7 @@ final class SearchBlock
                 // Check if the address matches the variant route.
                 // Проверяется, подходит ли адрес для вариативного маршрута.
                 if ($this->checkVariableRoute($addressParts, $routeParts)) {
-                    $this->setData($route, $this->data);
+                    $this->setData($route);
                     return $route['k'];
                 }
             }
@@ -352,7 +352,7 @@ final class SearchBlock
         }
         $result = (new RangeChecker($exactPart))->check(\count($addressParts) - \count($routeParts));
         if ($result) {
-            $this->data = $this->updateData(array_values(array_slice($addressParts, \count($routeParts))));
+            $this->data = $this->updateData(array_values(array_slice($addressParts, \count($routeParts) - 1)));
         }
 
         return $result;

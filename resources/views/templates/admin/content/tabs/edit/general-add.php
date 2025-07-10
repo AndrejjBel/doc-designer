@@ -39,12 +39,36 @@
     </div>
 
     <div class="col-12 col-md-8 mb-3">
-        <label for="link" class="form-label">Постоянная ссылка <span class="text-danger">*</span></label>
-        <div class="input-group mb-2">
-            <input type="text" id="allsit" name="allsit" class="form-control" value="">
+        <label for="link" class="form-label">Постоянная ссылка</label>
+        <div class="input-group">
+            <input
+                type="text"
+                id="allsit"
+                name="allsit"
+                class="form-control"
+                value=""
+                data-post-type="products"
+                data-type="add"
+                onblur="slugUnicActions(this)">
             <a href="" class="btn btn-success" title="Открыть на сайте">
                 <i class="bi bi-box-arrow-up-right"></i>
             </a>
+            <div id="title" class="warning-feedback">Ссылка уникализирована</div>
         </div>
+        <span class="help-block">
+            <small>Если оставить пустым, ссылка будет сформирована автоматически</small>
+        </span>
+    </div>
+
+    <div class="col-12 mb-3">
+        <label for="seo_title" class="form-label">Seo title</label>
+        <textarea class="form-control" id="seo_title" name="seo_title" rows="1" oninput="numberCharacters(this)"></textarea>
+        <span>Рекомендуемое количество символов <span class="number-characters-rec"><?php echo SITE_NCRST;?></span> / <span class="number-characters-curr text-success">0</span></span>
+    </div>
+
+    <div class="col-12 mb-3">
+        <label for="seo_description" class="form-label">Seo description</label>
+        <textarea class="form-control" id="seo_description" name="seo_description" rows="1" oninput="numberCharacters(this)"></textarea>
+        <span>Рекомендуемое количество символов <span class="number-characters-rec"><?php echo SITE_NCRSD;?></span> / <span class="number-characters-curr text-success">0</span></span>
     </div>
 </div>

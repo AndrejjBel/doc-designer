@@ -63,16 +63,25 @@ const fielddokClick = () => {
 
             modalTitle.innerText = (newVar.descr)? newVar.descr : newVar.captholder;
             modalBody.innerHTML = fieldTd(typedata, item.dataset.key, value, newVar.extdata);
+
+            let phone = '';
+            if (typedata[2] == 'phone') {
+                let inputElem = document.querySelector('input[data-title="'+item.dataset.key+'"]');
+                for (let ev of ['input', 'blur', 'focus']) {
+                    inputElem.addEventListener(ev, phone_mask);
+                }
+            }
+            partyYur('#yur-magazin');
         });
     });
-    console.dir(JSON.parse(varsAll));
-    // console.dir(varsAll);
+    // console.dir(JSON.parse(varsAll));
+    // console.dir(JSON.parse(prodCalc));
 }
 fielddokClick();
 
 function fieldFilling(elem) {
     let key = elem.dataset.title;
-    let cont = document.querySelectorAll('.fielddok[data-key="'+key+'"] strong'); //.innerHTML = elem.value;
+    let cont = document.querySelectorAll('.fielddok[data-key="'+key+'"]'); //.innerHTML = elem.value;
     cont.forEach((item) => {
         if (elem.type == 'date') {
             item.innerHTML = dateFormaterYearNew(elem.value, ' ')
@@ -83,8 +92,23 @@ function fieldFilling(elem) {
     });
 }
 
+function fieldFillingFd(elem) {
+    let key = elem.dataset.title;
+    console.dir(elem.dataset.title);
+    let cont = document.querySelectorAll('.fielddok[data-key="'+key+'"]'); //.innerHTML = elem.value;
+    cont.forEach((item) => {
+        if (elem.type == 'date') {
+            item.innerHTML = dateFormaterYearNew(elem.value, ' ');
+            document.querySelector('input[name="'+key+'"]').value = elem.value;
+        } else {
+            item.innerHTML = elem.value;
+            document.querySelector('input[name="'+key+'"]').value = elem.value.normalize(); //replace(/"/g, '&quot;');
+        }
+    });
+}
+
 function fieldFillingForm(elem) {
-    let ih = document.querySelectorAll('span[data-key="'+elem.name+'"] strong');
+    let ih = document.querySelectorAll('span[data-key="'+elem.name+'"]');
     if (ih.length) {
         ih.forEach((item) => {
             if (elem.type == 'date') {
@@ -97,10 +121,14 @@ function fieldFillingForm(elem) {
 }
 
 function fieldTd(typedata, name, value, optionsStr) {
+    let phone = '';
+    if (typedata[2] == 'phone') {
+        phone = ' phone_mask';
+    }
     if (typedata[0] == 'input') {
-        return `<input type="${typedata[1]}" data-title="${name}" class="form-control" value="${value}" oninput="fieldFilling(this)">`;
+        return `<input type="${typedata[1]}" id="${name}" data-title="${name}" class="form-control${phone}" value="${value}" onblur="fieldFillingFd(this)">`;
     } else if (typedata[0] == 'textarea') {
-        return `<textarea class="form-control" data-title="${name}" rows="2" oninput="fieldFilling(this)">${value}</textarea>`;
+        return `<textarea class="form-control" data-title="${name}" rows="2" onblur="fieldFillingFd(this)">${value}</textarea>`;
     } else if (typedata[0] == 'select') {
         let optionsArr = optionsStr.split(';');
         let options = ``;
@@ -173,14 +201,76 @@ function varsOptions(name='') {
     return result;
 }
 
-function calculator(type) {
-    if (type == 1) {}
-    if (type == 2) {}
-    if (type == 3) {
-        daysBetween(startDate, endDate);
+function calculatorActions() {
+    const calc = JSON.parse(prodCalc);
+
+    const inputs = [
+        document.querySelector('input[name="'+calc.dateStart+'"]'),
+        document.querySelector('input[name="'+calc.dateEnd+'"]'),
+        document.querySelector('input[name="'+calc.cost+'"]'),
+    ];
+
+    for (let elem of inputs) {
+        elem.addEventListener('blur', (e) => {
+            if (validateInputs(inputs)) {
+                calculator(calc);
+            }
+        });
     }
-    if (type == 4) {}
-    if (type == 5) {}
+
+    // calculator(calc.calc);
+}
+calculatorActions();
+
+function calculator(calc) {
+    let keyRate = calc.keyRate;
+    let dateStart = document.querySelector('input[name="'+calc.dateStart+'"]').value;
+    let dateEnd = document.querySelector('input[name="'+calc.dateEnd+'"]').value;
+    let sum = document.querySelector('input[name="'+calc.cost+'"]').value;
+    let startDate = new Date(dateStart);
+    let endDate = new Date(dateEnd);
+    let result = 0;
+    if (calc.calc == 1) {
+        result = ((sum*daysBetween(startDate, endDate)*2*0.0033)/100)*keyRate;
+    }
+    if (calc.calc == 2) {
+        result = ((sum/100)*3)*daysBetween(startDate, endDate);
+    }
+    if (calc.calc == 3) {
+        result = (sum/100)*daysBetween(startDate, endDate);
+    }
+    if (calc.calc == 4) {
+        result = ((sum/100)*0.5)*daysBetween(startDate, endDate);
+    }
+    if (calc.calc == 5) {
+        result = ((sum/100*keyRate)/365)*daysBetween(startDate, endDate);
+    }
+
+    document.querySelector('input[name="'+calc.calculation+'"]').value = result;
+    let ih = document.querySelectorAll('span[data-key="'+calc.calculation+'"]');
+    if (ih.length) {
+        ih.forEach((item) => {
+            item.innerHTML = result;
+        });
+    }
+
+    // console.dir(daysBetween(startDate, endDate));
+}
+
+// console.dir(JSON.parse(prodCalc));
+
+function validateInputs(inputs) {
+    let i = 0;
+    for (var variable of inputs) {
+        if (!variable.value) {
+            i++;
+        }
+    }
+    if (i == 0) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 function daysBetween(startDate, endDate) {
@@ -213,20 +303,181 @@ source.onselectstart = noselect;
 // source.ondragstart = noselect;
 // source.oncontextmenu = noselect;
 
-jQuery(document).ready( function($) {
-    $("#yur-magazin").suggestions({
+function payAction(elem) {
+    const modalBuyDoc = new bootstrap.Modal('#modal-buy-doc');
+    const modalWarning = new bootstrap.Modal('#warning-form-modal');
+    const offcanvasFields = new bootstrap.Offcanvas('#offcanvasFields');
+
+    const form = document.querySelector('form#fields-list');
+
+    if (validateForm(form)) {
+        modalBuyDoc.show();
+    } else {
+        modalWarning.show();
+    }
+
+    const wfm = document.getElementById('warning-form-modal');
+    wfm.addEventListener('hide.bs.modal', event => {
+        let obArr = document.querySelectorAll('.offcanvas-backdrop');
+        if (obArr.length) {
+            obArr.forEach((item) => {
+                item.remove();
+            });
+        }
+        offcanvasFields.show();
+    });
+}
+
+function buyDocument(elem) {
+    elem.style.pointerEvents = 'none';
+    const fieldsListForm = document.querySelector('form#fields-list');
+    const closeBtn = document.querySelector('#modal-buy-doc .btn-close');
+    const successModal = new bootstrap.Modal('#success-form-modal', {
+        // keyboard: false
+    });
+    const successModalAct = document.getElementById('success-form-modal');
+
+    successModalAct.addEventListener('hidden.bs.modal', event => {
+        location.reload();
+    });
+    // console.dir(elem);
+    // console.dir(elem.form);
+    // console.dir(fieldsListForm);
+    // console.dir(validateForm(elem.form));
+
+    if (validateForm(elem.form)) {
+        let formData = new FormData(elem.form);
+        let formDataFl = new FormData(fieldsListForm);
+
+        formData.append('action', 'buyDocument');
+        for (var pair of formDataFl.entries()) {
+            formData.append(pair[0], pair[1]);
+        }
+        url = '/front/fetch';
+
+        fetch(url, {
+            method: "POST",
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Ошибка запроса');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.dir(data);
+            if (data.doc_url) {
+                closeBtn.click();
+                successModal.show();
+            }
+        })
+        .catch(error => {
+            console.dir(error);
+        });
+    }
+}
+
+function validateForm(form) {
+    let i = 0;
+    for (var variable of form.elements) {
+        if (variable.type == 'checkbox') {
+            if (variable.required == true) {
+                if (variable.checked == false) {
+                    variable.classList.add('is-invalid');
+                    i++;
+                }
+            }
+        } else {
+            if (variable.type != 'button' && !variable.value) {
+                variable.classList.add('is-invalid');
+                i++;
+            }
+        }
+    }
+    if (i == 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function validateFormValid(selector) {
+    const form = document.querySelector(selector);
+    for (var variable of form.elements) {
+        variable.addEventListener('input', (e) => {
+            if (e.target.value) {
+                e.target.classList.remove('is-invalid');
+            }
+        });
+    }
+}
+validateFormValid('form#fields-list');
+validateFormValid('form#buy_doc_form');
+
+function phone_mask(e) {
+    var el = e.target,
+    clearVal = el.dataset.phoneClear,
+    pattern = el.dataset.phonePattern,
+    matrix_def = "+7(___) ___-__-__",
+    matrix = pattern ? pattern : matrix_def,
+    i = 0,
+    def = matrix.replace(/\D/g, ""),
+    val = e.target.value.replace(/\D/g, "");
+    if (clearVal !== 'false' && e.type === 'blur') {
+        if (val.length < matrix.match(/([\_\d])/g).length) {
+            e.target.value = '';
+            return;
+        }
+    }
+    if (def.length >= val.length) val = def;
+    e.target.value = matrix.replace(/./g, function (a) {
+        return /[_\d]/.test(a) && i < val.length ? val.charAt(i++) : i >= val.length ? "" : a
+    });
+}
+
+var phone_inputs = document.querySelectorAll('.phone_mask');
+for (let elem of phone_inputs) {
+    for (let ev of ['input', 'blur', 'focus']) {
+        elem.addEventListener(ev, phone_mask);
+    }
+}
+
+// jQuery(document).ready( function($) {});
+
+function partyYur(idName) {
+    $(idName).suggestions({
         token: "69cff3e74a71d5ece8579d27a89e9532c70bcbf5",
         type: "PARTY",
         /* Вызывается, когда пользователь выбирает одну из подсказок */
         onSelect: function(suggestion) {
             console.log(suggestion);
-            $("#yur-inn").val(suggestion.data.inn);
-            $("#yur-ogrn").val(suggestion.data.ogrn);
-            $("#yur-adres").val(suggestion.data.address.value);
+            // $("#yur-magazin").val(suggestion.value);
+            // $("#yur-inn").val(suggestion.data.inn);
+            // $("#yur-ogrn").val(suggestion.data.ogrn);
+            // $("#yur-adres").val(suggestion.data.address.value);
 
-            $('span[data-key="yur-inn"] strong').html(suggestion.data.inn);
-            $('span[data-key="yur-ogrn"] strong').html(suggestion.data.ogrn);
-            $('span[data-key="yur-adres"] strong').html(suggestion.data.address.value);
+            document.querySelector('input[name="yur-magazin"]').value = suggestion.value;
+            document.querySelector('input[name="yur-inn"]').value = suggestion.data.inn;
+            document.querySelector('input[name="yur-ogrn"]').value = suggestion.data.ogrn;
+            document.querySelector('textarea[name="yur-adres"]').value = suggestion.data.address.value;
+
+            document.querySelector('input[name="yur-magazin"]').classList.remove('is-invalid');
+            document.querySelector('input[name="yur-inn"]').classList.remove('is-invalid');
+            document.querySelector('input[name="yur-ogrn"]').classList.remove('is-invalid');
+            document.querySelector('textarea[name="yur-adres"]').classList.remove('is-invalid');
+
+            $('span[data-key="yur-inn"]').html(suggestion.data.inn);
+            $('span[data-key="yur-ogrn"]').html(suggestion.data.ogrn);
+            $('span[data-key="yur-adres"]').html(suggestion.data.address.value);
+
+            let ih = document.querySelectorAll('span[data-key="yur-magazin"]');
+            if (ih.length) {
+                ih.forEach((item) => {
+                    item.innerHTML = suggestion.value;
+                });
+            }
         }
     });
-});
+}
+partyYur('#yur-magazin');

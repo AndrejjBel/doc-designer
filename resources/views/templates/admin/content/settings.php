@@ -73,6 +73,20 @@ if ($site_settings) {
                     </div>
                 </div>
 
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="keyRate" class="form-label">Ключевая ставка ЦБ РФ</label>
+                            <input type="number"
+                                id="keyRate"
+                                name="keyRate"
+                                class="form-control"
+                                value="<?php echo ($site_settings)? $site_settings->keyRate : '';?>">
+                            <!-- <span class="help-block"><small>Количество записей на страницах на сайте</small></span> -->
+                        </div>
+                    </div>
+                </div>
+
                 <div class="mb-3">
                     <label class="form-label">Регистрация</label>
                     <div class="form-check">

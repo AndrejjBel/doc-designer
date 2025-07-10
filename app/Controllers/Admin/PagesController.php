@@ -113,6 +113,7 @@ class PagesController extends Controller
 
         if ($duplicate) {
             $page = PagesModel::getPageForId($duplicate);
+            $product = ProductsModel::getProductForId($page['product_id']);
 
             return view('/admin/index',
                 [
@@ -124,7 +125,8 @@ class PagesController extends Controller
                         'userId' => $userId,
                         'vars' => $vars,
                         'duplicate' => $duplicate,
-                        'page' => $page
+                        'page' => $page,
+                        'product' => $product
                     ]
                 ]
             );

@@ -60,10 +60,6 @@ final readonly class Verifier
                     }
                 }
 
-                if ($route['method'] === StandardRoute::ALIAS_SUBTYPE) {
-                    $this->error(AsyncRouteException::HL41_ERROR, ['origin' => $route['name'], 'target' => $route['new-name']]);
-                }
-
                 $realTagKeys = [];
                 $controllerCount = 0;
                 $nameCount = 0;

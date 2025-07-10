@@ -3,6 +3,7 @@ use Hleb\Static\Request;
 use App\Models\{
     ProductsModel,
     VarsModel,
+    OrdersModel,
     Admin\AdminModel,
     Myorm\MyormModel,
     User\UsersModel
@@ -15,6 +16,9 @@ define('SITE_SETTINGS', $site_settings);
 
 define('SITE_NCRST', 60); // Recommended number of characters Seo title
 define('SITE_NCRSD', 150); // Recommended number of characters Seo description
+
+define('SITE_KEYCODE', 'B6c8k6t958a5');
+define('SITE_KEYRATE', ($site_settings->keyRate)? (int)$site_settings->keyRate : 20);
 
 /**
  * Gets the URL of the site's main page
@@ -97,15 +101,17 @@ function userAllDataMeta() {
     $sth = $db->prepare("SELECT * FROM `users` WHERE `id` = ?");
     $sth->execute([$id]);
     $arr_gen = $sth->fetch(PDO::FETCH_ASSOC);
-    $sth = $db->prepare("SELECT `meta` FROM `usermeta` WHERE `user_id` = ?");
-    $sth->execute([$id]);
-    $arr_meta = $sth->fetch(PDO::FETCH_ASSOC);
-    if ($arr_meta) {
-        $result = array_merge($arr_gen, $arr_meta);
-    } else {
-        $result = $arr_gen;
-    }
-    return $result;
+    // $arr_meta = '';
+    // $sth = $db->prepare("SELECT `meta` FROM `usermeta` WHERE `user_id` = ?");
+    // $sth->execute([$id]);
+    // $arr_meta = $sth->fetch(PDO::FETCH_ASSOC);
+    // if ($arr_meta) {
+    //     $result = array_merge($arr_gen, $arr_meta);
+    // } else {
+    //     $result = $arr_gen;
+    // }
+    // return $result;
+    return $arr_gen;
 }
 
 function update_user_first_name($user_id, $first_name) {
@@ -183,6 +189,17 @@ function unicValue($table, $key, $link) {
     $sth->execute();
     $user = $sth->fetchAll(PDO::FETCH_COLUMN);
     return $user;
+}
+
+function unicValueNotId($table, $key, $id, $link) {
+    $db = MyormModel::dbc();
+    $sql = "SELECT $key FROM $table WHERE NOT id = :id AND $key LIKE :value";
+    $sth = $db->prepare($sql);
+    $sth->bindValue(":id", $id);
+    $sth->bindValue(":value", $link.'%');
+    $sth->execute();
+    $value = $sth->fetchAll(PDO::FETCH_COLUMN);
+    return $value;
 }
 
 function usernameId($user_id) {
@@ -506,7 +523,7 @@ function translit_file($filename) {
 	return $new;
 }
 
-function gen_password($length = 6) {
+function gen_password($length=6) {
 	$chars = 'qazxswedcvfrtgbnhyujmkiolp1234567890QAZXSWEDCVFRTGBNHYUJMKIOLP#&$';
 	$size = strlen($chars) - 1;
 	$password = '';
@@ -601,6 +618,14 @@ function checked($var, $value = null) {
 	}
 }
 
+function optionActive($option, $value)  {
+    $res = '';
+	if ($option == $value) {
+		$res = ' active';
+	}
+	return $res;
+}
+
 function post_thumbnail_edit($thumb_img) {
     if ($thumb_img) {
         echo '<div class="post-thumbnail-img mb-2">
@@ -693,9 +718,9 @@ function mini_cart_products($data) {
     }
 }
 
-function navigation_admin_left_html($nav, $vars) {
+function navigation_admin_left_html($mod, $vars) {
     // $nav = config('navigation', $nav.'_nav');
-    $nav = nav_obj($vars);
+    $nav = nav_obj($mod, $vars);
     $id = ($nav['container_id'])? ' id="' . $nav['container_id'] . '"' : '';
     $class = ($nav['container_class'])? ' class="' . $nav['container_class'] . '"' : '';
     $content = '<' . $nav['container'] . $id . $class . '>';
@@ -902,7 +927,7 @@ function varsForProductOptions($varsProduct, $varsArr, $value=0) {
             }));
             $label = '';
             if ($var['typedata'] != 9) {
-                $content .= '<option value="' . $var['id'] . '"' . selected($value, $var['id']) . '>#' . $var['title'] . '# ' . $var['descr'] . '</option>';
+                $content .= '<option value="' . $var['title'] . '"' . selected($value, $var['title']) . '>#' . $var['title'] . '# ' . $var['descr'] . '</option>';
             }
         }
     }
@@ -951,4 +976,8 @@ function prodVarsAdd() {
     }
 
     return $products_ids;
+}
+
+function get_order($id) {
+    return OrdersModel::getOrder($id);
 }

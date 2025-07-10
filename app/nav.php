@@ -1,6 +1,6 @@
 <?php
 
-function nav_obj($vars_obj) {
+function nav_obj($mod, $vars_obj) {
     $search = [0];
     $vars_n = array_filter($vars_obj, function($_array) use ($search){
         return in_array($_array['parentid'], $search);
@@ -67,7 +67,7 @@ function nav_obj($vars_obj) {
     //     'class_li' => '',
     //     'children' => []
     // ];
-    $nav = [
+    $nav_admin = [
         'container'       => 'ul',
         'container_class' => 'side-nav',
         'container_id'    => '',
@@ -97,6 +97,12 @@ function nav_obj($vars_obj) {
                 'children' => $vars
             ],
             [
+                'name' => 'Продажи',
+                'link' => 'orders',
+                'icon' => 'bi bi-credit-card-2-back-fill', // ri-dashboard-3-fill
+                'children' => []
+            ],
+            [
                 'name' => 'Пользователи',
                 'link' => 'sidebarUsers',
                 'icon' => 'ri-account-box-fill',
@@ -117,17 +123,83 @@ function nav_obj($vars_obj) {
             ],
             [
                 'name' => 'Профиль',
-                'link' => '/admin/user-settings',
+                'link' => 'sidebarUserSettings',
                 'icon' => 'ri-user-6-fill',
-                'children' => []
+                'children' => [
+                    [
+                        'name' => 'Профиль',
+                        'link' => '/admin/user-settings',
+                        'class_li' => '',
+                        'children' => []
+                    ],
+                    [
+                        'name' => 'Покупки',
+                        'link' => '/admin/user-orders',
+                        'class_li' => '',
+                        'children' => []
+                    ]
+                ]
             ],
             [
                 'name' => 'Настройки',
-                'link' => '/admin/settings',
+                'link' => 'sidebarSettings',
                 'icon' => 'ri-settings-5-fill',
-                'children' => []
+                'children' => [
+                    [
+                        'name' => 'Общие',
+                        'link' => '/admin/settings',
+                        'class_li' => '',
+                        'children' => []
+                    ],
+                    [
+                        'name' => 'Платежи',
+                        'link' => '/admin/settings-pay',
+                        'class_li' => '',
+                        'children' => []
+                    ]
+                ]
             ]
         ]
     ];
-    return $nav;
+
+    $nav_dashboard = [
+        'container'       => 'ul',
+        'container_class' => 'side-nav',
+        'container_id'    => '',
+        'structure' => [
+            [
+                'name' => 'Личный кабинет',
+                'link' => '/dashboard',
+                'icon' => 'bi bi-speedometer2', // ri-dashboard-3-fill
+                'children' => []
+            ],
+            [
+                'name' => 'Профиль',
+                'link' => 'sidebarUserSettings',
+                'icon' => 'ri-user-6-fill',
+                'children' => [
+                    [
+                        'name' => 'Профиль',
+                        'link' => '/dashboard/user-settings',
+                        'class_li' => '',
+                        'children' => []
+                    ],
+                    [
+                        'name' => 'Покупки',
+                        'link' => '/dashboard/user-orders',
+                        'class_li' => '',
+                        'children' => []
+                    ]
+                ]
+            ]
+        ]
+    ];
+
+    if ($mod == 'admin') {
+        return $nav_admin;
+    }
+
+    if ($mod == 'dashboard') {
+        return $nav_dashboard;
+    }
 }

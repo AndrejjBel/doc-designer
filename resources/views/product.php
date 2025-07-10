@@ -1,201 +1,208 @@
 <?php
 insertTemplate('/templates/header', ['data' => $data]);
-$post = $data['post_data'][0];
-$thumb = $post['post_thumb_img'];
-if ($thumb) {
-    $thumb_img = json_decode($thumb, true)[0]['link'];
-} else {
-    $thumb_img = '../public/images/no-images.png';
-}
-$gallery = $post['post_gallery_img'];
-if ($gallery) {
-    $gallery_img = json_decode($gallery);
-} else {
-    $gallery_img = false;
-}
-$add_cart = 0;
-if (isset($_COOKIE['ordersProduct'])) {
-    $orders = explode(';', $_COOKIE['ordersProduct']);
-    foreach ($orders as $value) {
-        if ((int)explode('-', $value)[0] == (int)$post['post_id']) {
-            $add_cart++;
-        }
-    }
-}
+$user = $data['user'];
 ?>
 
-<section class="bg-half-100 bg-light d-table w-100">
-    <div class="container">
-        <div class="row mt-5 justify-content-center">
-            <div class="col-lg-12 text-center">
-                <div class="pages-heading">
-                    <h4 class="title"><?php echo $post['post_title'];?></h4>
-                </div>
+<h4 class="text-center mb-5"><?php echo $data['product']['title'];?></h4>
+
+<div class="d-flex gap-2 justify-content-between product-btn">
+    <button class="btn btn-sm btn-primary mt-2 mt-md-0"
+    type="button"
+    data-bs-toggle="offcanvas"
+    data-bs-target="#offcanvasFields"
+    aria-controls="offcanvasVars">Поля</button>
+
+    <button
+        class="btn btn-sm btn-primary mt-2 mt-md-0"
+        type="button"
+        name="button"
+        onclick="payAction(this)">Купить за <?php echo $data['product']['price'];?>руб.</button>
+</div>
+
+<div class="product-block ql-editor">
+    <?php echo replace_vars_content($data['vars'], $data['product']['descr']);?>
+</div>
+
+<div id="edit-var-text-modal" class="modal fade" tabindex="-1" aria-labelledby="edit-var-text-modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header modal-colored-header">
+                <h4 class="modal-title" id="edit-var-text-modalLabel"></h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <div class="modal-body mt-3 mb-3"></div>
+            <!-- <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Отмена</button>
+                <button id="delete-product" type="button" class="btn btn-success" data-bs-dismiss="modal" data-id="0" onclick="productDelete(this)">Да, удалить</button>
+            </div> -->
         </div>
-
-        <div class="position-breadcrumb">
-            <nav aria-label="breadcrumb" class="d-inline-block">
-                <ul class="breadcrumb rounded shadow mb-0 px-4 py-2">
-                    <li class="breadcrumb-item"><a href="/">Главная</a></li>
-                    <li class="breadcrumb-item"><a href="/products">Изделия</a></li>
-                    <li class="breadcrumb-item active" aria-current="page"><?php echo $post['post_title'];?></li>
-                </ul>
-            </nav>
-        </div>
-    </div>
-</section>
-
-<div class="position-relative">
-    <div class="shape overflow-hidden text-color-white">
-        <svg viewBox="0 0 2880 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 48H1437.5H2880V0H2160C1442.5 52 720 0 720 0H0V48Z" fill="currentColor"></path>
-        </svg>
     </div>
 </div>
 
-<section class="section">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-md-6 mt-4 mt-sm-0 pt-2 pt-sm-0 order-2 order-md-1">
-                <div class="col-12 text-center mb-4">
-                    <img src="<?php echo $thumb_img;?>" class="img-fluid rounded" alt="">
-                </div>
-
-                <div class="work-detail">
-                    <?php echo str_replace('<p>', '<p class="text-muted">', $post['post_content']);?>
-                </div>
-
-                <?php if ($gallery_img) { ?>
-                <div class="col-md-12 mt-4 pt-2">
-                    <div class="tiny-two-item">
-                        <?php foreach ($gallery_img as $key => $img) { ?>
-                            <div class="tiny-slide">
-                                <div class="card border-0 work-container work-primary work-modern position-relative d-block overflow-hidden rounded">
-                                    <div class="portfolio-box-img position-relative overflow-hidden">
-                                        <img class="item-container img-fluid mx-auto" src="<?php echo $img->link; ?>" alt="1" />
-                                        <div class="overlay-work"></div>
-                                        <div class="content">
-                                            <h5 class="text-white mb-0"><?php echo $post['post_title'];?></h5>
-                                            <h6 class="text-white-50 tag mt-1 mb-0"><?php echo productCategory($post['post_term'], 1);?></h6>
-                                        </div>
-                                        <div class="icons text-center">
-                                            <a href="<?php echo $img->link; ?>" class="work-icon bg-white d-inline-flex rounded-pill lightbox"><i data-feather="camera" class="fea icon-sm image-icon"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php } ?>
-                    </div>
-                </div>
-                <?php } ?>
-
-                <div class="card shadow rounded border-0 mt-4">
-                    <div class="card-body">
-                        <h5 class="card-title mb-0">Leave A Comment :</h5>
-
-                        <form class="mt-3">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="mb-3">
-                                        <label class="form-label">Your Comment</label>
-                                        <div class="form-icon position-relative">
-                                            <i data-feather="message-circle" class="fea icon-sm icons"></i>
-                                            <textarea id="message" placeholder="Your Comment" rows="5" name="message" class="form-control ps-5" required=""></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Name <span class="text-danger">*</span></label>
-                                        <div class="form-icon position-relative">
-                                            <i data-feather="user" class="fea icon-sm icons"></i>
-                                            <input id="name" name="name" type="text" placeholder="Name" class="form-control ps-5" required="">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Your Email <span class="text-danger">*</span></label>
-                                        <div class="form-icon position-relative">
-                                            <i data-feather="mail" class="fea icon-sm icons"></i>
-                                            <input id="email" type="email" placeholder="Email" name="email" class="form-control ps-5" required="">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-12">
-                                    <div class="send d-grid">
-                                        <button type="submit" class="btn btn-primary">Send Comment</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+<div id="warning-form-modal" class="modal fade" tabindex="-1" aria-labelledby="warning-form-modal-modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header modal-colored-header">
+                <h4 class="modal-title" id="warning-form-modal-modalLabel"></h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <div class="modal-body mt-3 mb-3">
+                <h4 class="modal-title" id="warning-form-modal-modalLabel">Заполните все поля формы!</h4>
+            </div>
+            <!-- <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Отмена</button>
+                <button id="delete-product" type="button" class="btn btn-success" data-bs-dismiss="modal" data-id="0" onclick="productDelete(this)">Да, удалить</button>
+            </div> -->
+        </div>
+    </div>
+</div>
 
-            <div class="col-lg-4 col-md-6 order-1 order-md-2 pb-sm-4">
-                <div class="sticky-bar work-detail p-4 rounded shadow">
-                    <h4 class="title pb-3 border-bottom">Информация :</h4>
+<div id="success-form-modal" class="modal fade" tabindex="-1" aria-labelledby="success-form-modal-modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header modal-colored-header">
+                <h4 class="modal-title" id="success-form-modal-modalLabel">Документ сформирован</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body mt-3 mb-3">
+                <!-- <h4 class="modal-title" id="warning-form-modal-modalLabel">Заполните все поля формы!</h4> -->
+                <p>Документ сформирован и отправлен на указанный Вами адрес E-mail</p>
+            </div>
+            <!-- <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Отмена</button>
+                <button id="delete-product" type="button" class="btn btn-success" data-bs-dismiss="modal" data-id="0" onclick="productDelete(this)">Да, удалить</button>
+            </div> -->
+        </div>
+    </div>
+</div>
 
-                    <ul class="list-unstyled mb-4">
-                        <li class="mt-3">
-                            <b>Цена :</b>
-                            <span id="total" data-price="<?php echo $post['post_price'];?>"><?php echo number_format($post['post_price'], 0, ',', ' ');?></span>₽
-                        </li>
-                        <li class="mt-3">
-                            <b>Категория :</b>
-                            <span><?php echo productCategory($post['post_term'], 1);?></span>
-                        </li>
-                    </ul>
-
-                    <div class="shop-list d-flex flex-wrap flex-row gap-2 justify-content-between mb-4">
-                        <?php if ($add_cart) { ?>
-                            <button class="btn btn-primary btn-sm fs-14">В корзине</button>
-                        <?php } else { ?>
-                            <div class="qty-icons">
-                                <button onclick="productCount(this, 'minus')" class="btn btn-icon btn-soft-primary minus">-</button>
-                                <input min="1" name="quantity" value="1" type="number" class="btn btn-icon btn-soft-primary qty-btn quantity">
-                                <button onclick="productCount(this, 'plus')" class="btn btn-icon btn-soft-primary plus">+</button>
-                            </div>
-                            <button id="add_cart" class="btn btn-primary btn-sm fs-14" data-id="<?php echo $post['post_id'];?>" data-count="1" onclick="addCart(this)">В корзину</button>
-                        <?php } ?>
-                    </div>
-
-                    <?php if (!$add_cart) { ?>
-                        <div class="mt-3">
-                            <b>Общая стоимость :</b>
-                            <span id="total_price"><?php echo number_format($post['post_price'], 0, ',', ' ');?></span>₽
+<div id="modal-buy-doc" class="modal fade" tabindex="-1" aria-labelledby="modal-buy-doc-modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header modal-colored-header">
+                <h4 class="modal-title" id="modal-buy-doc-modalLabel">
+                    <?php echo $data['product']['title'];?>
+                </h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body mt-3 mb-3">
+                <h5 class="modal-title" id="modal-buy-doc-modalLabel">
+                    К оплате <?php echo $data['product']['price'];?>руб.
+                </h5>
+                <form id="buy_doc_form">
+                    <h5 class="modal-title">Информация о заказе:</h5>
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <label for="user_fio" class="form-label">Ф.И.О.</label>
+                            <input type="text" id="user_fio" name="user_fio" class="form-control" value="<?php echo ext_user_meta($user, 'fio');?>">
                         </div>
-                    <?php } ?>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+                        <!-- <div class="col-12 col-md-6 mb-3 pass-buy">
+                            <input type="text" id="user_passw" name="user_passw" class="form-control">
+                        </div> -->
+                        <div class="col-12 col-md-6 mb-3">
+                            <label for="user_email" class="form-label">E-mail</label>
+                            <input type="text" id="user_email" name="user_email" class="form-control" value="<?php echo ext_user_meta($user, 'email');?>">
+                        </div>
+                        <div class="col-12 col-md-6 mb-3">
+                            <label for="user_phone" class="form-label">Телефон</label>
+                            <input type="text" id="user_phone" name="user_phone" class="form-control phone_mask" value="<?php echo ext_user_meta($user, 'phone');?>">
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="user_cbaccept" name="user_cbaccept" required>
+                                <label class="form-check-label" for="user_cbaccept">
+                                    Соглашаюсь с <a id="lnk_cbaccept" href="#">политикой конфиденциальности и обработкой
+                                    персональных данных</a>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="user_cbaccept_ret" name="user_cbaccept_ret" required>
+                                <label class="form-check-label" for="user_cbaccept_ret">
+                                    Соглашаюсь с <a id="lnk_cbaccept" href="#">условиями возврата</a>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <a id="lnk_cbaccept" href="#">Условия оплаты</a>
+                        </div>
+                    </div>
 
-<div class="toast-container position-fixed top-80 end-0 p-3">
-    <div id="addCartToast" class="toast text-bg-primary" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="d-flex">
-            <div class="toast-body"><strong class="me-auto"><?php echo $data['post_data'][0]['post_title'];?></strong> в корзине</div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Закрыть"></button>
+                    <div class="col-12 mt-3 text-center">
+                        <button
+                            class="btn btn-primary"
+                            type="button"
+                            name="button"
+                            data-id="<?php echo $data['product']['id'];?>"
+                            onclick="buyDocument(this)">
+                            Оплатить банковской картой <?php echo $data['product']['price'];?>руб.
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <!-- <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Отмена</button>
+                <button id="delete-product" type="button" class="btn btn-success" data-bs-dismiss="modal" data-id="0" onclick="productDelete(this)">Да, удалить</button>
+            </div> -->
         </div>
     </div>
 </div>
+
+<div class="offcanvas offcanvas-start offcanvas-fields" tabindex="-1" id="offcanvasFields" aria-labelledby="offcanvasFieldsLabel">
+    <div class="offcanvas-header">
+        <h5 id="offcanvasFieldsLabel">Поля</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+
+    <div class="offcanvas-body syncscroll" name="pageSync">
+        <form id="fields-list" class="fields-list">
+            <?php echo fields_list_content($data['product']['descr'], $data['product']['vars'], $data['vars']);?>
+            <input type="hidden" name="productid" value="<?php echo $data['product']['id'];?>">
+            <input type="hidden" name="summ" value="<?php echo $data['product']['price'];?>">
+            <?php echo csrf_field();?>
+        </form>
+    </div>
+
+    <!-- <div id="warning-wrap-offcanvas" class="alert-container-offcanvas position-fixed bottom-0 end-0 p-3"></div> -->
+</div>
+
+<script type="text/javascript">
+    prodCalc = '<?php echo addslashes($data['product']['calc']);?>';
+</script>
 
 <?php
-insertTemplate('/templates/footer-pages', ['data' => $data]);
 
-// if (is_login()) {
-//     echo 'Login';
-// } else {
-//     echo 'No Login';
+// preg_match_all("/#(.+?)#/", $data['product']['descr'], $matches);
+//
+// $searchArr = [];
+// foreach ($matches[0] as $value) {
+//     $searchArr[] = str_replace('#', '', $value);
 // }
-// $user = userAllDataMeta();
+
+// $search = [251];
+// $newVars = array_shift(array_filter($data['vars'], function($_array) use ($search){
+//     return in_array($_array['id'], $search);
+// }));
+
+// $tt = fields_list($data['product']['descr'], $data['vars']);
+// $vars = [];
+// foreach ($tt as $var) {
+//     foreach ($var as $value) {
+//         $vars[] = $value;
+//     }
+// }
+
+// $vars = explode(',', $data['product']['vars']);
+
+// if (array_key_exists('email', $user)) {
+//     $email = $user['email'];
+// }
+
+// echo ext_user_meta($user, 'email');
+//
 // echo '<pre>';
 // var_dump($user);
-// var_dump(get_user_meta($user, 'phone'));
 // echo '</pre>';
+
+insertTemplate('/templates/footer-pages', ['data' => $data]);

@@ -44,10 +44,11 @@ class ForgotPassController extends Controller
                     $selector = \Delight\Auth\Auth::createRandomString();
                     $token = \Delight\Auth\Auth::createUuid();
                     try {
+                        $home_url = config('main', 'home_url');
                         $auth->forgotPassword($_POST['email'], function ($selector, $token) {
                             $to  = $_POST['email'];
                             $subject = "Восстановление пароля";
-                            $url = 'https://do.developer-creatsites.h1n.ru/verify?type=forgot_password&selector=' . \urlencode($selector) . '&token=' . \urlencode($token);
+                            $url = $home_url . '/verify?type=forgot_password&selector=' . \urlencode($selector) . '&token=' . \urlencode($token);
 
                             $message = ' <p>Для подтвеждения E-mail перейдите по ссылке: </p>' . "\r\n";
                             $message .= $url;
@@ -55,9 +56,9 @@ class ForgotPassController extends Controller
                             $headers  = 'MIME-Version: 1.0' . "\r\n";
                             $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
                             $headers .= 'To: <' . $to . '>' . "\r\n";
-                            $headers .= 'From: do.developer-creatsites.h1n.ru <admin@do.developer-creatsites.h1n.ru>' . "\r\n";
-                            $headers .= 'Cc: admin@do.developer-creatsites.h1n.ru' . "\r\n";
-                            $headers .= 'Bcc: admin@do.developer-creatsites.h1n.ru' . "\r\n";
+                            $headers .= 'From: administrator@urist-master.ru <administrator@urist-master.ru>' . "\r\n";
+                            $headers .= 'Cc: administrator@urist-master.ru' . "\r\n";
+                            $headers .= 'Bcc: administrator@urist-master.ru' . "\r\n";
 
                             mail($to, $subject, $message, $headers);
                         });

@@ -26,10 +26,10 @@ return [
         'mysql.name' => [
             'mysql:host=localhost',
             'port=3306',
-            'dbname=%dbname%',
+            'dbname=cg42596_nwtest',
             'charset=utf8',
-            'user' => '%username%',
-            'pass' => '%password%',
+            'user' => 'cg42596_nwtest',
+            'pass' => 'gX4AkQic',
             'options' => [
             // \PDO::ATTR_PERSISTENT => TRUE
             ],

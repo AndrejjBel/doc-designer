@@ -28,12 +28,21 @@
     </div> -->
 
     <div class="col-12 col-md-8 mb-3">
-        <label for="link" class="form-label">Постоянная ссылка <span class="text-danger">*</span></label>
+        <label for="link" class="form-label">Постоянная ссылка</label>
         <div class="input-group mb-2">
-            <input type="text" id="link" name="link" class="form-control" value="">
+            <input
+                type="text"
+                id="link"
+                name="link"
+                class="form-control"
+                value=""
+                data-post-type="pages"
+                data-type="add"
+                onblur="slugUnicActions(this)">
             <a href="#" class="btn btn-success" title="Открыть на сайте">
                 <i class="bi bi-box-arrow-up-right"></i>
             </a>
+            <div id="title" class="warning-feedback">Ссылка уникализирована</div>
         </div>
         <span class="help-block">
             <small>Если оставить пустым, ссылка будет сформирована автоматически</small>

@@ -29,11 +29,11 @@ if ($data['mod'] == 'dashboard') {
             </div>
             <!-- end page title -->
 
-            <div class="row mb-4 filter-products">
+            <!-- <div class="row mb-4 filter-products">
                 <div class="col-md-4 mb-2 mb-md-0 filter-item">
                     <label for="example-select" class="form-label">Группа</label>
                     <select class="form-select form-select-sm" id="productGroup" onchange="filterGroupChange(this)">
-                        <?php productGroup($data['products_gr'], $gr_val);?>
+                        <?php //productGroup($data['products_gr'], $gr_val);?>
                     </select>
                 </div>
 
@@ -73,7 +73,7 @@ if ($data['mod'] == 'dashboard') {
                         <a href="/admin/page-add" class="btn btn-sm btn-soft-success">Создать страницу</a>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <?php if (count($data['pages_list']) ) { ?>
 
@@ -123,7 +123,7 @@ if ($data['mod'] == 'dashboard') {
                                                 title="Изменить статус"><?php echo $text_status;?></button>
                                         </td>
                                         <td class="actions-product">
-                                            <a href="/products/<?php echo $product['slug'];?>" target="_blank" class="text-reset fs-16 mx-1" data-state="def" title="Смотреть">
+                                            <a href="/<?php echo $product['slug'];?>" target="_blank" class="text-reset fs-16 mx-1" data-state="def" title="Смотреть">
                                                 <i class="ri-eye-line"></i>
                                             </a>
                                             <a href="/admin/page-edit?id=<?php echo $product['id'];?>" class="text-reset fs-16 mx-1 js-user-settings" data-id="product<?php echo $product['id']?>" title="Редактировать">

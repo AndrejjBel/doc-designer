@@ -17,6 +17,25 @@ class UsersModel extends Model
         return DB::run($sql, ['start' => $start, 'limit' => $limit])->fetchAll();
     }
 
+    public static function getLoginsEmails()
+    {
+        $sql = "SELECT email, username FROM users";
+        $loginsEmails =  DB::run($sql)->fetchAll();
+        $emails = [];
+        $logins = [];
+        foreach ($loginsEmails as $key => $value) {
+            $emails[] = $value['email'];
+            $logins[] = $value['username'];
+        }
+        return ['emails' => $emails, 'logins' => $logins];
+    }
+
+    public static function getUserForEmail($email)
+    {
+        $sql = "SELECT * FROM users WHERE email = :email";
+        return DB::run($sql, ['email' => $email])->fetch();
+    }
+
     public static function getUser()
     {
         $db = MyormModel::dbc();
@@ -41,13 +60,19 @@ class UsersModel extends Model
     {
         $sql = "INSERT INTO usermeta(user_id, meta) VALUES(:user_id, :meta) ON DUPLICATE KEY UPDATE meta = :meta2";
         DB::run($sql, $params);
-        $sql_last_id =  DB::run("SELECT LAST_INSERT_ID() as last_id")->fetch();
-        return $sql_last_id['last_id'];
+        // $sql_last_id =  DB::run("SELECT LAST_INSERT_ID() as last_id")->fetch();
+        // return $sql_last_id;
     }
 
     public static function updateUserSettings($params)
     {
-        $sql = "UPDATE users SET first_name = :first_name, last_name = :last_name WHERE id = :id";
+        $sql = "UPDATE users SET first_name = :first_name, last_name = :last_name, fio = :fio, meta = :meta WHERE id = :id";
+        return DB::run($sql, $params);
+    }
+
+    public static function updateUserMeta($params)
+    {
+        $sql = "UPDATE users SET fio = :fio, meta = :meta WHERE id = :id";
         return DB::run($sql, $params);
     }
 

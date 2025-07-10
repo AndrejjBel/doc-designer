@@ -45,43 +45,17 @@ final class Handler
      */
     private function sortRoutes(): array
     {
-        $routes = [];
-        $hasAlias = false;
+        $result = [];
         $this->checkGroups();
         foreach ($this->rawData as $key => $data) {
-            $searchAlias = $data['method'] === StandardRoute::ALIAS_SUBTYPE;
-            if ($data['method'] === StandardRoute::ADD_TYPE || $searchAlias) {
-                $routes[$key] = $data;
+            if ($data['method'] === StandardRoute::ADD_TYPE) {
+                $result[$key] = $data;
                 $routeGroups = $this->getGroupActions($key);
                 $RouteReference = $this->getRouteReference($key);
-                $routes[$key]['actions'] = array_merge($routeGroups, $RouteReference);
-            }
-            $searchAlias and $hasAlias = true;
-         }
-        if ($hasAlias) {
-            foreach ($routes as $key => $route) {
-                if ($route['method'] === StandardRoute::ALIAS_SUBTYPE) {
-                    $searchName = $route['name'];
-                    foreach ($routes as $item) {
-                        foreach ($item['actions'] ?? [] as $keyAction => $action) {
-                            if ($action['method'] === StandardRoute::NAME_TYPE && $action['name'] === $searchName) {
-                                $new = $item;
-                                $new['actions'][$keyAction]['name'] = $route['new-name'];
-                                $new['data']['route'] = $route['data']['route'];
-                                $actions = $route['actions'] ?? [];
-                                foreach($new['actions'] ?? [] as $originAction) {
-                                    $actions[] = $originAction;
-                                }
-                                $new['actions'] = $actions;
-                                $routes[$key] = $new;
-                                break 2;
-                            }
-                        }
-                    }
-                }
+                $result[$key]['actions'] = array_merge($routeGroups, $RouteReference);
             }
         }
-        return $routes;
+        return $result;
     }
 
     /**
@@ -147,8 +121,7 @@ final class Handler
             }
             if ($method['method'] === StandardRoute::ADD_TYPE ||
                 $method['method'] === StandardRoute::TO_GROUP_TYPE ||
-                $method['method'] === StandardRoute::END_GROUP_TYPE ||
-                $method['method'] === StandardRoute::ALIAS_SUBTYPE
+                $method['method'] === StandardRoute::END_GROUP_TYPE
             ) {
                 break;
             }
@@ -234,21 +207,21 @@ final class Handler
         $result = [];
 
         foreach ($items as $k => $item) {
-            if ($item['method'] !== StandardRoute::ALIAS_SUBTYPE) {
-                if ($item['method'] === StandardRoute::TO_GROUP_TYPE) {
-                    $num++;
-                }
-                // If the group at a certain level has ended, then it is not considered.
-                // Если группа на определённом уровне закончилась, то она не считается.
-                if ($item['method'] === StandardRoute::END_GROUP_TYPE) {
-                    unset($groups[$num]);
-                    $num--;
-                    continue;
-                }
-                if (!empty($item['from-group'])) {
-                    $groups[$num][] = $item;
-                }
+            if ($item['method'] === StandardRoute::TO_GROUP_TYPE) {
+                $num++;
             }
+
+            // If the group at a certain level has ended, then it is not considered.
+            // Если группа на определённом уровне закончилась, то она не считается.
+            if ($item['method'] === StandardRoute::END_GROUP_TYPE) {
+                unset($groups[$num]);
+                $num--;
+                continue;
+            }
+            if (!empty($item['from-group'])) {
+                $groups[$num][] = $item;
+            }
+
             // Ends once all groups have been iterated up to the current route number.
             // Завершается, как только все группы перебраны до текущего номера маршрута.
             if ($k === $key) {

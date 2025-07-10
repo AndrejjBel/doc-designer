@@ -10,6 +10,15 @@
     user-select: none;
 }
 
+.fielddok {
+    font-weight: bolder;
+}
+
+.pass-buy label,
+.pass-buy input {
+    display: none;
+}
+
 @media (min-width: 768px) {
     .bd-placeholder-img-lg {
         font-size: 3.5rem;

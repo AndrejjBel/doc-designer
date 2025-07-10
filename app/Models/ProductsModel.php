@@ -11,6 +11,7 @@ class ProductsModel extends Model
     {
         $sql = "INSERT INTO products(isgr,
                                 parentid,
+                                ceo,
                                 title,
                                 description,
                                 favor,
@@ -23,6 +24,7 @@ class ProductsModel extends Model
 
                                 VALUES(:isgr,
                                     :parentid,
+                                    :ceo,
                                     :title,
                                     :description,
                                     :favor,
@@ -102,6 +104,7 @@ class ProductsModel extends Model
         $sql = "UPDATE products SET
                     isgr         = :isgr,
                     parentid     = :parentid,
+                    ceo          = :ceo,
                     title        = :title,
                     description  = :description,
                     favor        = :favor,
@@ -132,6 +135,32 @@ class ProductsModel extends Model
     {
         $sql = "SELECT * FROM products";
         return DB::run($sql)->fetchAll();
+    }
+
+    public static function getProdSlug()
+    {
+        $sql = "SELECT allsit FROM products";
+        $res = DB::run($sql)->fetchAll();
+        $allsit = [];
+        foreach ($res as $key => $value) {
+            if ($value['allsit']) {
+                $allsit[] = $value['allsit'];
+            }
+        }
+        return $allsit;
+    }
+
+    public static function getProdSlugNotId($params)
+    {
+        $sql = "SELECT allsit FROM products WHERE NOT id = :id";
+        $res = DB::run($sql, $params)->fetchAll();
+        $allsit = [];
+        foreach ($res as $key => $value) {
+            if ($value['allsit']) {
+                $allsit[] = $value['allsit'];
+            }
+        }
+        return $allsit;
     }
 
     public static function getProductsNav()
@@ -207,6 +236,12 @@ class ProductsModel extends Model
     {
         $sql = "SELECT * FROM products WHERE id = :id";
         return DB::run($sql, ['id' => $id])->fetch();
+    }
+
+    public static function getProductForSlug($slug)
+    {
+        $sql = "SELECT * FROM products WHERE allsit = :allsit";
+        return DB::run($sql, ['allsit' => $slug])->fetch();
     }
 
     public static function delete_var($product_id)

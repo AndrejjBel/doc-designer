@@ -14,9 +14,7 @@ function replace_vars_content($vars, $content) {
             data-key="' . $var['title'] . '"
             data-descr="' . $var['descr'] . '"
             data-bs-toggle="modal"
-            data-bs-target="#edit-var-text-modal">
-            <strong>' . $var['captholder'] . '</strong>
-            </span>';
+            data-bs-target="#edit-var-text-modal">' . $var['captholder'] . '</span>';
         }
     }
     return str_replace($vars_title, $vars_captholder, $content);
@@ -38,6 +36,10 @@ function fields_list_content($descr, $prod_vars, $vars) {
 function fields_html($var, $name) {
     $options_data = vars_options('typedata_field');
     $label = ($var['descr'])? $var['descr'] : $var['captholder'];
+    $phone = '';
+    if ($options_data[$var['typedata']][2] == 'phone') {
+        $phone = ' phone_mask';
+    }
     $content = '';
     if ($options_data[$var['typedata']][0] == 'input') {
         $content .= '<div class="col-12 mb-2">';
@@ -45,15 +47,16 @@ function fields_html($var, $name) {
         $content .= '<input type="' . $options_data[$var['typedata']][1] . '"
             id="' . $name . '"
             name="' . $name . '"
-            class="form-control field-item"
+            value=""
+            class="form-control field-item' . $phone . '"
             placeholder="' . $var['captholder'] . '"
-            oninput="fieldFillingForm(this)">';
+            onblur="fieldFillingForm(this)">';
         $content .= '</div>';
     }
     if ($options_data[$var['typedata']][0] == 'textarea') {
         $content .= '<div class="col-12 mb-2">';
         $content .= '<label for="' . $name . '" class="form-label">' . $label . '</label>';
-        $content .= '<textarea class="form-control field-item" id="' . $name . '" name="' . $name . '" rows="2" oninput="fieldFillingForm(this)"></textarea>';
+        $content .= '<textarea class="form-control field-item" id="' . $name . '" name="' . $name . '" value="" rows="2" onblur="fieldFillingForm(this)"></textarea>';
         $content .= '</div>';
     }
     if ($options_data[$var['typedata']][0] == 'label') {
@@ -80,6 +83,14 @@ function var_ft($vars, $field_name) {
         return in_array($_array['title'], $search);
     });
     return $newVars;
+}
+
+function order_prod_title($products, $product_id) {
+    $search = [$product_id];
+    $product = array_shift(array_filter($products, function($_array) use ($search){
+        return in_array($_array['id'], $search);
+    }));
+    return $product['title'];
 }
 
 function vars_options($name='') {
@@ -122,4 +133,47 @@ function vars_options($name='') {
         $result = $typedata_field;
     }
     return $result;
+}
+
+function replace_vars_order_content($vars, $content) {
+    $vars_title = [];
+    $vars_captholder = [];
+    $vars_title[] = '#starthide#';
+    $vars_title[] = '#endhide#';
+    $vars_captholder[] = '<div class="text-blure">';
+    $vars_captholder[] = '</div>';
+    foreach ($vars as $key => $val) {
+        $vars_title[] = '#' . $key . '#';
+        $vars_captholder[] = $val;
+    }
+    return str_replace($vars_title, $vars_captholder, $content);
+}
+
+function html_to_pdf($html, $fname) {
+    require_once HLEB_GLOBAL_DIR . '/app/Content/dompdf/autoload.inc.php';
+    $dompdf = new Dompdf\Dompdf();
+    $dompdf->set_option('isRemoteEnabled', true);
+    $dompdf->set_option('isHtml5ParserEnabled', true);
+    $dompdf->set_option('defaultFont', 'garamond');
+    $dompdf->setPaper('A4', 'portrait');
+    $dompdf->loadHtml($html, 'UTF-8');
+    $dompdf->render();
+
+    // Вывод файла в браузер:
+    // $dompdf->stream('schet');
+
+    // Или сохранение на сервере:
+    $pdf = $dompdf->output();
+    // $upload_path = HLEB_GLOBAL_DIR . '/upload/';
+    // $file_name = $fname . '.pdf';
+    // file_put_contents($upload_path . $file_name, $pdf);
+
+    $uploadsubddir = date('m-Y');
+	$uploaddir = HLEB_PUBLIC_DIR . '/uploads/' . $uploadsubddir;
+    $file_url = '/public/uploads/' . $uploadsubddir . '/' . $fname . '.pdf';
+    if( ! is_dir( $uploaddir ) ) mkdir( $uploaddir, 0777, true );
+    $path = $uploaddir . '/' . $fname . '.pdf';
+	file_put_contents($path, $pdf);
+
+    return $file_url;
 }

@@ -247,6 +247,9 @@ function productAddEdit() {
     document.querySelector('form#add-edit-product input#title').addEventListener('input', (e) => {
         document.querySelector('form#add-edit-product input#title').classList.remove('is-invalid');
     });
+    document.querySelector('form#add-edit-product input#allsit').addEventListener('input', (e) => {
+        document.querySelector('form#add-edit-product input#allsit').classList.remove('is-invalid');
+    });
 
     btn.addEventListener('click', (e) => {
         e.preventDefault();
@@ -279,10 +282,10 @@ function productAddEdit() {
         })
         .then(data => {
             console.dir(data);
-            if (data.result == 'success') {
+            if (data.message.result == 'success') {
                 btn.style.pointerEvents = '';
                 let url = '/admin/products';
-                alertAction(warningWrap, data.text, 'success', ' onclick="locUrlAddProd()"');
+                alertAction(warningWrap, data.message.text, 'success', ' onclick="locUrlAddProd()"');
                 setTimeout(function(){
                     if (btn.dataset.type == 'edit') {
                         warningWrap.innerHTML = '';
@@ -291,7 +294,7 @@ function productAddEdit() {
                     }
                 }, 6000);
             }
-            if (data.result == 'error') {
+            if (data.message.result == 'error') {
                 btn.style.pointerEvents = '';
                 alertAction(warningWrap, data.error.text, 'danger');
                 document.querySelector('form#add-edit-product input#'+data.error.type).classList.add('is-invalid');
@@ -307,6 +310,60 @@ function productAddEdit() {
     });
 }
 productAddEdit();
+
+function slugUnicActions(elem) {
+    if (elem.value) {
+        let formData = new FormData();
+        if (elem.dataset.type == 'add') {
+            console.dir(elem.dataset.type);
+            formData.append('action', 'slugUnicAdd');
+        } else if (elem.dataset.type == 'edit') {
+            console.dir(elem.dataset.type);
+            formData.append('action', 'slugUnicEdit');
+            if (elem.dataset.postType == 'products') {
+                formData.append('id', document.querySelector('input[name="product_id"]').value);
+            }
+            if (elem.dataset.postType == 'pages') {
+                formData.append('id', document.querySelector('input[name="page_id"]').value);
+            }
+        }
+        if (elem.dataset.postType == 'products') {
+            formData.append('post_type', 'products');
+            formData.append('post_slug', 'allsit');
+        }
+        if (elem.dataset.postType == 'pages') {
+            formData.append('post_type', 'pages');
+            formData.append('post_slug', 'slug');
+        }
+
+        formData.append('slug', elem.value);
+        formData.append('_token', document.querySelector('input[name="_token"]').value);
+        url = '/admin/fetch';
+
+        fetch(url, {
+            method: "POST",
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Ошибка запроса');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.dir(data);
+            if (data.type == 'warning') {
+                elem.value = data.slug;
+                elem.classList.add('is-warning');
+            } else {
+                elem.classList.remove('is-warning');
+            }
+        })
+        .catch(error => {
+            console.dir(error);
+        });
+    }
+}
 
 function calcFieldsActions(elem) {
     const calcFields = document.querySelector('.calc-fields');
@@ -652,6 +709,52 @@ function changeStatusOrder(elem) {
     }, 5000);
 }
 
+function orderStatusEdit(elem) {
+    const warningWrap = document.querySelector('#warning-wrap');
+    let orderId = elem.dataset.id;
+    let orderStatus = Number(elem.dataset.value);
+
+    let url = '/admin/fetch';
+    let formData = new FormData();
+    formData.append('action', 'edit_order_status');
+    formData.append('id', orderId);
+    formData.append('status', orderStatus);
+    formData.append('_token', document.querySelector('input[name="_token"]').value);
+    fetch(url, {
+        method: "POST",
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Ошибка запроса');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.dir(data);
+        if (data.type = 'success') {
+            elem.parentElement.parentElement.children[2].className = 'badge bg-'+orderStatusStyle(orderStatus);
+            elem.parentElement.parentElement.children[2].innerText = elem.innerText;
+        }
+        // console.dir(document.querySelector('#order_url'));
+    })
+    .catch(error => {
+        console.dir(error);
+    });
+}
+
+function orderStatusStyle(status) {
+    const orderStatusObj = {
+        1: 'warning',
+        2: 'success',
+        3: 'danger'
+    };
+    return orderStatusObj[status];
+    // return orderStatusObj;
+    // console.dir(orderStatusObj[1]);
+}
+// orderStatusStyle(status);
+
 function fetchGenerale(url, formData) {
     fetch(url, {
         method: "POST",
@@ -799,6 +902,18 @@ function admEditUserPass(elem) {
 function formSiteSettings(elem) {
     const warningWrap = document.querySelector('#warning-wrap');
     let url = '/admin/settings-post';
+    let formData = new FormData(elem.form);
+    fetchGenerale(url, formData);
+    warningWrap.innerHTML = '';
+    alertAction(warningWrap, 'Настройки сохранены', 'success');
+    setTimeout(function(){
+        warningWrap.innerHTML = '';
+    }, 5000);
+}
+
+function formSiteSettingsPay(elem) {
+    const warningWrap = document.querySelector('#warning-wrap');
+    let url = '/admin/settings-post-pay';
     let formData = new FormData(elem.form);
     fetchGenerale(url, formData);
     warningWrap.innerHTML = '';
@@ -1291,14 +1406,23 @@ function varsTableEdit(elem) {
     form.elements.extdata.value = (varIt.extdata)? varIt.extdata : '';
     form.elements.var_id.value = varIt.id;
 
-    let selectTd = document.getElementById('typedata');
+    let selectPi = document.querySelector('#form_var_add #parentid');
+    if (selectPi.querySelector(`option[value='${varIt.parentid}']`)) {
+        selectPi.value = varIt.parentid;
+    } else {
+        console.warn('Опция с таким значением не найдена:', varIt.parentid);
+    }
+    console.dir(selectPi);
+    console.dir(varIt.parentid);
+
+    let selectTd = document.querySelector('#form_var_add #typedata');
     if (selectTd.querySelector(`option[value='${varIt.typedata}']`)) {
         selectTd.value = varIt.typedata;
     } else {
         console.warn('Опция с таким значением не найдена:', varIt.typedata);
     }
 
-    let selectT = document.getElementById('type');
+    let selectT = document.querySelector('#form_var_add #type');
     if (selectT.querySelector(`option[value='${varIt.type}']`)) {
         selectT.value = varIt.type;
     } else {

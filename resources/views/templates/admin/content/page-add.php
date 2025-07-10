@@ -46,10 +46,10 @@
                         <?php if ($data['duplicate']) { ?>
                             <div class="tab-content mb-5">
                                 <div class="tab-pane show active" id="general">
-                                    <?php insertTemplate('/templates/admin/content/tabs/edit/page-general', ['mod' => $data['mod'], 'product' => $data['product'], 'products_gr' => $data['products_gr']]);?>
+                                    <?php insertTemplate('/templates/admin/content/tabs/edit/page-general', ['mod' => $data['mod'], 'page' => $data['page'], 'products_gr' => $data['products_gr']]);?>
                                 </div>
                                 <div class="tab-pane" id="text">
-                                    <?php insertTemplate('/templates/admin/content/tabs/edit/text', ['product' => $data['product']]);?>
+                                    <?php insertTemplate('/templates/admin/content/tabs/edit/content-edit', ['mod' => $data['mod'], 'page' => $data['page'], 'product' => $data['product']]);?>
                                 </div>
                             </div>
                         <?php } else { ?>

@@ -61,17 +61,20 @@ class UserEditController extends Controller
             [
                 'id'  => $userId,
                 'first_name'     => $allPost['first_name'],
-                'last_name'     => $allPost['last_name']
+                'last_name'      => $allPost['last_name'],
+                'fio'            => $allPost['fio'],
+                'meta'           => json_encode($meta, JSON_UNESCAPED_UNICODE)
             ]
         );
-        $meta_id = UsersModel::setUserMeta(
-            [
-                'user_id'  => $userId,
-                'meta'     => json_encode($meta, JSON_UNESCAPED_UNICODE),
-                'meta2'     => json_encode($meta, JSON_UNESCAPED_UNICODE)
-            ]
-        );
-        $ret = ['post' => $allPost, 'meta_id' => $meta_id];
+        // $meta_id = UsersModel::setUserMeta(
+        //     [
+        //         'user_id'  => $userId,
+        //         'meta'     => json_encode($meta, JSON_UNESCAPED_UNICODE),
+        //         'meta2'     => json_encode($meta, JSON_UNESCAPED_UNICODE)
+        //     ]
+        // );
+        // $ret = ['post' => $allPost, 'meta_id' => $meta_id];
+        $ret = ['post' => $allPost];
         echo json_encode($ret, true);
     }
 

@@ -10,6 +10,12 @@ use App\Models\{
     ProductsModel,
     VarsModel
 };
+use App\Controllers\{
+    Admin\AdminController,
+    Auth\SigninController,
+    Auth\ForgotPassController,
+    Auth\VerifyController
+};
 
 class PagesFrontController extends Controller
 {
@@ -39,6 +45,49 @@ class PagesFrontController extends Controller
     }
 
     public function pages_item(): View
+    {
+        $page_slug = Request::param('slug')->asString();
+
+        if ($page_slug == 'signin') {
+            return (new SigninController())->index();
+        }
+        if ($page_slug == 'forgot-password') {
+            return (new ForgotPassController())->showPasswordForm();
+        }
+        if ($page_slug == 'verify') {
+            return (new VerifyController())->index();
+        }
+
+        if ($page_slug == 'admin') {
+            return (new AdminController())->index();
+        }
+        if ($page_slug == 'dashboard') {
+            return (new AdminController())->dashboard();
+        }
+
+        $page_slug = Request::param('slug')->asString();
+        $page_data = PagesModel::getPostForSlug($page_slug);
+        $product = ProductsModel::getProductForId($page_data[0]['product_id']);
+        $vars = VarsModel::getVarsAll();
+        $varsJson = VarsModel::getVarsAllJsonFront();
+        return view('page',
+            [
+                'data'  => [
+                    'body_classes' => 'page page-templates',
+                    'temp_header' => 'header-pages',
+                    'title' => 'Page',
+                    'description' => 'Page description',
+                    'mod' => 'page',
+                    'page_data' => $page_data,
+                    'product' => $product,
+                    'vars' => $vars,
+                    'varsJson' => $varsJson
+                ]
+            ]
+        );
+    }
+
+    public function products_pages(): View
     {
         $page_slug = Request::param('slug')->asString();
         $page_data = PagesModel::getPostForSlug($page_slug);

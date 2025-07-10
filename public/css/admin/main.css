@@ -375,6 +375,31 @@ td .status-value {
     display: flex;
 }
 
+.cursor-point {
+    cursor: pointer;
+}
+
+.form-control.is-warning {
+    color: #d89e70;
+    border-color: #d89e70;
+    padding-right: calc(1.5em + .9rem);
+    background-repeat: no-repeat;
+    background-position: right calc(.375em + .225rem) center;
+    background-size: calc(.75em + .45rem) calc(.75em + .45rem);
+}
+
+.warning-feedback {
+    display: none;
+    width: 100%;
+    margin-top: .25rem;
+    font-size: .75rem;
+    color: #d89e70;
+}
+
+.is-warning~.warning-feedback {
+    display: block;
+}
+
 @media (max-width: 867px) {
     .post-gallery .filepond--item {
         width: calc((100% - 2em) / 2);

@@ -51,40 +51,9 @@ abstract class Console
      */
     protected const SUCCESS_CODE = 0;
 
-    /**
-     * The standard signal for graceful process termination.
-     * Typically sent by the system or administrator to request termination,
-     * giving the application a chance to gracefully release resources.
-     *
-     * Стандартный сигнал для корректного завершения процесса.
-     * Обычно отправляется системой или администратором для запроса на завершение работы,
-     * предоставляя приложению возможность корректно освободить ресурсы.
-     *
-     * @see self::isShutdownSignalReceived()
-     */
-    protected const SIGTERM = 15;
-
-    /**
-     * The user's abort signal, typically sent by pressing Ctrl+C in the terminal.
-     * Used to stop the application at the user's initiative
-     * with the ability to perform finishing actions.
-     *
-     * Сигнал прерывания процесса пользователем, как правило,
-     * отправляется при нажатии Ctrl+C в терминале.
-     * Используется для остановки приложения по инициативе пользователя
-     * с возможностью выполнить завершающие действия.
-     *
-     * @see self::isShutdownSignalReceived()
-     */
-    protected const SIGINT = 2;
-
     private const RUN_ERROR = 'Parameters for `run` method arguments are incorrect: ';
 
     private const RULE_ERROR = 'Parameters passed incorrectly according to the rules from the `rules` method: ';
-
-    private ?int $signalReceived = null;
-
-    private ?bool $isAsyncSignal = null;
 
     private int $code = 0;
 
@@ -148,9 +117,6 @@ abstract class Console
         // System definition of the request as executed from the console.
         // Системное определение запроса как выполненного из консоли.
         $this->fromCli = $this->settings()->isCli();
-
-        $this->registerSignalHandlers();
-        $this->enableAutomaticSignalInterrupt();
 
         $this->attributeHelper = new AttributeHelper(static::class);
     }
@@ -342,69 +308,6 @@ abstract class Console
         return $this->colorizer;
     }
 
-    /**
-     * @see self::enableAutomaticSignalInterrupt()
-     */
-    protected function disableAutomaticSignalInterrupt(): void
-    {
-        if (\is_int($this->signalReceived) && $this->isAsyncSignal !== false) {
-            \pcntl_async_signals(false);
-            $this->isAsyncSignal = false;
-        }
-    }
-
-    /**
-     * @see self::disableAutomaticSignalInterrupt()
-     */
-    protected function enableAutomaticSignalInterrupt(): void
-    {
-        if (\is_int($this->signalReceived) && $this->isAsyncSignal !== true) {
-            \pcntl_async_signals(true);
-            $this->isAsyncSignal = true;
-        }
-    }
-
-    /**
-     * @see self::disableAutomaticSignalInterrupt()
-     */
-    protected function isShutdownSignalReceived(): int
-    {
-        if (\is_int($this->signalReceived)) {
-            \pcntl_signal_dispatch();
-        }
-        return (int)$this->signalReceived;
-    }
-
-    /**
-     * Monitors for system interrupt signals.
-     *
-     * Отслеживает наличие системных сигналов на прерывание работы.
-     */
-    private function registerSignalHandlers(): void
-    {
-        if (\is_int($this->signalReceived)) {
-            return;
-        }
-        if (\function_exists('pcntl_signal')) {
-            $this->signalReceived = 0;
-            \pcntl_signal(self::SIGTERM, function() {
-                $this->signalReceived = self::SIGTERM;
-                    if ($this->isAsyncSignal) {
-                        echo " SIGTERM detected, exiting..." . PHP_EOL;
-                        exit(self::ERROR_CODE);
-                }
-            });
-            \pcntl_signal(self::SIGINT, function() {
-                $this->signalReceived = self::SIGINT;
-                if ($this->isAsyncSignal) {
-                    echo " Ctrl+C detected, exiting..." . PHP_EOL;
-                    exit(self::ERROR_CODE);
-                }
-            });
-        }
-    }
-
-
     private function convertArguments(array $arguments): array
     {
         $result = [];
@@ -572,6 +475,4 @@ abstract class Console
     {
         return \implode(', ', \array_unique($errors));
     }
-
-
 }

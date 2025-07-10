@@ -27,4 +27,6 @@ Route::toGroup()->protect();
     Route::post('/admin/delete')->controller(UploadController::class, 'deleteFiles');
 
     Route::post('/admin/fetch')->controller(AdminFetchController::class);
+
+    Route::post('/front/fetch')->controller(FrontFetchController::class);
 Route::endGroup();

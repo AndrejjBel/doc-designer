@@ -25,14 +25,14 @@ if ($product['calc']) {
     <div class="col-12 col-md-6 mb-2">
         <label class="form-label">Дата начала периода</label>
         <select class="form-select" name="date-start">
-            <?php varsForProductOptions($product['vars'], $vars, ($calc)? $calc['date-start'] : 0);?>
+            <?php varsForProductOptions($product['vars'], $vars, ($calc)? $calc['dateStart'] : 0);?>
         </select>
     </div>
 
     <div class="col-12 col-md-6 mb-2">
         <label class="form-label">Дата окончания периода</label>
         <select class="form-select" name="date-end">
-            <?php varsForProductOptions($product['vars'], $vars, ($calc)? $calc['date-end'] : 0);?>
+            <?php varsForProductOptions($product['vars'], $vars, ($calc)? $calc['dateEnd'] : 0);?>
         </select>
     </div>
 

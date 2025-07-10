@@ -10,6 +10,7 @@ return array(
     'Phphleb\\Hlogin\\' => array($vendorDir . '/phphleb/hlogin'),
     'Phphleb\\Debugpan\\' => array($vendorDir . '/phphleb/debugpan'),
     'Phphleb\\' => array($vendorDir . '/phphleb'),
+    'PHPMailer\\PHPMailer\\' => array($vendorDir . '/phpmailer/phpmailer/src'),
     'Hleb\\' => array($vendorDir . '/phphleb/framework', $vendorDir . '/phphleb/framework'),
     'Delight\\Http\\' => array($vendorDir . '/delight-im/http/src'),
     'Delight\\Db\\' => array($vendorDir . '/delight-im/db/src'),

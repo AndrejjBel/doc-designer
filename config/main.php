@@ -137,5 +137,5 @@ return [
      * Hleb\Static\Settings::getParam('main', ...) по названию настройки.
      */
 
-    'home_url' => 'home_url',
+    'home_url' => 'https://cg42596.tw1.ru',
 ];

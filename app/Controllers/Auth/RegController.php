@@ -27,11 +27,12 @@ class RegController extends Controller
                     if (!check($_POST['username'])) {
                         Redirect::to('/signin?error=username_novalid');
                     } else {
+                        $home_url = config('main', 'home_url');
                         try {
                             $userId = $auth->registerWithUniqueUsername($_POST['email'], $_POST['password'], $_POST['username'], function ($selector, $token) {
                                 $to  = $_POST['email'];
                                 $subject = "Регистрация на сайте";
-                                $url = 'https://do.developer-creatsites.h1n.ru/verify?type=email_reg&selector=' . \urlencode($selector) . '&token=' . \urlencode($token);
+                                $url = $home_url . '/verify?type=email_reg&selector=' . \urlencode($selector) . '&token=' . \urlencode($token);
 
                                 $message = '<p>Для подтвеждения E-mail перейдите по ссылке: </p>' . "\r\n";
                                 $message .= $url;
@@ -39,9 +40,9 @@ class RegController extends Controller
                                 $headers  = 'MIME-Version: 1.0' . "\r\n";
                                 $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
                                 $headers .= 'To: <' . $to . '>' . "\r\n";
-                                $headers .= 'From: do.developer-creatsites.h1n.ru <admin@do.developer-creatsites.h1n.ru>' . "\r\n";
-                                $headers .= 'Cc: admin@do.developer-creatsites.h1n.ru' . "\r\n";
-                                $headers .= 'Bcc: admin@do.developer-creatsites.h1n.ru' . "\r\n";
+                                $headers .= 'From: administrator@urist-master.ru <administrator@urist-master.ru>' . "\r\n";
+                                $headers .= 'Cc: administrator@urist-master.ru' . "\r\n";
+                                $headers .= 'Bcc: administrator@urist-master.ru' . "\r\n";
 
                                 mail($to, $subject, $message, $headers);
                             });

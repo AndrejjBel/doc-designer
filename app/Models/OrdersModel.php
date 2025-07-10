@@ -10,15 +10,32 @@ class OrdersModel extends Model
     public static function create(array $params): int
     {
         $sql = "INSERT INTO orders(
-                    user_id,
-                    order_products,
-                    user_info)
+                    productid,
+                    nomer,
+                    status,
+                    summ,
+                    sumpay,
+                    typepay,
+                    descr,
+                    clientid,
+                    clientmeta,
+                    useropen,
+                    strjson,
+                    doc_url)
                        VALUES(
-                       :user_id,
-                       :order_products,
-                       :user_info)";
+                       :productid,
+                       :nomer,
+                       :status,
+                       :summ,
+                       :sumpay,
+                       :typepay,
+                       :descr,
+                       :clientid,
+                       :clientmeta,
+                       :useropen,
+                       :strjson,
+                       :doc_url)";
 
-        // $sql = "INSERT INTO orders user_id, order_products VALUES :user_id, :order_products";
         DB::run($sql, $params);
         $sql_last_id =  DB::run("SELECT LAST_INSERT_ID() as last_id")->fetch();
         return $sql_last_id['last_id'];
@@ -36,10 +53,42 @@ class OrdersModel extends Model
         return DB::run($sql, ['id' => $id, 'status' => $status]);
     }
 
+    public static function orderDocUrlEdit($id, $doc_url)
+    {
+        $sql = "UPDATE orders SET doc_url = :doc_url WHERE id = :id";
+        return DB::run($sql, ['id' => $id, 'doc_url' => $doc_url]);
+    }
+
     public static function getOrdersUser(int $user_id)
     {
-        $sql = "SELECT * FROM orders WHERE user_id = :user_id";
-        return DB::run($sql, ['user_id' => $user_id])->fetchAll();
+        $sql = "SELECT * FROM orders WHERE clientid = :clientid";
+        return DB::run($sql, ['clientid' => $user_id])->fetchAll();
+    }
+
+    public static function getOrdersUserPagin($page, $limit, $order, $order_by, $user_id)
+    {
+        $start = ($page - 1) * $limit;
+        $params = [
+            'start' => $start,
+            'limit' => $limit,
+            'clientid' => $user_id
+        ];
+        $string = "ORDER BY $order $order_by LIMIT";
+
+        $sql = "SELECT *
+                    FROM orders
+                    WHERE clientid = :clientid
+                    $string
+                    :start, :limit";
+
+        // $sql = "SELECT * FROM orders WHERE clientid = :clientid";
+        return DB::run($sql, $params)->fetchAll();
+    }
+
+    public static function getOrder(int $id)
+    {
+        $sql = "SELECT * FROM orders WHERE id = :id";
+        return DB::run($sql, ['id' => $id])->fetch();
     }
 
     public static function getOrders($page, $limit, $order, $order_by)
@@ -50,10 +99,12 @@ class OrdersModel extends Model
             'limit' => $limit
         ];
         $string = "ORDER BY $order $order_by LIMIT";
+
         $sql = "SELECT *
                     FROM orders
                     $string
                     :start, :limit";
+
         return DB::run($sql, $params)->fetchAll();
     }
 

@@ -196,8 +196,10 @@
                                 <img src="../public/images/svg/maintenance.svg" height="150" alt="File not found Image">
                                 <h3 class="mt-4">Сайт находится на обслуживании</h3>
                                 <p class="text-muted">Мы делаем систему еще круче. Скоро вернемся.</p>
-                                <?php if (is_login()) { ?>
+                                <?php if (is_login() && is_admin_allowed()) { ?>
                                     <a href="/admin" class="btn btn-primary">В админку</a>
+                                <?php } elseif (is_login() && !is_admin_allowed()) { ?>
+                                    <a href="/dashboard" class="btn btn-primary">В личный кабинет</a>
                                 <?php } else { ?>
                                     <a href="/login" class="btn btn-primary">Вход</a>
                                 <?php } ?>

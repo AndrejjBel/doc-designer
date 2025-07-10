@@ -8,7 +8,8 @@ use Hleb\Static\Request;
 use App\Models\{
     VarsModel,
     ProductsModel,
-    PagesModel
+    PagesModel,
+    OrdersModel
 };
 
 class AdminFetchController extends Controller
@@ -16,8 +17,8 @@ class AdminFetchController extends Controller
     public function index()
     {
         $allPost = Request::allPost();
-        if ($allPost['action'] == 'edit_status') {
-            $this->edit_status($allPost);
+        if ($allPost['action'] == 'edit_order_status') {
+            $this->edit_order_status($allPost);
         }
         if ($allPost['action'] == 'change_vars') {
             $this->change_vars($allPost);
@@ -52,6 +53,12 @@ class AdminFetchController extends Controller
         if ($allPost['action'] == 'delete_product') {
             $this->delete_product($allPost);
         }
+        if ($allPost['action'] == 'slugUnicAdd') {
+            $this->slugUnicAdd($allPost);
+        }
+        if ($allPost['action'] == 'slugUnicEdit') {
+            $this->slugUnicEdit($allPost);
+        }
 
         if ($allPost['action'] == 'add_page') {
             $this->add_page($allPost);
@@ -65,6 +72,14 @@ class AdminFetchController extends Controller
         if ($allPost['action'] == 'delete_page') {
             $this->delete_page($allPost);
         }
+    }
+
+    public function edit_order_status($allPost)
+    {
+        $order_status = [];
+        $order_status[] = OrdersModel::orderStatusEdit($allPost['id'], $allPost['status']);
+        $order_status['type'] = 'success';
+        echo json_encode($order_status, JSON_UNESCAPED_UNICODE);
     }
 
     public function change_vars($allPost)
@@ -93,7 +108,7 @@ class AdminFetchController extends Controller
                 [
                     'parentid'   => $allPost['parentid'],
                     'isgr'       => 1,
-                    'title'      => $allPost['title'],
+                    'title'      => trim($allPost['title']),
                     'descr'      => '',
                     'active'     => 1,
                     'type'       => 0,
@@ -129,7 +144,7 @@ class AdminFetchController extends Controller
                 [
                     'parentid'   => $allPost['parentid'],
                     'isgr'       => 0,
-                    'title'      => $allPost['title'],
+                    'title'      => trim($allPost['title']),
                     'descr'      => $allPost['descr'] ?? '',
                     'active'     => 1,
                     'type'       => $allPost['type'],
@@ -166,7 +181,7 @@ class AdminFetchController extends Controller
                     'id'         => $allPost['var_id'],
                     'parentid'   => $allPost['parentid'],
                     'isgr'       => 0,
-                    'title'      => $allPost['title'],
+                    'title'      => trim($allPost['title']),
                     'descr'      => $allPost['descr'] ?? '',
                     'active'     => 1,
                     'type'       => $allPost['type'],
@@ -250,63 +265,110 @@ class AdminFetchController extends Controller
     public function edit_product($allPost)
     {
         $message = [];
+        $error = [];
 
-        $favor = 0;
-        $active = 0;
-        if (array_key_exists('favor', $allPost)) {
-            $favor = 1;
-        }
-        if (array_key_exists('active', $allPost)) {
-            $active = 1;
-        }
-
-        $pContent = htmlspecialchars_decode($allPost['descr']);
-        $pContent = strip_tags($pContent);
-        $pContent = str_replace("&nbsp;", '', $pContent);
-        if ($pContent) {
-            $post_content = htmlspecialchars_decode($allPost['descr']);
-            $post_content = str_replace("&nbsp;", ' ', $post_content);
-        } else {
-            $post_content = '';
-        }
-
-        $calc = [
-            'calc' => $allPost['calc'],
-            'date-start' => $allPost['date-start'],
-            'date-end' => $allPost['date-end'],
-            'cost' => $allPost['cost'],
-            'calculation' => $allPost['calculation'],
-            'keyRate' => ''
-        ];
-
-        $res = ProductsModel::edit([
-            'id'          => $allPost['product_id'],
-            'isgr'        => 0,
-            'parentid'    => $allPost['parentid'],
-            'title'       => $allPost['title'],
-            'description' => $allPost['description'] ?? '',
-            'favor'       => $favor,
-            'descr'       => $post_content,
-            'price'       => $allPost['price'] ?? 0,
-            'active'      => $active,
-            'calc'        => json_encode($calc, JSON_UNESCAPED_UNICODE),
-            'allsit'      => $allPost['allsit'] ?? '',
-            'vars'        => $allPost['vars'] ?? ''
-        ]);
-
-        if ($res) {
-            $message['result'] = 'success';
-            $message['text'] = 'Изменения сохранены успешно';
-        } else {
+        if (!$allPost['title']) {
             $message['result'] = 'error';
-            $message['text'] = 'Ошибка, попробуйте позже';
+            $error['type'] = 'title';
+            $error['text'] = 'Заполните поле Наименование шаблона';
         }
 
-        $message['post'] = $allPost;
+        if (!$allPost['allsit']) {
+            $message['result'] = 'error';
+            $error['type'] = 'allsit';
+            $error['text'] = 'Заполните поле Постоянная ссылка';
+        }
 
-        $message['calc'] = $calc;
+        if (count($error)) {
+            $message['result'] = 'error';
+        } else {
+            $favor = 0;
+            $active = 0;
+            if (array_key_exists('favor', $allPost)) {
+                $favor = 1;
+            }
+            if (array_key_exists('active', $allPost)) {
+                $active = 1;
+            }
 
-        echo json_encode($message, JSON_UNESCAPED_UNICODE);
+            $pContent = htmlspecialchars_decode($allPost['descr']);
+            $pContent = strip_tags($pContent);
+            $pContent = str_replace("&nbsp;", '', $pContent);
+            if ($pContent) {
+                $post_content = htmlspecialchars_decode($allPost['descr']);
+                $post_content = str_replace("&nbsp;", ' ', $post_content);
+            } else {
+                $post_content = '';
+            }
+
+            $calc = [
+                'calc' => $allPost['calc'],
+                'dateStart' => $allPost['date-start'],
+                'dateEnd' => $allPost['date-end'],
+                'cost' => $allPost['cost'],
+                'calculation' => $allPost['calculation'],
+                'keyRate' => SITE_KEYRATE
+            ];
+
+            $post_seo = [
+                'title' => $allPost['seo_title'],
+                'description' => $allPost['seo_description'],
+                // 'keywords' => $allPost['post_meta_keywords']
+            ];
+
+            $is_post_slug = unicValueNotId('products', 'allsit', $allPost['product_id'], $allPost['allsit']);
+            if (count($is_post_slug) == 0) {
+                $allsit = $allPost['allsit'];
+            } elseif (count($is_post_slug) == 1) {
+                if ($is_post_slug[0] == $allPost['slug']) {
+                    $allsit = $allPost['allsit'] . '-2';
+                } else {
+                    $allsit = $allPost['allsit'];
+                }
+                $allsit = $allPost['allsit'] . '-2';
+            } elseif (count($is_post_slug) > 1) {
+                $arr = [];
+                foreach ($is_post_slug as $key => $value) {
+                    if ($value != $allPost['allsit']) {
+                        $arr[] = (int)str_replace($allPost['allsit'] . '-', '', $value);
+                    }
+                }
+                $allsit = $allPost['allsit'] . '-' . max($arr)+1;
+            }
+
+            // $is_post_slug = unicValueNotId('products', 'allsit', 14465, 'bytovaya-tekhnika');
+
+            $res = ProductsModel::edit([
+                'id'          => $allPost['product_id'],
+                'isgr'        => 0,
+                'parentid'    => $allPost['parentid'],
+                'ceo'         => json_encode($post_seo, JSON_UNESCAPED_UNICODE),
+                'title'       => $allPost['title'],
+                'description' => $allPost['description'] ?? '',
+                'favor'       => $favor,
+                'descr'       => $post_content,
+                'price'       => $allPost['price'] ?? 0,
+                'active'      => $active,
+                'calc'        => json_encode($calc, JSON_UNESCAPED_UNICODE),
+                'allsit'      => $allsit,
+                'vars'        => $allPost['vars'] ?? ''
+            ]);
+
+            if ($res) {
+                $message['result'] = 'success';
+                $message['text'] = 'Изменения сохранены успешно';
+            } else {
+                $message['result'] = 'error';
+                $message['text'] = 'Ошибка, попробуйте позже';
+            }
+        }
+
+        // $message['post'] = $allPost;
+        //
+        // $message['calc'] = $calc;
+        $result = ['error' => $error, 'message' => $message];
+
+        echo json_encode($result, JSON_UNESCAPED_UNICODE);
     }
 
     public function add_product($allPost)
@@ -344,16 +406,61 @@ class AdminFetchController extends Controller
 
             $calc = [
                 'calc' => $allPost['calc'],
-                'date-start' => $allPost['date-start'],
-                'date-end' => $allPost['date-end'],
+                'dateStart' => $allPost['date-start'],
+                'dateEnd' => $allPost['date-end'],
                 'cost' => $allPost['cost'],
                 'calculation' => $allPost['calculation'],
-                'keyRate' => ''
+                'keyRate' => SITE_KEYRATE
             ];
+
+            $post_seo = [
+                'title' => $allPost['seo_title'],
+                'description' => $allPost['seo_description'],
+                // 'keywords' => $allPost['post_meta_keywords']
+            ];
+
+            // $allsit = $allPost['allsit'];
+            if ($allPost['allsit']) {
+                $is_post_slug = unicValue('products', 'allsit', $allPost['allsit']);
+                if (count($is_post_slug) == 0) {
+                    $allsit = $allPost['allsit'];
+                } elseif (count($is_post_slug) == 1) {
+                    if ($is_post_slug[0] == $allPost['slug']) {
+                        $allsit = $allPost['allsit'] . '-2';
+                    } else {
+                        $allsit = $allPost['allsit'];
+                    }
+                } elseif (count($is_post_slug) > 1) {
+                    $arr = [];
+                    foreach ($is_post_slug as $key => $value) {
+                        if ($value != $allPost['allsit']) {
+                            $arr[] = (int)str_replace($allPost['allsit'] . '-', '', $value);
+                        }
+                    }
+                    $allsit = $allPost['allsit'] . '-' . max($arr)+1;
+                }
+            } else {
+                $allsit_title = translit_friendly_url($allPost['title']);
+                $is_post_slug = unicValue('products', 'allsit', $allPost['allsit']);
+                if (count($is_post_slug) == 0) {
+                    $allsit = $allsit_title;
+                } elseif (count($is_post_slug) == 1) {
+                    $allsit = $allsit_title . '-2';
+                } elseif (count($is_post_slug) > 1) {
+                    $arr = [];
+                    foreach ($is_post_slug as $key => $value) {
+                        if ($value != $allsit_title) {
+                            $arr[] = (int)str_replace($allsit_title . '-', '', $value);
+                        }
+                    }
+                    $allsit = $allsit_title . '-' . max($arr)+1;
+                }
+            }
 
             $res = ProductsModel::create([
                 'isgr'        => 0,
                 'parentid'    => $allPost['parentid'],
+                'ceo'         => json_encode($post_seo, JSON_UNESCAPED_UNICODE),
                 'title'       => $allPost['title'],
                 'description' => $allPost['description'],
                 'favor'       => $favor,
@@ -361,7 +468,7 @@ class AdminFetchController extends Controller
                 'price'       => $allPost['price'],
                 'active'      => $active,
                 'calc'        => json_encode($calc, JSON_UNESCAPED_UNICODE),
-                'allsit'      => $allPost['allsit'],
+                'allsit'      => $allsit,
                 'vars'        => $allPost['vars']
             ]);
 
@@ -450,6 +557,43 @@ class AdminFetchController extends Controller
                 $link = translit_friendly_url($allPost['title']);
             }
 
+            if ($allPost['link']) {
+                $is_post_slug = unicValue('pages', 'link', $allPost['link']);
+                if (count($is_post_slug) == 0) {
+                    $link = $allPost['link'];
+                } elseif (count($is_post_slug) == 1) {
+                    if ($is_post_slug[0] == $allPost['slug']) {
+                        $link = $allPost['link'] . '-2';
+                    } else {
+                        $link = $allPost['link'];
+                    }
+                } elseif (count($is_post_slug) > 1) {
+                    $arr = [];
+                    foreach ($is_post_slug as $key => $value) {
+                        if ($value != $allPost['link']) {
+                            $arr[] = (int)str_replace($allPost['link'] . '-', '', $value);
+                        }
+                    }
+                    $link = $allPost['link'] . '-' . max($arr)+1;
+                }
+            } else {
+                $allsit_title = translit_friendly_url($allPost['title']);
+                $is_post_slug = unicValue('products', 'allsit', $allPost['allsit']);
+                if (count($is_post_slug) == 0) {
+                    $link = $allsit_title;
+                } elseif (count($is_post_slug) == 1) {
+                    $link = $allsit_title . '-2';
+                } elseif (count($is_post_slug) > 1) {
+                    $arr = [];
+                    foreach ($is_post_slug as $key => $value) {
+                        if ($value != $allsit_title) {
+                            $arr[] = (int)str_replace($allsit_title . '-', '', $value);
+                        }
+                    }
+                    $link = $allsit_title . '-' . max($arr)+1;
+                }
+            }
+
             $post_seo = [
                 'title' => $allPost['seo_title'],
                 'description' => $allPost['seo_description'],
@@ -514,7 +658,12 @@ class AdminFetchController extends Controller
 
         if (!$allPost['title']) {
             $message['result'] = 'error';
-            $error['title'] = 'Заполните Заголовок страницы';
+            $error['title'] = 'Заполните поле Заголовок страницы';
+        }
+
+        if (!$allPost['link']) {
+            $message['result'] = 'error';
+            $error['link'] = 'Заполните поле Постоянная ссылка';
         }
 
         if ($allPost['page_gr'] != 'cont_page') {
@@ -543,11 +692,31 @@ class AdminFetchController extends Controller
             }
             $date_modified = date('Y-m-d H:i:s');
 
+            $is_post_slug = unicValueNotId('pages', 'link', $allPost['page_id'], $allPost['link']);
+            if (count($is_post_slug) == 0) {
+                $link = $allPost['link'];
+            } elseif (count($is_post_slug) == 1) {
+                if ($is_post_slug[0] == $allPost['slug']) {
+                    $link = $allPost['link'] . '-2';
+                } else {
+                    $link = $allPost['link'];
+                }
+                $link = $allPost['link'] . '-2';
+            } elseif (count($is_post_slug) > 1) {
+                $arr = [];
+                foreach ($is_post_slug as $key => $value) {
+                    if ($value != $allPost['link']) {
+                        $arr[] = (int)str_replace($allPost['link'] . '-', '', $value);
+                    }
+                }
+                $link = $allPost['link'] . '-' . max($arr)+1;
+            }
+
             $res = PagesModel::edit([
                 'id'          => $allPost['page_id'],
                 'title'       => $allPost['title'],
                 'content'     => '',
-                'slug'        => $allPost['link'],
+                'slug'        => $link,
                 'url'         => '',
                 'status'      => $status,
                 'favor'       => $favor,
@@ -594,5 +763,82 @@ class AdminFetchController extends Controller
         $message['text'] = 'Страница удалена';
 
         echo json_encode(['message' => $message], JSON_UNESCAPED_UNICODE);
+    }
+
+    public function slugUnicAdd($allPost)
+    {
+        $message = [];
+        $is_post_slug = unicValue($allPost['post_type'], $allPost['post_slug'], $allPost['slug']);
+        if (count($is_post_slug) == 0) {
+            $message['slug'] = $allPost['slug'];
+            $message['type'] = 'success';
+        } elseif (count($is_post_slug) == 1) {
+            // $message['slug'] = $allPost['slug'] . '-2';
+            // $message['type'] = 'warning';
+            $message['count'] = $is_post_slug;
+            if ($is_post_slug[0] == $allPost['slug']) {
+                $message['slug'] = $allPost['slug'] . '-2';
+                $message['type'] = 'warning';
+            } else {
+                $message['slug'] = $allPost['slug'];
+                $message['type'] = 'success';
+            }
+        } elseif (count($is_post_slug) > 1) {
+            // $message['count'] = $is_post_slug;
+            $arr = [];
+            foreach ($is_post_slug as $key => $value) {
+                if ($value != $allPost['slug']) {
+                    $arr[] = (int)str_replace($allPost['slug'] . '-', '', $value);
+                }
+            }
+            $message['slug'] = $allPost['slug'] . '-' . max($arr)+1;
+            $message['type'] = 'warning';
+        }
+
+        echo json_encode($message, JSON_UNESCAPED_UNICODE);
+    }
+
+    public function slugUnicEdit($allPost)
+    {
+        $message = [];
+
+        if ($allPost['post_type'] == 'products') {
+            $product = ProductsModel::getProductForId($allPost['id']);
+            $old_slug = $product['allsit'];
+        }
+        if ($allPost['post_type'] == 'pages') {
+            $page = PagesModel::getPageForId($allPost['id']);
+            $old_slug = $page['slug'];
+        }
+
+        if ($old_slug == $allPost['slug']) {
+            $message['slug'] = $allPost['slug'];
+            $message['type'] = 'success';
+        } else {
+            $is_post_slug = unicValue($allPost['post_type'], $allPost['post_slug'], $allPost['slug']);
+            if (count($is_post_slug) == 0) {
+                $message['slug'] = $allPost['slug'];
+                $message['type'] = 'success';
+            } elseif (count($is_post_slug) == 1) {
+                if ($is_post_slug[0] == $allPost['slug']) {
+                    $message['slug'] = $allPost['slug'] . '-2';
+                    $message['type'] = 'warning';
+                } else {
+                    $message['slug'] = $allPost['slug'];
+                    $message['type'] = 'success';
+                }
+            } elseif (count($is_post_slug) > 1) {
+                $arr = [];
+                foreach ($is_post_slug as $key => $value) {
+                    if ($value != $allPost['slug']) {
+                        $arr[] = (int)str_replace($allPost['slug'] . '-', '', $value);
+                    }
+                }
+                $message['slug'] = $allPost['slug'] . '-' . max($arr)+1;
+                $message['type'] = 'warning';
+            }
+        }
+
+        echo json_encode($message, JSON_UNESCAPED_UNICODE);
     }
 }

@@ -86,6 +86,7 @@ class ProductsController extends Controller
         $id = Request::get('id')->asInt();
         $product = ProductsModel::getProductForId($id);
         $varsProduct = ProductsModel::getVarsForProduct($id);
+        $prodSlugNotId = ProductsModel::getProdSlugNotId(['id' => $id]);
 
         $userId = userId();
         return view('/admin/index',
@@ -98,7 +99,8 @@ class ProductsController extends Controller
                     'userId' => $userId,
                     'product_id' => $id,
                     'product' => $product,
-                    'varsProduct' => $varsProduct
+                    'varsProduct' => $varsProduct,
+                    'prodSlugNotId' => $prodSlugNotId
                 ]
             ]
         );
