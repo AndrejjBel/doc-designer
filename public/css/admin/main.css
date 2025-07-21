@@ -400,6 +400,14 @@ td .status-value {
     display: block;
 }
 
+select.form-select option:disabled {
+    background: #fbfbfb;
+}
+
+[data-bs-theme=dark] select.form-select option:disabled {
+    background: #3e4651;
+}
+
 @media (max-width: 867px) {
     .post-gallery .filepond--item {
         width: calc((100% - 2em) / 2);

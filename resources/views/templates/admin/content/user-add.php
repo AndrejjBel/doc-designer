@@ -39,15 +39,21 @@
 
                             <select class="form-select" name="role" id="role">
                                 <option value="262144">СУПЕРАДМИН</option>
-                                <option value="524288">СУПЕРРЕДАКТОР</option>
-                                <option value="1048576">СУПЕРМОДЕРАТОР</option>
                                 <option value="1">АДМИН</option>
                                 <option value="1024">РЕДАКТОР</option>
-                                <option value="16384">МОДЕРАТОР</option>
-                                <option value="8192">МЕНЕДЖЕР</option>
-                                <option value="65536">РЕЦЕНЗЕНТ</option>
                                 <option value="131072" selected>ПОДПИСЧИК</option>
-                                <!-- <option value="0">Выберите роль</option>
+
+
+                                <!-- <option value="524288" disabled>СУПЕРРЕДАКТОР</option>
+                                <option value="1048576" disabled>СУПЕРМОДЕРАТОР</option>
+                                <option value="1">АДМИН</option>
+                                <option value="1024">РЕДАКТОР</option>
+                                <option value="16384" disabled>МОДЕРАТОР</option>
+                                <option value="8192" disabled>МЕНЕДЖЕР</option>
+                                <option value="65536" disabled>РЕЦЕНЗЕНТ</option>
+                                <option value="131072" selected>ПОДПИСЧИК</option>
+
+                                <option value="0">Выберите роль</option>
                                 <option value="1">АДМИН</option>
                                 <option value="2">АВТОР</option>
                                 <option value="4">СОТРУДНИК</option>

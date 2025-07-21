@@ -259,7 +259,7 @@ function rolesOptions() {
 }
 
 function createRolesOptions($defolt='Нет роли', $value=0) {
-    $keyRoles = [262144,524288,1048576,1,1024,16384,8192,65536,131072];
+    $keyRoles = [262144,1,1024,131072];  //[262144,524288,1048576,1,1024,16384,8192,65536,131072]
 	$out = '';
     $out .= '<option value="0">' . $defolt . '</option>';
 	foreach (\Delight\Auth\Role::getMap() as $roleValue => $roleName) {
