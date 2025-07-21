@@ -55,6 +55,18 @@ class ProductsModel extends Model
         return $sql_last_id['last_id'];
     }
 
+    public static function edit_gr($params)
+    {
+        $sql = "UPDATE products SET
+                    isgr         = :isgr,
+                    parentid     = :parentid,
+                    title        = :title,
+                    description  = :description
+                        WHERE id  = :id";
+
+        return DB::run($sql, $params);
+    }
+
     public static function create_def(array $params): int
     {
         $sql = "INSERT INTO products(isgr,
@@ -175,6 +187,12 @@ class ProductsModel extends Model
         return DB::run($sql)->rowCount();
     }
 
+    public static function getProductsGr()
+    {
+        $sql = "SELECT * FROM products WHERE isgr = 1";
+        return DB::run($sql)->fetchAll();
+    }
+
     public static function getProductsNogr()
     {
         $sql = "SELECT id FROM products WHERE isgr = 0";
@@ -244,10 +262,28 @@ class ProductsModel extends Model
         return DB::run($sql, ['allsit' => $slug])->fetch();
     }
 
-    public static function delete_var($product_id)
+    public static function delete_product($product_id)
     {
         $sql = "DELETE FROM products WHERE id = :id";
         return DB::run($sql, ['id' => $product_id]);
+    }
+
+    public static function delete_product_parent($parent_id)
+    {
+        $sql = "DELETE FROM products WHERE id IN (:parent_id)";
+        return DB::run($sql, ['parent_id' => $parent_id]);
+    }
+
+    public static function getProductsParentId($parentid)
+    {
+        $sql = "SELECT id FROM products WHERE parentid = :parentid";
+        return  DB::run($sql, ['parentid' => $parentid])->fetchAll();
+    }
+
+    public static function getProductsParentIdGr($parentid, $isgr=1)
+    {
+        $sql = "SELECT id FROM products WHERE parentid = :parentid AND isgr = :isgr";
+        return  DB::run($sql, ['parentid' => $parentid, 'isgr' => $isgr])->fetchAll();
     }
 
     // varsbyprods

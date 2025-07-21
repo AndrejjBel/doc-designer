@@ -870,15 +870,15 @@ function formValidatePass() {
     return f;
 }
 
-function formReset(form) {
-    for (var input of form.elements) {
-        if (input.required == true) {
-            input.classList.remove('is-valid');
-            input.classList.remove('is-invalid');
-        }
-    }
-    form.reset();
-}
+// function formReset(form) {
+//     for (var input of form.elements) {
+//         if (input.required == true) {
+//             input.classList.remove('is-valid');
+//             input.classList.remove('is-invalid');
+//         }
+//     }
+//     form.reset();
+// }
 
 function admEditUserPass(elem) {
     const warningWrap = document.querySelector('#warning-wrap');
@@ -975,7 +975,7 @@ function sectionsVarsLink(elem) {
     })
     .then(data => {
         console.dir(data);
-        varsTableChange(data);
+        varsTableChange(data.vars, data.userRoles);
         elem.classList.add("active");
     })
     .catch(error => {
@@ -983,16 +983,30 @@ function sectionsVarsLink(elem) {
     });
 }
 
-function varsTableChange(vars) {
+function varsTableChange(vars, userRoles=0) {
     const listVars = document.querySelectorAll('.list-vars a');
     const tbody = document.querySelector('.vars-table tbody');
     if ( !listVars.length ) return;
     for (var variable of listVars) {
         variable.classList.remove("active");
     }
+    let delBtn = ``;
     tbody.innerHTML = '';
     if (vars.length) {
         vars.forEach((item) => {
+            if (userRoles) {
+                if (userRoles == 'SUPER_ADMIN') {
+                    delBtn = `<a href="javascript: void(0);"
+                    class="text-reset fs-16 px-1 ms-1 js-var-delete"
+                    data-id="${item.id}"
+                    onclick="varsTableDelete(this)"
+                    data-bs-toggle="modal"
+                    data-bs-target="#delete-var-modal"
+                    title="Удалить">
+                        <i class="ri-delete-bin-line text-danger"></i>
+                    </a>`;
+                }
+            }
             tbody.insertAdjacentHTML(
                 'beforeend',
                 `<tr id="var${item.id}">
@@ -1008,15 +1022,8 @@ function varsTableChange(vars) {
                 onclick="varsTableEdit(this)"
                 title="Редактировать">
                     <i class="ri-edit-2-line"></i>
-                </a><a href="javascript: void(0);"
-                class="text-reset fs-16 px-1 ms-1 js-var-delete"
-                data-id="${item.id}"
-                onclick="varsTableDelete(this)"
-                data-bs-toggle="modal"
-                data-bs-target="#delete-var-modal"
-                title="Удалить">
-                    <i class="ri-delete-bin-line text-danger"></i>
-                </a></td>
+                </a>
+                ${delBtn}</td>
                 </tr>`
             );
         });
@@ -1091,7 +1098,7 @@ function varsGrAdd() {
                 console.dir(data);
                 if (data.type == 'success') {
                     grAddModal.hide();
-                    alertAction(warningWrap, 'Раздел создан', 'success');
+                    alertAction(warningWrap, data.text, 'success');
                     grAddBtn.style.pointerEvents = '';
                     setTimeout(function(){
                         warningWrap.innerHTML = '';
@@ -1231,7 +1238,7 @@ function grPrAdd() {
                 grPrAddBtn.style.pointerEvents = '';
                 if (data.type == 'success') {
                     prAddModal.hide();
-                    alertAction(warningWrap, 'Группа шаблонов создана', 'success');
+                    alertAction(warningWrap, data.text, 'success');
                     setTimeout(function(){
                         warningWrap.innerHTML = '';
                     }, 5000);
@@ -1349,6 +1356,51 @@ function varsDelete(elem) {
     });
 }
 
+function productGroupDelete(elem) {
+    const warningWrap = document.querySelector('#warning-wrap');
+    console.dir(elem.dataset.id);
+    console.dir(elem.dataset.par);
+
+    let formData = new FormData();
+    formData.append('action', 'deleteProductGroup');
+    formData.append('prod_id', elem.dataset.id);
+    if (elem.dataset.par) {
+        formData.append('root', elem.dataset.par);
+    }
+    formData.append('_token', document.querySelector('input[name="_token"]').value);
+    url = '/admin/fetch';
+
+    fetch(url, {
+        method: "POST",
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Ошибка запроса');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.dir(data);
+        alertAction(warningWrap, data.message.text, 'success');
+        document.querySelector('#var'+elem.dataset.id).remove();
+        let parGroup = data.res;
+        for (var variable of parGroup) {
+            try {
+                document.querySelector('#var'+variable).remove();
+            } catch (e) {
+                console.dir(e);
+            }
+        }
+        setTimeout(function(){
+            warningWrap.innerHTML = '';
+        }, 5000);
+    })
+    .catch(error => {
+        console.dir(error);
+    });
+}
+
 function productDelete(elem) {
     const warningWrap = document.querySelector('#warning-wrap');
     console.dir(elem.dataset.id);
@@ -1387,8 +1439,90 @@ function productDelete(elem) {
 }
 
 function varsTableEdit(elem) {
-    const form = document.querySelector('#form_var_add');
-    const vars = JSON.parse(varsAll);
+    let form = '';
+    let vars = '';
+    if (elem.dataset.type == 'products') {
+        form = document.querySelector('#group_prod_section');
+        vars = JSON.parse(prodGroups);
+    } else if (elem.dataset.type == 'var_group') {
+        form = document.querySelector('#group_section');
+        vars = JSON.parse(varsAll);
+    } else {
+        form = document.querySelector('#form_var_add');
+        vars = JSON.parse(varsAll);
+    }
+    const varsArr = [];
+    for (var item in vars) {
+        if (vars.hasOwnProperty(item)) {
+            varsArr.push(vars[item]);
+        }
+    }
+    let varIt = varsArr.filter((item) => {
+        return (item.id == elem.dataset.id);
+    })[0];
+
+    console.dir(form);
+    console.dir(varIt);
+
+    if (elem.dataset.type == 'products') {
+        form.elements.title.value = varIt.title;
+        form.elements.prod_gr_id.value = varIt.id;
+        form.elements.description.innerText = varIt.description;
+        let selectPi = document.querySelector('#group_prod_section #parentid');
+        if (selectPi.querySelector(`option[value='${varIt.parentid}']`)) {
+            selectPi.value = varIt.parentid;
+        } else {
+            console.warn('Опция с таким значением не найдена:', varIt.parentid);
+        }
+    } else if (elem.dataset.type == 'var_group') {
+        form.elements.title.value = varIt.title;
+        form.elements.var_gr_id.value = varIt.id;
+        let selectPi = document.querySelector('#group_section #parentid');
+        if (selectPi.querySelector(`option[value='${varIt.parentid}']`)) {
+            selectPi.value = varIt.parentid;
+        } else {
+            console.warn('Опция с таким значением не найдена:', varIt.parentid);
+        }
+    } else {
+        form.elements.title.value = varIt.title;
+        form.elements.descr.value = (varIt.descr)? varIt.descr : '';
+        form.elements.captholder.value = (varIt.captholder)? varIt.captholder : '';
+        form.elements.extdata.value = (varIt.extdata)? varIt.extdata : '';
+        form.elements.var_id.value = varIt.id;
+
+        let selectPi = document.querySelector('#form_var_add #parentid');
+        if (selectPi.querySelector(`option[value='${varIt.parentid}']`)) {
+            selectPi.value = varIt.parentid;
+        } else {
+            console.warn('Опция с таким значением не найдена:', varIt.parentid);
+        }
+
+        let selectTd = document.querySelector('#form_var_add #typedata');
+        if (selectTd.querySelector(`option[value='${varIt.typedata}']`)) {
+            selectTd.value = varIt.typedata;
+        } else {
+            console.warn('Опция с таким значением не найдена:', varIt.typedata);
+        }
+
+        let selectT = document.querySelector('#form_var_add #type');
+        if (selectT.querySelector(`option[value='${varIt.type}']`)) {
+            selectT.value = varIt.type;
+        } else {
+            console.warn('Опция с таким значением не найдена:', varIt.type);
+        }
+    }
+}
+
+function varsGroupEdit(elem) {
+    const form = document.querySelector('#group_section');
+    console.dir(elem.dataset.type);
+    let vars = '';
+    if (elem.dataset.type == 'products') {
+        vars = JSON.parse(prodGroups);
+    } else {
+        vars = JSON.parse(varsAll);
+    }
+    console.dir(vars);
     const varsArr = [];
     for (var item in vars) {
         if (vars.hasOwnProperty(item)) {
@@ -1429,6 +1563,8 @@ function varsTableEdit(elem) {
         console.warn('Опция с таким значением не найдена:', varIt.type);
     }
 }
+
+// console.dir(JSON.parse(prodGroups));
 
 function productStatusChange(elem) {
     const warningWrap = document.querySelector('#warning-wrap');

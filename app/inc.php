@@ -29,11 +29,31 @@ function sections_vars($items) {
     return $content;
 }
 
-function table_vars_group($items) {
+function table_vars_group($items, $userRoles=0, $type='') {
     $items_new = array_multisort_value($items, 'title', SORT_ASC);
+    $delBtn = '';
+    $delBtnPar = '';
+    $dataBsTarget = '#modal-vargr-add';
+    if ($type == 'products') {
+        $dataBsTarget = '#modal-productsgr-add';
+    }
     $content = '';
     foreach ($items_new as $item) {
         if ($item['parentid'] == 0) {
+            if ($userRoles) {
+                if ($userRoles == 'SUPER_ADMIN') {
+                    $delBtn = '<a href="javascript: void(0);"
+                        class="text-reset fs-16 px-1 ms-1 js-var-delete"
+                        data-id="' . $item["id"] . '"
+                        data-par="yes"
+                        onclick="varsTableDelete(this)"
+                        data-bs-toggle="modal"
+                        data-bs-target="#delete-var-modal"
+                        title="Удалить">
+                        <i class="ri-delete-bin-line text-danger"></i>
+                    </a>';
+                }
+            }
             $content .= '<tr id="var' . $item['id'] . '">';
             $content .= '<td>' . $item['id'] . '</td>';
             $content .= '<td id="title' . $item['id'] . '"><a href="/admin/vars/' . $item['id'] . '" class="parent-var-table" title="Перейти">' . $item['title'] . ' (корневая)</a></td>';
@@ -42,25 +62,33 @@ function table_vars_group($items) {
             $content .= '<a href="javascript: void(0);"
                 class="text-reset fs-16 px-1 js-var-edit"
                 data-id="' . $item["id"] . '"
+                data-type="' . $type . '"
                 onclick="varsTableEdit(this)"
+                data-bs-toggle="modal"
+                data-bs-target="' . $dataBsTarget . '"
                 title="Редактировать">
                 <i class="ri-edit-2-line"></i>
             </a>';
-            $content .= '<a href="javascript: void(0);"
-                class="text-reset fs-16 px-1 ms-1 js-var-delete"
-                data-id="' . $item["id"] . '"
-                data-par="yes"
-                onclick="varsTableDelete(this)"
-                data-bs-toggle="modal"
-                data-bs-target="#delete-var-modal"
-                title="Удалить">
-                <i class="ri-delete-bin-line text-danger"></i>
-            </a>';
+            $content .= $delBtn;
             $content .= '</td>';
             $content .= '</tr>';
 
             foreach ($items_new as $item_par) {
                 if ($item_par['parentid'] == $item["id"] && $item_par['isgr'] == 1) {
+                    if ($userRoles) {
+                        if ($userRoles == 'SUPER_ADMIN') {
+                            $delBtnPar = '<a href="javascript: void(0);"
+                                class="text-reset fs-16 px-1 ms-1 js-var-delete"
+                                data-id="' . $item_par["id"] . '"
+                                data-par="no"
+                                onclick="varsTableDelete(this)"
+                                data-bs-toggle="modal"
+                                data-bs-target="#delete-var-modal"
+                                title="Удалить">
+                                <i class="ri-delete-bin-line text-danger"></i>
+                            </a>';
+                        }
+                    }
                     $content .= '<tr id="var' . $item_par['id'] . '">';
                     $content .= '<td>' . $item_par['id'] . '</td>';
                     $content .= '<td id="title' . $item_par['id'] . '" class="parent-var-title">– ' . $item_par['title'] . '</td>';
@@ -69,20 +97,14 @@ function table_vars_group($items) {
                     $content .= '<a href="javascript: void(0);"
                         class="text-reset fs-16 px-1 js-var-edit"
                         data-id="' . $item_par["id"] . '"
+                        data-type="' . $type . '"
                         onclick="varsTableEdit(this)"
+                        data-bs-toggle="modal"
+                        data-bs-target="' . $dataBsTarget . '"
                         title="Редактировать">
                         <i class="ri-edit-2-line"></i>
                     </a>';
-                    $content .= '<a href="javascript: void(0);"
-                        class="text-reset fs-16 px-1 ms-1 js-var-delete"
-                        data-id="' . $item_par["id"] . '"
-                        data-par="no"
-                        onclick="varsTableDelete(this)"
-                        data-bs-toggle="modal"
-                        data-bs-target="#delete-var-modal"
-                        title="Удалить">
-                        <i class="ri-delete-bin-line text-danger"></i>
-                    </a>';
+                    $content .= $delBtnPar;
                     $content .= '</td>';
                     $content .= '</tr>';
                 }
@@ -92,7 +114,8 @@ function table_vars_group($items) {
     return $content;
 }
 
-function table_vars($array, $var_id) {
+function table_vars($array, $var_id, $userRoles=0) {
+    $delBtn = '';
     $search = [$var_id];
     $items = array_filter($array, function($_array) use ($search){
         return in_array($_array['parentid'], $search);
@@ -100,6 +123,19 @@ function table_vars($array, $var_id) {
 
     $content = '';
     foreach ($items as $key => $item) {
+        if ($userRoles) {
+            if ($userRoles == 'SUPER_ADMIN') {
+                $delBtn = '<a href="javascript: void(0);"
+                    class="text-reset fs-16 px-1 ms-1 js-var-delete"
+                    data-id="' . $item["id"] . '"
+                    onclick="varsTableDelete(this)"
+                    data-bs-toggle="modal"
+                    data-bs-target="#delete-var-modal"
+                    title="Удалить">
+                    <i class="ri-delete-bin-line text-danger"></i>
+                </a>';
+            }
+        }
         $content .= '<tr id="var' . $item['id'] . '">';
         $content .= '<td>' . $item['id'] . '</td>';
         $content .= '<td id="title' . $item['id'] . '">' . $item['title'] . '</td>';
@@ -115,15 +151,7 @@ function table_vars($array, $var_id) {
             title="Редактировать">
             <i class="ri-edit-2-line"></i>
         </a>';
-        $content .= '<a href="javascript: void(0);"
-            class="text-reset fs-16 px-1 ms-1 js-var-delete"
-            data-id="' . $item["id"] . '"
-            onclick="varsTableDelete(this)"
-            data-bs-toggle="modal"
-            data-bs-target="#delete-var-modal"
-            title="Удалить">
-            <i class="ri-delete-bin-line text-danger"></i>
-        </a>';
+        $content .= $delBtn;
         $content .= '</td>';
         $content .= '</tr>';
     }

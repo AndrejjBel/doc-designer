@@ -59,6 +59,12 @@ function is_login() {
 	return $is_login;
 }
 
+function getUserRoles() {
+    $db = MyormModel::dbc();
+    $auth = new \Delight\Auth\Auth($db);
+    return $auth->getRoles();
+}
+
 function is_superadmin() {
     $db = MyormModel::dbc();
     $auth = new \Delight\Auth\Auth($db);
@@ -70,8 +76,22 @@ function is_admin_allowed() {
     $auth = new \Delight\Auth\Auth($db);
     return $auth->hasAnyRole(
         \Delight\Auth\Role::ADMIN,
-        \Delight\Auth\Role::SUPER_ADMIN
+        \Delight\Auth\Role::SUPER_ADMIN,
+        \Delight\Auth\Role::EDITOR,
+        \Delight\Auth\Role::SUPER_EDITOR
     );
+}
+
+function is_editor() { // Редактор
+    $db = MyormModel::dbc();
+    $auth = new \Delight\Auth\Auth($db);
+    return $auth->hasRole(\Delight\Auth\Role::EDITOR);
+}
+
+function is_super_editor() { // Супер Редактор
+    $db = MyormModel::dbc();
+    $auth = new \Delight\Auth\Auth($db);
+    return $auth->hasRole(\Delight\Auth\Role::SUPER_EDITOR);
 }
 
 function userData($meta) {
@@ -239,13 +259,16 @@ function rolesOptions() {
 }
 
 function createRolesOptions($defolt='Нет роли', $value=0) {
+    $keyRoles = [262144,524288,1048576,1,1024,16384,8192,65536,131072];
 	$out = '';
     $out .= '<option value="0">' . $defolt . '</option>';
 	foreach (\Delight\Auth\Role::getMap() as $roleValue => $roleName) {
-        if ($roleValue == $value) {
-            $out .= '<option value="' . $roleValue . '" selected>' . $roleName . '</option>';
-        } else {
-            $out .= '<option value="' . $roleValue . '">' . $roleName . '</option>';
+        if (in_array($roleValue, $keyRoles)) {
+            if ($roleValue == $value) {
+                $out .= '<option value="' . $roleValue . '" selected>' . rolesTranslate($roleName) . '</option>';
+            } else {
+                $out .= '<option value="' . $roleValue . '">' . rolesTranslate($roleName) . '</option>';
+            }
         }
 	}
 	return $out;
@@ -718,9 +741,9 @@ function mini_cart_products($data) {
     }
 }
 
-function navigation_admin_left_html($mod, $vars) {
+function navigation_admin_left_html($mod, $vars, $userRole=0) {
     // $nav = config('navigation', $nav.'_nav');
-    $nav = nav_obj($mod, $vars);
+    $nav = nav_obj($mod, $vars, $userRole);
     $id = ($nav['container_id'])? ' id="' . $nav['container_id'] . '"' : '';
     $class = ($nav['container_class'])? ' class="' . $nav['container_class'] . '"' : '';
     $content = '<' . $nav['container'] . $id . $class . '>';

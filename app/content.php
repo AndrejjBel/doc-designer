@@ -177,3 +177,31 @@ function html_to_pdf($html, $fname) {
 
     return $file_url;
 }
+
+function rolesTranslate($name) {
+    $roles = [
+        'ADMIN' => 'АДМИН',
+        'AUTHOR' => 'АВТОР',
+        'COLLABORATOR' => 'СОТРУДНИК',
+        'CONSULTANT' => 'КОНСУЛЬТАНТ',
+        'CONSUMER' => 'ПОТРЕБИТЕЛЬ',
+        'CONTRIBUTOR' => 'УЧАСТНИК',
+        'COORDINATOR' => 'КООРДИНАТОР',
+        'CREATOR' => 'СОЗДАТЕЛЬ',
+        'DEVELOPER' => 'РАЗРАБОТЧИК',
+        'DIRECTOR' => 'ДИРЕКТОР',
+        'EDITOR' => 'РЕДАКТОР',
+        'EMPLOYEE' => 'СОТРУДНИК',
+        'MAINTAINER' => 'ОБСЛУЖИВАЮЩИЙ',
+        'MANAGER' => 'МЕНЕДЖЕР',
+        'MODERATOR' => 'МОДЕРАТОР',
+        'PUBLISHER' => 'ИЗДАТЕЛЬ',
+        'REVIEWER' => 'РЕЦЕНЗЕНТ',
+        'SUBSCRIBER' => 'ПОДПИСЧИК',
+        'SUPER_ADMIN' => 'СУПЕРАДМИН',
+        'SUPER_EDITOR' => 'СУПЕРРЕДАКТОР',
+        'SUPER_MODERATOR' => 'СУПЕРМОДЕРАТОР',
+        'TRANSLATOR' => 'ПЕРЕВОДЧИК'
+    ];
+    return $roles[$name];
+}

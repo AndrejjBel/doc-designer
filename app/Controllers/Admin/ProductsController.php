@@ -147,4 +147,22 @@ class ProductsController extends Controller
             );
         }
     }
+
+    public function products_group(): View
+    {
+        $products = ProductsModel::getProductsAll();
+
+        $userId = userId();
+        return view('/admin/index',
+            [
+                'data'  => [
+                    'temp' => 'products-group',
+                    'title' => 'Products group',
+                    'description' => 'Products group description',
+                    'mod' => 'admin',
+                    'products' => $products
+                ]
+            ]
+        );
+    }
 }

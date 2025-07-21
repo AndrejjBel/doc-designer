@@ -27,6 +27,7 @@ Route::toGroup()->prefix('admin')->middleware(AdminMiddleware::class);
     Route::get('/page-edit')->controller(PagesController::class, 'page_edit')->name('admin.page-edit');
 
     Route::get('/products')->controller(ProductsController::class)->name('admin.products');
+    Route::get('/products-group')->controller(ProductsController::class, 'products_group')->name('admin.products-group');
     Route::get('/product-add')->controller(ProductsController::class, 'product_add')->name('admin.product-add');
     Route::get('/product-edit')->controller(ProductsController::class, 'product_edit')->name('admin.product-edit');
 

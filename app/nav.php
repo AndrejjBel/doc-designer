@@ -1,6 +1,6 @@
 <?php
 
-function nav_obj($mod, $vars_obj) {
+function nav_obj($mod, $vars_obj, $userRole=0) {
     $search = [0];
     $vars_n = array_filter($vars_obj, function($_array) use ($search){
         return in_array($_array['parentid'], $search);
@@ -25,6 +25,12 @@ function nav_obj($mod, $vars_obj) {
         [
             'name' => 'Все шаблоны',
             'link' => '/admin/products',
+            'class_li' => '',
+            'children' => []
+        ],
+        [
+            'name' => 'Группы шаблонов',
+            'link' => '/admin/products-group',
             'class_li' => '',
             'children' => []
         ],
@@ -162,6 +168,57 @@ function nav_obj($mod, $vars_obj) {
         ]
     ];
 
+    $nav_admin_editors = [
+        'container'       => 'ul',
+        'container_class' => 'side-nav',
+        'container_id'    => '',
+        'structure' => [
+            [
+                'name' => 'Консоль',
+                'link' => '/admin',
+                'icon' => 'bi bi-speedometer2', // ri-dashboard-3-fill
+                'children' => []
+            ],
+            [
+                'name' => 'Страницы',
+                'link' => 'sidebarPages',
+                'icon' => 'ri-pages-line', // ri-dashboard-3-fill
+                'children' => $pages
+            ],
+            [
+                'name' => 'Шаблоны',
+                'link' => 'sidebarProducts',
+                'icon' => 'ri-store-2-line', // ri-dashboard-3-fill
+                'children' => $products
+            ],
+            [
+                'name' => 'Переменные',
+                'link' => 'sidebarVars',
+                'icon' => 'bi bi-hash', // ri-dashboard-3-fill
+                'children' => $vars
+            ],
+            [
+                'name' => 'Профиль',
+                'link' => 'sidebarUserSettings',
+                'icon' => 'ri-user-6-fill',
+                'children' => [
+                    [
+                        'name' => 'Профиль',
+                        'link' => '/admin/user-settings',
+                        'class_li' => '',
+                        'children' => []
+                    ],
+                    [
+                        'name' => 'Покупки',
+                        'link' => '/admin/user-orders',
+                        'class_li' => '',
+                        'children' => []
+                    ]
+                ]
+            ]
+        ]
+    ];
+
     $nav_dashboard = [
         'container'       => 'ul',
         'container_class' => 'side-nav',
@@ -196,7 +253,13 @@ function nav_obj($mod, $vars_obj) {
     ];
 
     if ($mod == 'admin') {
-        return $nav_admin;
+        if ($userRole) {
+            if ($userRole == 'SUPER_ADMIN') {
+                return $nav_admin;
+            } elseif ($userRole == 'EDITOR') {
+                return $nav_admin_editors;
+            }
+        }
     }
 
     if ($mod == 'dashboard') {

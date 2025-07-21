@@ -132,6 +132,7 @@ if ($data['mod'] == 'dashboard') {
                                             <a href="/admin/page-add?duplicate=<?php echo $product['id'];?>" target="_blank" class="text-reset fs-16 mx-1 js-duplicate-btn" data-state="def" title="Дублировать">
                                                 <i class="bi bi-files"></i>
                                             </a>
+                                            <?php if ($data['userRoles'] == 'SUPER_ADMIN') { ?>
                                             <button
                                                 class="btn btn-link mx-1 p-0 js-product-delete"
                                                 type="button"
@@ -142,6 +143,7 @@ if ($data['mod'] == 'dashboard') {
                                                 data-id="<?php echo $product['id'];?>" title="Удалить">
                                                 <i class="ri-delete-bin-line text-danger"></i>
                                             </button>
+                                            <?php } ?>
                                         </td>
                                     </tr>
                                 <?php } ?>

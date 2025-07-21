@@ -53,6 +53,9 @@ class AdminFetchController extends Controller
         if ($allPost['action'] == 'delete_product') {
             $this->delete_product($allPost);
         }
+        if ($allPost['action'] == 'deleteProductGroup') {
+            $this->deleteProductGroup($allPost);
+        }
         if ($allPost['action'] == 'slugUnicAdd') {
             $this->slugUnicAdd($allPost);
         }
@@ -84,9 +87,12 @@ class AdminFetchController extends Controller
 
     public function change_vars($allPost)
     {
+        $res = [];
+        $userRoles = getUserRoles();
+        $res['userRoles'] = array_slice($userRoles, 0, 1)[0];
         $id = $allPost['var_id'];
-        $vars = VarsModel::getVarsParent($id);
-        echo json_encode($vars, JSON_UNESCAPED_UNICODE);
+        $res['vars'] = VarsModel::getVarsParent($id);
+        echo json_encode($res, JSON_UNESCAPED_UNICODE);
     }
 
     public function create_vargr($allPost)
@@ -104,27 +110,53 @@ class AdminFetchController extends Controller
         if ( count( $message ) > 0 ) {
             $message['type'] = 'error';
         } else {
-            $last_post_id = VarsModel::create_var(
-                [
-                    'parentid'   => $allPost['parentid'],
-                    'isgr'       => 1,
-                    'title'      => trim($allPost['title']),
-                    'descr'      => '',
-                    'active'     => 1,
-                    'type'       => 0,
-                    'typedata'   => 0,
-                    'captholder' => 0,
-                    'exthtml'    => '',
-                    'extdata'    => ''
-                ]
-            );
-            if ($last_post_id) {
-                $message['type'] = 'success';
-                $message['id'] = $last_post_id;
-            } else {
-                $message['type'] = 'error';
+            if (array_key_exists('var_gr_id', $allPost)) {
+                $message['var_gr_id'] = $allPost['var_gr_id'];
+                if ($allPost['var_gr_id']) {
+                    $res = VarsModel::edit_var(
+                        [
+                            'id'         => $allPost['var_gr_id'],
+                            'parentid'   => $allPost['parentid'],
+                            'isgr'       => 1,
+                            'title'      => trim($allPost['title']),
+                            'descr'      => '',
+                            'active'     => 1,
+                            'type'       => 0,
+                            'typedata'   => 0,
+                            'captholder' => 0,
+                            'exthtml'    => '',
+                            'extdata'    => ''
+                        ]
+                    );
+                    $message['type'] = 'success';
+                    $message['text'] = 'Раздел изменен';
+                } else {
+                    $last_post_id = VarsModel::create_var(
+                        [
+                            'parentid'   => $allPost['parentid'],
+                            'isgr'       => 1,
+                            'title'      => trim($allPost['title']),
+                            'descr'      => '',
+                            'active'     => 1,
+                            'type'       => 0,
+                            'typedata'   => 0,
+                            'captholder' => 0,
+                            'exthtml'    => '',
+                            'extdata'    => ''
+                        ]
+                    );
+                    if ($last_post_id) {
+                        $message['type'] = 'success';
+                        $message['id'] = $last_post_id;
+                        $message['text'] = 'Раздел создан';
+                    } else {
+                        $message['type'] = 'error';
+                    }
+                }
             }
         }
+
+        $message['post'] = $allPost;
 
         echo json_encode($message, JSON_UNESCAPED_UNICODE);
     }
@@ -492,7 +524,7 @@ class AdminFetchController extends Controller
         $id = $allPost['product_id'];
         $message = [];
 
-        $del_var = ProductsModel::delete_var($id);
+        $del_var = ProductsModel::delete_product($id);
         $message['text'] = 'Шаблон удален';
 
         echo json_encode(['message' => $message], JSON_UNESCAPED_UNICODE);
@@ -513,21 +545,78 @@ class AdminFetchController extends Controller
         if ( count( $message ) > 0 ) {
             $message['type'] = 'error';
         } else {
-            $last_post_id = ProductsModel::create_gr([
-                'isgr'        => 1,
-                'parentid'    => $allPost['parentid'],
-                'title'       => $allPost['title'],
-                'description' => $allPost['description']
-            ]);
-            if ($last_post_id) {
-                $message['type'] = 'success';
-                $message['id'] = $last_post_id;
-            } else {
-                $message['type'] = 'error';
+            if (array_key_exists('prod_gr_id', $allPost)) {
+                if ($allPost['prod_gr_id']) {
+                    $editGr = ProductsModel::edit_gr([
+                        'id'          => $allPost['prod_gr_id'],
+                        'isgr'        => 1,
+                        'parentid'    => $allPost['parentid'],
+                        'title'       => $allPost['title'],
+                        'description' => $allPost['description']
+                    ]);
+                    $message['type'] = 'success';
+                    $message['text'] = 'Группа шаблонов изменена';
+
+                    $message['post'] = $allPost;
+                } else {
+                    $last_post_id = ProductsModel::create_gr([
+                        'isgr'        => 1,
+                        'parentid'    => $allPost['parentid'],
+                        'title'       => $allPost['title'],
+                        'description' => $allPost['description']
+                    ]);
+                    if ($last_post_id) {
+                        $message['type'] = 'success';
+                        $message['id'] = $last_post_id;
+                        $message['text'] = 'Группа шаблонов создана';
+                    } else {
+                        $message['type'] = 'error';
+                    }
+                }
             }
         }
 
         echo json_encode($message, JSON_UNESCAPED_UNICODE);
+    }
+
+    public function deleteProductGroup($allPost)
+    {
+        $id = $allPost['prod_id'];
+        $message = [];
+        $fin = [];
+        $vp = '';
+        if (array_key_exists('root', $allPost)) {
+            $res = [];
+            if ($allPost['root'] == 'yes') {
+                $vars_parent = ProductsModel::getProductsParentIdGr($id);
+                foreach ($vars_parent as $value) {
+                    $res = array_merge($res, ProductsModel::getProductsParentId($value['id']));
+                }
+                $del_prod = ProductsModel::delete_product($id);
+                $message['text'] = 'Группа удалена';
+            } else if ($allPost['root'] == 'no') {
+                $vars_parent = ProductsModel::getProductsParentId($id);
+                $del_prod = ProductsModel::delete_product($id);
+                $message['text'] = 'Раздел удален';
+            } else {
+                $vars_parent = ProductsModel::getProductsParentId($id);
+            }
+            $res = array_merge($res, $vars_parent);
+            foreach ($res as $value) {
+                $fin[] = $value['id'];
+            }
+            if (count($fin)) {
+                $vp = implode(',', $fin);
+                $del_par = ProductsModel::delete_product_parent($vp);
+            }
+            // $del_var = ProductsModel::delete_product($id);
+            // $message['text'] = 'Группа шаблонов удалена';
+        }
+        // else {
+        //     $del_var = ProductsModel::delete_product($id);
+        //     $message['text'] = 'Группа шаблонов удалена';
+        // }
+        echo json_encode(['res' => $fin, 'vp' => $vp, 'message' => $message, 'post' => $allPost], JSON_UNESCAPED_UNICODE);
     }
 
     public function add_page($allPost)

@@ -33,8 +33,43 @@
 
                         <div class="mb-3">
                             <label for="role" class="form-label">Роль пользователя</label>
+                            <!-- <select class="form-select" name="role" id="role">
+                                <?php //echo createRolesOptions('Выберите роль', 131072);?>
+                            </select> -->
+
                             <select class="form-select" name="role" id="role">
-                                <?php echo createRolesOptions('Выберите роль', 131072);?>
+                                <option value="262144">СУПЕРАДМИН</option>
+                                <option value="524288">СУПЕРРЕДАКТОР</option>
+                                <option value="1048576">СУПЕРМОДЕРАТОР</option>
+                                <option value="1">АДМИН</option>
+                                <option value="1024">РЕДАКТОР</option>
+                                <option value="16384">МОДЕРАТОР</option>
+                                <option value="8192">МЕНЕДЖЕР</option>
+                                <option value="65536">РЕЦЕНЗЕНТ</option>
+                                <option value="131072" selected>ПОДПИСЧИК</option>
+                                <!-- <option value="0">Выберите роль</option>
+                                <option value="1">АДМИН</option>
+                                <option value="2">АВТОР</option>
+                                <option value="4">СОТРУДНИК</option>
+                                <option value="8">КОНСУЛЬТАНТ</option>
+                                <option value="16">ПОТРЕБИТЕЛЬ</option>
+                                <option value="32">УЧАСТНИК</option>
+                                <option value="64">КООРДИНАТОР</option>
+                                <option value="128">СОЗДАТЕЛЬ</option>
+                                <option value="256">РАЗРАБОТЧИК</option>
+                                <option value="512">ДИРЕКТОР</option>
+                                <option value="1024">РЕДАКТОР</option>
+                                <option value="2048">СОТРУДНИК</option>
+                                <option value="4096">ОБСЛУЖИВАЮЩИЙ</option>
+                                <option value="8192">МЕНЕДЖЕР</option>
+                                <option value="16384">МОДЕРАТОР</option>
+                                <option value="32768">ИЗДАТЕЛЬ</option>
+                                <option value="65536">РЕЦЕНЗЕНТ</option>
+                                <option value="131072" selected>ПОДПИСЧИК</option>
+                                <option value="262144">СУПЕРАДМИН</option>
+                                <option value="524288">СУПЕРРЕДАКТОР</option>
+                                <option value="1048576">СУПЕРМОДЕРАТОР</option>
+                                <option value="2097152">ПЕРЕВОДЧИК</option> -->
                             </select>
                         </div>
 

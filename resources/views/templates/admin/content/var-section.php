@@ -90,7 +90,7 @@ if ($data['mod'] == 'dashboard') {
                                 </thead>
                                 <tbody>
                                     <?php if (table_vars($data['vars'], $data['vars_parent'][0]['id'])) { ?>
-                                        <?php echo table_vars($data['vars'], $data['vars_parent'][0]['id']);?>
+                                        <?php echo table_vars($data['vars'], $data['vars_parent'][0]['id'], $data['userRoles']);?>
                                     <?php } else { ?>
                                         <tr>
                                             <td></td>

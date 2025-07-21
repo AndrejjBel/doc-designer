@@ -32,7 +32,7 @@
     <?php insertTemplate('/templates/admin/content/footer', ['data' => $data]);
 
     // echo '<pre>';
-    // var_dump($data['products']);
+    // var_dump($data['userRoles']);
     // echo '</pre>';
 
 

@@ -35,7 +35,7 @@ $home_url = home_url();
     </div>
 
     <div class="h-100" id="leftside-menu-container" data-simplebar>
-        <?php echo navigation_admin_left_html($data['mod'], $data['vars']);?>
+        <?php echo navigation_admin_left_html($data['mod'], $data['vars'], $data['userRoles']);?>
         <div class="clearfix"></div>
     </div>
 </div>

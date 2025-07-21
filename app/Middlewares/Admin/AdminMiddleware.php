@@ -17,4 +17,11 @@ class AdminMiddleware extends Middleware
             Redirect::to('/');
         }
     }
+
+    public function editors()
+    {
+        if (! AdminModel::is_editors()) { // is_logged is_admin_allowed
+            Redirect::to('/');
+        }
+    }
 }

@@ -125,8 +125,13 @@
 
     // echo __DIR__;
 
+    // $rolesNames = [];
+    // foreach (\Delight\Auth\Role::getMap() as $roleValue => $roleName) {
+    //     $rolesNames[] = $roleName;
+    // }
+
     // echo '<pre>';
-    // var_dump(vars_sections());
+    // var_dump(implode(',', $rolesNames));
     // echo '</pre>';
     ?>
 

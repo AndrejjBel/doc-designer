@@ -22,7 +22,9 @@ class AdminModel extends Model
         $auth = new \Delight\Auth\Auth($db);
         return $auth->hasAnyRole(
             \Delight\Auth\Role::ADMIN,
-            \Delight\Auth\Role::SUPER_ADMIN
+            \Delight\Auth\Role::SUPER_ADMIN,
+            \Delight\Auth\Role::EDITOR,
+            \Delight\Auth\Role::SUPER_EDITOR
         );
     }
 
@@ -31,6 +33,30 @@ class AdminModel extends Model
         $db = MyormModel::dbc();
         $auth = new \Delight\Auth\Auth($db);
         return $auth->hasRole(\Delight\Auth\Role::SUPER_ADMIN);
+    }
+
+    public static function is_editors() // Редактор
+    {
+        $db = MyormModel::dbc();
+        $auth = new \Delight\Auth\Auth($db);
+        return $auth->hasRole(
+            \Delight\Auth\Role::EDITOR,
+            \Delight\Auth\Role::SUPER_EDITOR
+        );
+    }
+
+    public static function is_editor() // Редактор
+    {
+        $db = MyormModel::dbc();
+        $auth = new \Delight\Auth\Auth($db);
+        return $auth->hasRole(\Delight\Auth\Role::EDITOR);
+    }
+
+    public static function is_super_editor() // Супер Редактор
+    {
+        $db = MyormModel::dbc();
+        $auth = new \Delight\Auth\Auth($db);
+        return $auth->hasRole(\Delight\Auth\Role::SUPER_EDITOR);
     }
 
     public static function set_site_settings($params)
