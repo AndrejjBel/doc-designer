@@ -104,7 +104,7 @@ function nav_obj($mod, $vars_obj, $userRole=0) {
             ],
             [
                 'name' => 'Продажи',
-                'link' => 'orders',
+                'link' => '/admin/orders',
                 'icon' => 'bi bi-credit-card-2-back-fill', // ri-dashboard-3-fill
                 'children' => []
             ],

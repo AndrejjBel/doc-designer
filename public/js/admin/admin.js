@@ -1462,7 +1462,7 @@ function varsTableEdit(elem) {
     })[0];
 
     console.dir(form);
-    console.dir(varIt);
+    console.dir(vars);
 
     if (elem.dataset.type == 'products') {
         form.elements.title.value = varIt.title;

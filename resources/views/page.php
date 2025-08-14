@@ -2,7 +2,7 @@
 insertTemplate('/templates/header', ['data' => $data]);
 ?>
 
-<h4 class="text-center mb-5"><?php echo $data['page_data'][0]['title'];?></h4>
+<h4 class="text-center mb-5"><?php echo $data['page_data']['title'];?></h4>
 
 <div class="product-btn">
     <button class="btn btn-sm btn-primary mt-2 mt-md-0"
@@ -72,7 +72,7 @@ insertTemplate('/templates/header', ['data' => $data]);
 // $vars = explode(',', $data['product']['vars']);
 
 // echo '<pre>';
-// var_dump($data['product']['calc']);
+// var_dump($data);
 // echo '</pre>';
 
 // $html = '<style type="text/css">

@@ -20,7 +20,6 @@
                             </ol>
                         </div>
                         <h4 class="page-title">Создать страницу</h4>
-                        <!-- <h4 class="product-title"><?php //echo $data['product']['title'];?></h4> -->
                     </div>
                 </div>
             </div>
@@ -88,8 +87,10 @@
     //     return in_array($_array['id'], $search);
     // });
 
+    // $is_post_slug = unicValueNotId('pages', 'slug', 8, 'testovaya-stranica-3');
+    //
     // echo '<pre>';
-    // var_dump($data['duplicate']);
+    // var_dump($is_post_slug);
     // echo '</pre>';
     ?>
 
@@ -115,6 +116,5 @@
 </div>
 
 <script type="text/javascript">
-    varsAll = '<?php echo json_encode($data['varsJson'], JSON_FORCE_OBJECT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);?>';
-    // varsYes = '<?php //echo json_encode($data['varsProduct'], JSON_FORCE_OBJECT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);?>';
+    varsAll = '<?php echo addslashes(json_encode($data['varsJson'], JSON_FORCE_OBJECT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE));?>';
 </script>

@@ -1,3 +1,33 @@
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+footer.footer {
+    margin-top: auto;
+}
+
+.header-page {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: #FFFFFF;
+        -webkit-transition: 0.4s all;
+        -o-transition: 0.4s all;
+    transition: 0.4s all;
+    z-index: 999;
+}
+
+.header-fixed-height {
+    height: 77px;
+    margin-top: 40px;
+}
+
+.my-mode-toggle {
+    top: 100px;
+}
+
 #topnav .logo .l-light, #topnav .logo .logo-light-mode {
     display: inline-flex;
     align-items: center;
@@ -93,14 +123,109 @@ button::-moz-focus-inner {
 	margin-top: 1.5rem;
 }
 
+.header-container {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 6px 0;
+}
+
+.logo img {
+    width: 50px;
+    height: 50px;
+}
+
+.text-logo {
+    line-height: 1;
+}
+
+.fs-28 {
+    font-size: 28px;
+}
+
+.site-footer {
+    background: #313a46;
+    color: #FFFFFF;
+}
+
+.site-footer a.nav-link {
+    color: #dee2e6bf;
+}
+
+.footer-logo-title {
+    font-weight: 700;
+    font-size: 24px;
+}
+
+.dashboard-logout-btn {
+    padding: 0;
+}
+
+.block-tabs .nav-pills {
+    gap: 8px;
+}
+
+.block-tabs .nav-pills a.nav-link {
+    display: flex;
+    align-items: center;
+    max-width: 250px;
+    height: 100%;
+    padding: 0.3rem 1rem;
+    background: #2f55d41a;
+}
+
+.block-tabs .nav-pills a.nav-link.active {
+    background-color: var(--bs-nav-pills-link-active-bg);
+}
+
+.block-tabs .nav-pills a.nav-link:hover {
+    background: #2848b4;
+}
+
+.block-tabs .nav-pills a.nav-link:hover h6 {
+    color: #FFFFFF;
+}
+
+.block-tabs .nav-pills a.nav-link.active {
+    pointer-events: none;
+}
+
+
+@media (max-width: 1349px) {
+    .ql-editor .ql-indent-8:not(.ql-direction-rtl) {
+        padding-left: 50%;
+    }
+}
+
 @media (max-width: 991px) {
+    .menu-extras {
+        margin-left: auto;
+    }
+
     #topnav .logo .logo-text {
         font-size: 18px;
         color: #3c723d;
     }
 }
 
+@media (max-width: 576px) {
+    .block-tabs .nav-pills a.nav-link {
+        max-width: 100%;
+    }
+}
+
 @media (max-width: 440px) {
+    .header-fixed-height {
+        margin-top: 20px;
+    }
+
     .pagination .page-item .page-link {
         padding: 4px 10px;
         font-size: 12px;

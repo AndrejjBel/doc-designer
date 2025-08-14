@@ -13,8 +13,6 @@ const pageTermStart = () => {
     const pageTermSelect = document.querySelector('#page_gr');
     const pageProductSelect = document.querySelector('#product');
     if (!pageTermSelect) return;
-    console.dir(pageTermSelect.value);
-    console.dir(pageTermSelect.dataset.pr);
     if (pageTermSelect.value == 'cont_page') {
         pageProductSelect.disabled = true;
     } else {
@@ -82,14 +80,33 @@ const pageAddEdit = () => {
     const form = document.querySelector('#add-edit-page');
     if (!form) return;
 
+    const pageBloks = document.querySelector('.page-contents').children;
+    console.dir(pageBloks);
+
     const warningWrap = document.querySelector('#warning-wrap');
     const btn = form.elements.submit;
-    console.dir(btn);
+    // console.dir(btn);
     btn.addEventListener('click', (e) => {
         e.preventDefault();
         btn.style.pointerEvents = 'none';
 
+        const pageBloks = document.querySelector('.page-contents').children;
+        const typeDispute = document.querySelector('#typeDispute');
+        let ssiValue = '';
+        if (typeDispute) {
+            ssiValue = JSON.stringify(ssiValueAction(typeDispute.children));
+        }
+        let bloks = [];
+
+        for (var variable of pageBloks) {
+            bloks.push(variable.dataset.block);
+        }
+
         let formData = new FormData(form);
+        formData.append('ssi', ssiValue);
+        formData.append('product', '');
+        formData.append('situations', '');
+        formData.append('bloks', bloks.join(','));
         url = '/admin/fetch';
 
         fetch(url, {
@@ -272,13 +289,24 @@ sortableBloksInit();
 
 function btnBlockCont(elem) {
     let wrapPageCont = document.querySelector('.page-contents');
-    let btn = `<button type="button" class="btn btn-outline-secondary w-100 text-start btn-blok"
-        data-blok="${elem.dataset.blok}">
+    let modalData = `data-block="${elem.dataset.block}"`;
+    if (elem.dataset.block == 'ssi') {
+        modalData = `data-bs-toggle="modal"
+        data-bs-target="#blockContEdit"
+        data-block="${elem.dataset.block}"
+        onclick="btnContRender(this)"`;
+        // modalData = `data-block="${elem.dataset.block}"
+        // onclick="btnContRender(this)"`;
+    }
+    let btn = `<div class="button-block" data-block="${elem.dataset.block}">
+        <button type="button" class="btn btn-outline-secondary w-100 text-start btn-blok"
+        ${modalData}>
         <strong>${elem.innerText}</strong>
-        <span class="btn-var-del-prod float-end" data-blok="${elem.dataset.blok}" title="Удалить блок" onclick="btnBlocksContsDel(this)">
+        </button>
+        <span class="btn-blok-del" data-block="${elem.dataset.block}" title="Удалить блок" onclick="btnBlocksContsDel(this)">
         <i class="ri-delete-bin-line text-danger"></i>
         </span>
-        </button>`;
+        </div>`;
     wrapPageCont.insertAdjacentHTML(
         "beforeend",
         btn
@@ -288,7 +316,7 @@ function btnBlockCont(elem) {
 
 function btnBlocksContsDel(elem) {
     elem.parentElement.remove();
-    document.querySelector('button[data-blok="'+elem.dataset.blok+'"]').disabled = false;
+    document.querySelector('button[data-block="'+elem.dataset.block+'"]').disabled = false;
 }
 
 function numberCharacters(elem) {
@@ -318,3 +346,331 @@ function numberCharactersStart(elemSel) {
 }
 numberCharactersStart('#seo_title');
 numberCharactersStart('#seo_description');
+
+function btnContRender(elem) {
+    const modalTitle = document.querySelector('.block-cont-edit .modal-title');
+    const modalBody = document.querySelector('.block-cont-edit .modal-body');
+    modalTitle.innerText = elem.children[0].innerText;
+
+    let formData = new FormData();
+    formData.append('action', 'block_cont_render');
+    formData.append('block_name', elem.dataset.block);
+    formData.append('page_id', document.querySelector('input[name="page_id"]').value);
+    formData.append('_token', document.querySelector('input[name="_token"]').value);
+    url = '/admin/fetch';
+
+    fetch(url, {
+        method: "POST",
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Ошибка запроса');
+        }
+        return response.json();
+    })
+    .then(data => {
+        // console.dir(data);
+        if (!modalBody.children.length) {
+            modalBody.innerHTML = data.modal_html;
+        }
+    })
+    .catch(error => {
+        console.dir(error);
+    });
+}
+
+function addBtnTab(elem) {
+    elem.parentElement.previousElementSibling.insertAdjacentHTML(
+        "beforeend",
+        `<div class="accordion-item stage-btns-item stage-btns-${elem.parentElement.previousElementSibling.children.length+1}">
+            <h2 class="accordion-header position-relative" id="headingOne">
+                <button class="accordion-button fw-medium collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#stage-btns${elem.parentElement.previousElementSibling.children.length+1}" aria-expanded="false" aria-controls="collapseOne">
+                    <span class="stages-item-title">Кнопка ${elem.parentElement.previousElementSibling.children.length+1}</span>
+                    <button class="btn btn-link mx-1 p-0 js-stage-item-delete" type="button" name="button" onclick="stageBtnDelete(this)" title="Удалить">
+                        <i class="ri-delete-bin-line text-danger"></i>
+                    </button>
+                </button>
+            </h2>
+            <div id="stage-btns${elem.parentElement.previousElementSibling.children.length+1}" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#${elem.parentElement.previousElementSibling.id}" style="">
+                <div class="accordion-body">
+                    <div class="stage-buttons-item">
+                        <div class="stage_btn_text mb-2">
+                            <label for="stage_btn_text${elem.parentElement.previousElementSibling.children.length+1}" class="form-label">Текст кнопки</label>
+                            <input type="text" id="stage_btn_text${elem.parentElement.previousElementSibling.children.length+1}" name="stage_btn_text${elem.parentElement.previousElementSibling.children.length+1}" class="form-control stage_btn_text">
+                        </div>
+                        <div class="stage_btn_link mb-2">
+                            <label for="stage_btn_link${elem.parentElement.previousElementSibling.children.length+1}" class="form-label">Ссылка кнопки</label>
+                            <input type="text" id="stage_btn_link${elem.parentElement.previousElementSibling.children.length+1}" name="stage_btn_link${elem.parentElement.previousElementSibling.children.length+1}" class="form-control stage_btn_link">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>`
+    );
+}
+
+function stageBtnDelete(elem) {
+    let wrap = elem.parentElement.parentElement.parentElement.children;
+    elem.parentElement.parentElement.remove();
+    let i = 1;
+    for (var variable of wrap) {
+        variable.querySelector('.accordion-button').dataset.bsTarget = '#stage-btns'+i;
+        variable.querySelector('.accordion-collapse').id = 'stage-btns'+i;
+        variable.querySelector('.stages-item-title').innerText = 'Кнопка '+i;
+        variable.querySelector('.stage_btn_text').children[0].attributes.for.value = 'stage_btn_text'+i;
+        variable.querySelector('.stage_btn_text').children[1].id = 'stage_btn_text'+i;
+        variable.querySelector('.stage_btn_text').children[1].name = 'stage_btn_text'+i;
+
+        variable.querySelector('.stage_btn_link').children[0].attributes.for.value = 'stage_btn_link'+i;
+        variable.querySelector('.stage_btn_link').children[1].id = 'stage_btn_link'+i;
+        variable.querySelector('.stage_btn_link').children[1].name = 'stage_btn_link'+i;
+        i++;
+    }
+}
+
+function addStagesItem(elem) {
+    elem.parentElement.previousElementSibling.insertAdjacentHTML(
+        "beforeend",
+        `<div class="accordion-item stages-item">
+            <h2 class="accordion-header position-relative" id="headingOne">
+                <button class="accordion-button fw-medium collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#stage${elem.parentElement.previousElementSibling.children.length+1}" aria-expanded="false" aria-controls="collapseOne">
+                    <span class="stages-item-title">Этап ${elem.parentElement.previousElementSibling.children.length+1}</span>
+                    <button class="btn btn-link mx-1 p-0 js-stages-item-delete" type="button" name="button" onclick="stagesItemDelete(this)" title="Удалить">
+                        <i class="ri-delete-bin-line text-danger"></i>
+                    </button>
+                </button>
+            </h2>
+            <div id="stage${elem.parentElement.previousElementSibling.children.length+1}" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#${elem.parentElement.previousElementSibling.id}" style="">
+                <div class="accordion-body">
+                    <div class="stage_text mb-2">
+                        <label for="stage_text${elem.parentElement.previousElementSibling.children.length+1}" class="form-label">Текст этапа</label>
+                        <textarea class="form-control stage_text" id="stage_text${elem.parentElement.previousElementSibling.children.length+1}" name="stage_text${elem.parentElement.previousElementSibling.children.length+1}" rows="4"></textarea>
+                        <span class="help-block">
+                            <small>Допускается любой HTML</small>
+                        </span>
+                    </div>
+
+                    <div class="stage-buttons mb-2">
+                        <label class="form-label">Кнопки</label>
+                        <div class="accordion mb-2 stage-btns" id="stage-btns"></div>
+
+                        <div class="mb-2 text-end">
+                            <button type="button" class="btn btn-primary" onclick="addBtnTab(this)">Добавить кнопку</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>`
+    );
+}
+
+function stagesItemDelete(elem) {
+    let wrap = elem.parentElement.parentElement.parentElement.children;
+    elem.parentElement.parentElement.remove();
+    let i = 1;
+    for (var variable of wrap) {
+        variable.querySelector('.accordion-button').dataset.bsTarget = '#stage'+i;
+        variable.querySelector('.accordion-collapse').id = 'stage'+i;
+        variable.querySelector('.stages-item-title').innerText = 'Этап '+i;
+        variable.querySelector('.stage_text').children[0].attributes.for.value = 'stage_text'+i;
+        variable.querySelector('.stage_text').children[1].id = 'stage_text'+i;
+        variable.querySelector('.stage_text').children[1].name = 'stage_text'+i;
+        i++;
+    }
+}
+
+function addAccItem(elem) {
+    elem.parentElement.previousElementSibling.insertAdjacentHTML(
+        "beforeend",
+        `<div class="accordion-item acc-item">
+            <h2 class="accordion-header position-relative" id="headingOne">
+                <button class="accordion-button fw-medium collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#tdi${elem.parentElement.previousElementSibling.children.length+1}" aria-expanded="false" aria-controls="collapseOne">
+                    <span class="acc-item-title">Таб ${elem.parentElement.previousElementSibling.children.length+1}</span>
+                    <button class="btn btn-link mx-1 p-0 js-acc-item-delete" type="button" name="button" onclick="accItemDelete(this)" title="Удалить">
+                        <i class="ri-delete-bin-line text-danger"></i>
+                    </button>
+                </button>
+            </h2>
+            <div id="tdi${elem.parentElement.previousElementSibling.children.length+1}" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#typeDispute" style="">
+                <div class="accordion-body">
+                    <div class="btn_text mb-2">
+                        <label for="btn_text${elem.parentElement.previousElementSibling.children.length+1}" class="form-label">Текст кнопки</label>
+                        <input type="text" id="btn_text${elem.parentElement.previousElementSibling.children.length+1}" name="btn_text[${elem.parentElement.previousElementSibling.children.length+1}]" class="form-control btn_text" oninput="accItemTitleAction(this)">
+                    </div>
+                    <div class="tab_title mb-2">
+                        <label for="tab_title${elem.parentElement.previousElementSibling.children.length+1}" class="form-label">Заголовок таба</label>
+                        <input type="text" id="tab_title${elem.parentElement.previousElementSibling.children.length+1}" name="tab_title[${elem.parentElement.previousElementSibling.children.length+1}]" class="form-control tab_title">
+                    </div>
+                    <div class="tab_text mb-2">
+                        <label for="tab_text${elem.parentElement.previousElementSibling.children.length+1}" class="form-label">Текст таба</label>
+                        <textarea class="form-control tab_text" id="tab_text${elem.parentElement.previousElementSibling.children.length+1}" name="tab_text[${elem.parentElement.previousElementSibling.children.length+1}]" rows="4"></textarea>
+                        <span class="help-block">
+                            <small>Допускается любой HTML</small>
+                        </span>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Этапы</label>
+                        <div class="accordion stages mb-2" id="stages">
+                            <div class="accordion-item stages-item">
+                                <h2 class="accordion-header position-relative" id="headingOne">
+                                    <button class="accordion-button fw-medium collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#stage1" aria-expanded="false" aria-controls="collapseOne">
+                                        <span class="stages-item-title">Этап 1</span>
+                                        <button class="btn btn-link mx-1 p-0 js-stages-item-delete" type="button" name="button" onclick="stagesItemDelete(this)" title="Удалить">
+                                            <i class="ri-delete-bin-line text-danger"></i>
+                                        </button>
+                                    </button>
+                                </h2>
+                                <div id="stage1" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#stages" style="">
+                                    <div class="accordion-body">
+                                        <div class="stage_text mb-2">
+                                            <label for="stage_text1" class="form-label">Текст этапа</label>
+                                            <textarea class="form-control stage_text" id="stage_text1" name="stage_text1" rows="4"></textarea>
+                                            <span class="help-block">
+                                                <small>Допускается любой HTML</small>
+                                            </span>
+                                        </div>
+
+                                        <div class="stage-buttons mb-2">
+                                            <label class="form-label">Кнопки</label>
+                                            <div class="accordion mb-2 stage-btns" id="stage-btns"></div>
+
+                                            <div class="mb-2 text-end">
+                                                <button type="button" class="btn btn-primary" onclick="addBtnTab(this)">Добавить кнопку</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-2 text-end">
+                            <button type="button" class="btn btn-primary" onclick="addStagesItem(this)">Добавить этап</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>`
+    );
+}
+
+function accItemDelete(elem) {
+    let wrap = elem.parentElement.parentElement.parentElement.children;
+    elem.parentElement.parentElement.remove();
+    let i = 1;
+    for (var variable of wrap) {
+        let accItemTitle = variable.querySelector('.acc-item-title').innerText;
+        let ait = accItemTitle.replace(/[^a-zа-яё]/gi, '');
+        if (ait == 'Таб') {
+            variable.querySelector('.acc-item-title').innerText = 'Таб '+i;
+        }
+        variable.querySelector('.accordion-button').dataset.bsTarget = '#tdi'+i;
+        variable.querySelector('.accordion-collapse').id = 'tdi'+i;
+
+        variable.querySelector('.btn_text').children[0].attributes.for.value = 'btn_text'+i;
+        variable.querySelector('.btn_text').children[1].id = 'btn_text'+i;
+        variable.querySelector('.btn_text').children[1].name = 'btn_text'+i;
+
+        variable.querySelector('.tab_title').children[0].attributes.for.value = 'tab_title'+i;
+        variable.querySelector('.tab_title').children[1].id = 'tab_title'+i;
+        variable.querySelector('.tab_title').children[1].name = 'tab_title'+i;
+
+        variable.querySelector('.tab_text').children[0].attributes.for.value = 'tab_text'+i;
+        variable.querySelector('.tab_text').children[1].id = 'tab_text'+i;
+        variable.querySelector('.tab_text').children[1].name = 'tab_text'+i;
+        i++;
+    }
+}
+
+function  accItemTitleAction(elem) {
+    elem.parentElement.parentElement.parentElement.previousElementSibling.children[0].children[0].innerText = elem.value;
+}
+
+function blockContAddEditAction() {
+    const btn = document.querySelector('#blockContEditSubmit');
+    if (!btn) return;
+    const blockContEditModal = new bootstrap.Modal('#blockContEdit', {
+        keyboard: false
+    });
+    btn.addEventListener('click', (e) => {
+        let ssi = localStorage.getItem('ssi');
+        const typeDispute = document.querySelector('#typeDispute');
+        let ssiValue = ssiValueAction(typeDispute.children);
+
+        // localStorage.setItem('ssi', JSON.stringify(ssiValue));
+
+        console.dir(ssiValue);
+
+        let formData = new FormData();
+        formData.append('action', 'ssi_save');
+        formData.append('block_id', 'ssi');
+        formData.append('block_value', JSON.stringify(ssiValue));
+        formData.append('page_id', document.querySelector('input[name="page_id"]').value);
+        formData.append('_token', document.querySelector('input[name="_token"]').value);
+        url = '/admin/fetch';
+
+        fetch(url, {
+            method: "POST",
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Ошибка запроса');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.dir(data);
+        })
+        .catch(error => {
+            console.dir(error);
+        });
+
+        blockContEditModal.hide();
+    });
+}
+blockContAddEditAction();
+
+function ssiValueAction(items) {
+    let dataObj = [];
+    let i = 0;
+    for (var variable of items) {
+        let stagesItem = variable.querySelectorAll('.stages .stages-item');
+        let stagesObj = stagesValue(stagesItem);
+        dataObj[i] = {
+            'btn_text': variable.querySelector('input.btn_text').value,
+            'tab_title': variable.querySelector('input.tab_title').value,
+            'tab_text': variable.querySelector('textarea.tab_text').value,
+            'stages' : stagesObj
+        };
+        i++;
+    }
+    return dataObj;
+}
+
+function stagesValue(stages) {
+    let dataObj = [];
+    let i = 0;
+    for (var variable of stages) {
+        let stagesItem = variable.querySelectorAll('.stage-btns .stage-btns-item');
+        let btnsStagesObj = btnsStagesValue(stagesItem);
+        dataObj[i] = {
+            'stage_text': variable.querySelector('textarea.stage_text').value,
+            'btnsStages' : btnsStagesObj
+        };
+        i++;
+    }
+    return dataObj;
+}
+
+function btnsStagesValue(btnsStages) {
+    let dataObj = [];
+    let i = 0;
+    for (var variable of btnsStages) {
+        dataObj[i] = {
+            'stage_btn_text': variable.querySelector('input.stage_btn_text').value,
+            'stage_btn_link': variable.querySelector('input.stage_btn_link').value
+        };
+        i++;
+    }
+    return dataObj;
+}

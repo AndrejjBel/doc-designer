@@ -75,6 +75,12 @@ class AdminFetchController extends Controller
         if ($allPost['action'] == 'delete_page') {
             $this->delete_page($allPost);
         }
+        if ($allPost['action'] == 'block_cont_render') {
+            $this->block_cont_render($allPost);
+        }
+        if ($allPost['action'] == 'ssi_save') {
+            $this->ssi_save($allPost);
+        }
     }
 
     public function edit_order_status($allPost)
@@ -152,6 +158,28 @@ class AdminFetchController extends Controller
                     } else {
                         $message['type'] = 'error';
                     }
+                }
+            } else {
+                $last_post_id = VarsModel::create_var(
+                    [
+                        'parentid'   => $allPost['parentid'],
+                        'isgr'       => 1,
+                        'title'      => trim($allPost['title']),
+                        'descr'      => '',
+                        'active'     => 1,
+                        'type'       => 0,
+                        'typedata'   => 0,
+                        'captholder' => 0,
+                        'exthtml'    => '',
+                        'extdata'    => ''
+                    ]
+                );
+                if ($last_post_id) {
+                    $message['type'] = 'success';
+                    $message['id'] = $last_post_id;
+                    $message['text'] = 'Раздел создан';
+                } else {
+                    $message['type'] = 'error';
                 }
             }
         }
@@ -629,29 +657,32 @@ class AdminFetchController extends Controller
             $error['title'] = 'Заполните Заголовок страницы';
         }
 
-        if ($allPost['page_gr'] != 'cont_page') {
+        if ($allPost['page_gr'] == 'cont_page') {
+            $product_id = 0;
+        } else {
             if ($allPost['product'] == 0) {
                 $message['result'] = 'error';
                 $error['product'] = 'Выберите шаблон';
             }
+            $product_id = $allPost['product'];
         }
 
         if (count($error)) {
             $message['result'] = 'error';
         } else {
             $link = '';
-            if ($allPost['link']) {
-                $link = $allPost['link'];
-            } else {
-                $link = translit_friendly_url($allPost['title']);
-            }
+            // if ($allPost['link']) {
+            //     $link = $allPost['link'];
+            // } else {
+            //     $link = translit_friendly_url($allPost['title']);
+            // }
 
             if ($allPost['link']) {
-                $is_post_slug = unicValue('pages', 'link', $allPost['link']);
+                $is_post_slug = unicValue('pages', 'slug', $allPost['link']);
                 if (count($is_post_slug) == 0) {
                     $link = $allPost['link'];
                 } elseif (count($is_post_slug) == 1) {
-                    if ($is_post_slug[0] == $allPost['slug']) {
+                    if ($is_post_slug[0] == $allPost['link']) {
                         $link = $allPost['link'] . '-2';
                     } else {
                         $link = $allPost['link'];
@@ -667,7 +698,7 @@ class AdminFetchController extends Controller
                 }
             } else {
                 $allsit_title = translit_friendly_url($allPost['title']);
-                $is_post_slug = unicValue('products', 'allsit', $allPost['allsit']);
+                $is_post_slug = unicValue('pages', 'slug', $allsit_title);
                 if (count($is_post_slug) == 0) {
                     $link = $allsit_title;
                 } elseif (count($is_post_slug) == 1) {
@@ -715,7 +746,7 @@ class AdminFetchController extends Controller
                 'url'         => '',
                 'status'      => $status,
                 'favor'       => $favor,
-                'product_id'  => $allPost['product'],
+                'product_id'  => $product_id,
                 'terms'       => $allPost['page_gr'],
                 'blocks'      => '',
                 'thumb_img'   => '',
@@ -733,6 +764,8 @@ class AdminFetchController extends Controller
                 $message['text'] = 'Ошибка, попробуйте позже';
             }
         }
+
+        $message['link'] = $link;
 
         $message['post'] = $allPost;
         $result = ['error' => $error,'message' => $message];
@@ -755,11 +788,14 @@ class AdminFetchController extends Controller
             $error['link'] = 'Заполните поле Постоянная ссылка';
         }
 
-        if ($allPost['page_gr'] != 'cont_page') {
+        if ($allPost['page_gr'] == 'cont_page') {
+            $product_id = 0;
+        } else {
             if ($allPost['product'] == 0) {
                 $message['result'] = 'error';
                 $error['product'] = 'Выберите шаблон';
             }
+            $product_id = $allPost['product'];
         }
 
         if (count($error)) {
@@ -781,7 +817,7 @@ class AdminFetchController extends Controller
             }
             $date_modified = date('Y-m-d H:i:s');
 
-            $is_post_slug = unicValueNotId('pages', 'link', $allPost['page_id'], $allPost['link']);
+            $is_post_slug = unicValueNotId('pages', 'slug', $allPost['page_id'], $allPost['link']);
             if (count($is_post_slug) == 0) {
                 $link = $allPost['link'];
             } elseif (count($is_post_slug) == 1) {
@@ -801,6 +837,21 @@ class AdminFetchController extends Controller
                 $link = $allPost['link'] . '-' . max($arr)+1;
             }
 
+            $blocks_arr = explode(',', $allPost['bloks']);
+
+            $blocks = [];
+            // $blocks['ssi'] = $allPost['block_ssi_value'];
+
+            foreach ($blocks_arr as $key => $block) {
+                // if ($block == 'ssi') {
+                //     $blocks['ssi'] = $allPost['block_ssi_value'];
+                // } else {
+                //     $blocks[$block] = $allPost[$block];
+                // }
+
+                $blocks[$block] = $allPost[$block];
+            }
+
             $res = PagesModel::edit([
                 'id'          => $allPost['page_id'],
                 'title'       => $allPost['title'],
@@ -809,9 +860,9 @@ class AdminFetchController extends Controller
                 'url'         => '',
                 'status'      => $status,
                 'favor'       => $favor,
-                'product_id'  => $allPost['product'],
+                'product_id'  => $product_id,
                 'terms'       => $allPost['page_gr'],
-                'blocks'      => '',
+                'blocks'      => json_encode($blocks, JSON_UNESCAPED_UNICODE),
                 'thumb_img'   => '',
                 'gallery_img' => '',
                 'seo'         => json_encode($post_seo, JSON_UNESCAPED_UNICODE),
@@ -929,5 +980,36 @@ class AdminFetchController extends Controller
         }
 
         echo json_encode($message, JSON_UNESCAPED_UNICODE);
+    }
+
+    public function block_cont_render($allPost)
+    {
+        $page = PagesModel::getPageForId($allPost['page_id']);
+        $blocks = json_decode($page['blocks'], true);
+        if (array_key_exists('ssi', $blocks)) {
+            $ssi = json_decode($blocks['ssi']);
+            $modal_html = blocks_modal_render($ssi);
+        } else {
+            $file_name = $allPost['block_name'];
+            $modal_html = template('/templates/modals/' . $file_name);
+        }
+
+        echo json_encode(['modal_html' => $modal_html, 'allPost' => $allPost], JSON_UNESCAPED_UNICODE);
+    }
+
+    public function ssi_save($allPost)
+    {
+        $blocks = [];
+        $blocks[$allPost['block_id']] = $allPost['block_value'];
+        $res = PagesModel::editBlocks([
+            'id' => $allPost['page_id'],
+            'blocks' => json_encode($blocks, JSON_UNESCAPED_UNICODE)
+        ]);
+        if ($res) {
+            $result = 'success';
+        } else {
+            $result = 'error';
+        }
+        echo json_encode(['allPost' => $allPost], JSON_UNESCAPED_UNICODE);
     }
 }

@@ -868,6 +868,8 @@ function getGroupsProd($prod_arr, $id) {
             $new_par = current($newArray_par);
             $title_par = $new_par['title'];
         }
+    } else {
+        $title = 'Контентная страница';
     }
 
     if ($title_par || $title) {

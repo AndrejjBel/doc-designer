@@ -149,6 +149,169 @@ function replace_vars_order_content($vars, $content) {
     return str_replace($vars_title, $vars_captholder, $content);
 }
 
+function blocks_modal_render($arr) {
+    $content = '<div class="accordion type-dispute mb-2" id="typeDispute">';
+    foreach ($arr as $key => $item) {
+        $btn_text = ($item->btn_text)? $item->btn_text : 'Таб ' . $key+1;
+        $stages_html = blocks_modal_stages_render($item->stages, $key+1);
+        $content .= '<div class="accordion-item acc-item">';
+        $content .= '<h2 class="accordion-header position-relative" id="headingOne">
+            <button class="accordion-button fw-medium collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#tdi' . $key+1 . '" aria-expanded="false" aria-controls="collapseOne">
+                <span class="acc-item-title">' . $btn_text . '</span>
+                <button class="btn btn-link mx-1 p-0 js-acc-item-delete" type="button" name="button" onclick="accItemDelete(this)" title="Удалить">
+                    <i class="ri-delete-bin-line text-danger"></i>
+                </button>
+            </button>
+        </h2>';
+        $content .= '<div id="tdi' . $key+1 . '" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#typeDispute" style="">';
+        $content .= '<div class="accordion-body">
+            <div class="btn_text mb-2">
+                <label for="btn_text' . $key+1 . '" class="form-label">Текст кнопки</label>
+                <input type="text" id="btn_text' . $key+1 . '" name="btn_text" class="form-control btn_text" value="' . $item->btn_text . '" oninput="accItemTitleAction(this)">
+            </div>
+            <div class="tab_title mb-2">
+                <label for="tab_title' . $key+1 . '" class="form-label">Заголовок таба</label>
+                <input type="text" id="tab_title' . $key+1 . '" name="tab_title" class="form-control tab_title" value="' . $item->tab_title . '">
+            </div>
+            <div class="tab_text mb-2">
+                <label for="tab_text" class="form-label">Текст таба</label>
+                <textarea class="form-control tab_text" id="tab_text" name="tab_text" rows="4">' . $item->tab_text . '</textarea>
+                <span class="help-block">
+                <small>Допускается любой HTML</small>
+                </span>
+            </div>';
+        $content .= '<div class="mb-2">
+                <label class="form-label">Этапы</label>
+                <div class="accordion stages mb-2" id="stages' . $key+1 . '">';
+        $content .= $stages_html;
+        $content .= '</div>';
+        $content .= '<div class="mb-2 text-end">
+                    <button type="button" class="btn btn-primary" onclick="addStagesItem(this)">Добавить этап</button>
+                </div>
+            </div>
+        </div>';
+        $content .= '</div>';
+
+        $content .= '</div>';
+    }
+    $content .= '</div>';
+    $content .= '<div class="mb-2 text-end">
+        <button type="button" class="btn btn-primary" onclick="addAccItem(this)">Добавить таб</button>
+    </div>';
+    return $content;
+}
+
+function blocks_modal_stages_render($stages, $ti) {
+    $content = '';
+    foreach ($stages as $key => $stage) {
+        $btns_html = blocks_modal_stages_btns_render($stage->btnsStages, $ti, $key+1);
+        $content .= '<div class="accordion-item stages-item">
+                        <h2 class="accordion-header position-relative" id="headingOne">
+                            <button class="accordion-button fw-medium collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#stage' . $ti . $key+1 . '" aria-expanded="false" aria-controls="collapseOne">
+                                <span class="stages-item-title">Этап ' . $key+1 . '</span>
+                                <button class="btn btn-link mx-1 p-0 js-stages-item-delete" type="button" name="button" onclick="stagesItemDelete(this)" title="Удалить">
+                                    <i class="ri-delete-bin-line text-danger"></i>
+                                </button>
+                            </button>
+                        </h2>
+                        <div id="stage' . $ti . $key+1 . '" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#stages' . $ti . '" style="">
+                            <div class="accordion-body">
+                                <div class="stage_text mb-2">
+                                    <label for="stage_text1" class="form-label">Текст этапа</label>
+                                    <textarea class="form-control stage_text" id="stage_text1" name="stage_text" rows="4">' . $stage->stage_text . '</textarea>
+                                    <span class="help-block">
+                                    <small>Допускается любой HTML</small>
+                                    </span>
+                                </div>
+                                <div class="stage-buttons mb-2">
+                                    <label class="form-label">Кнопки</label>
+                                    <div class="accordion mb-2 stage-btns" id="stage-btns' . $ti . $key+1 . '">';
+        $content .= $btns_html;
+        $content .= '</div>
+                        <div class="mb-2 text-end">
+                            <button type="button" class="btn btn-primary" onclick="addBtnTab(this)">Добавить кнопку</button>
+                        </div>
+                    </div>
+                    </div>
+                    </div>
+                    </div>';
+    }
+    return $content;
+}
+
+function blocks_modal_stages_btns_render($btns, $ti, $si) {
+    $content = '';
+    foreach ($btns as $key => $btn) {
+        $content .= '<div class="accordion-item stage-btns-item stage-btns-' . $ti . $si . '">
+            <h2 class="accordion-header position-relative" id="headingOne">
+                <button class="accordion-button fw-medium collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#stage-btns' . $ti . $si . $key+1 . '" aria-expanded="false" aria-controls="collapseOne">
+                    <span class="stages-item-title">Кнопка ' . $key+1 . '</span>
+                    <button class="btn btn-link mx-1 p-0 js-stage-item-delete" type="button" name="button" onclick="stageBtnDelete(this)" title="Удалить">
+                        <i class="ri-delete-bin-line text-danger"></i>
+                    </button>
+                </button>
+            </h2>
+            <div id="stage-btns' . $ti . $si . $key+1 . '" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#stage-btns' . $ti . $si . '" style="">
+                <div class="accordion-body">
+                    <div class="stage-buttons-item">
+                        <div class="stage_btn_text mb-2">
+                            <label for="stage_btn_text' . $si . $key+1 . '" class="form-label">Текст кнопки</label>
+                            <input type="text" id="stage_btn_text' . $si . $key+1 . '" name="stage_btn_text" class="form-control stage_btn_text" value="' . $btn->stage_btn_text . '">
+                        </div>
+                        <div class="stage_btn_link mb-2">
+                            <label for="stage_btn_link' . $si . $key+1 . '" class="form-label">Ссылка кнопки</label>
+                            <input type="text" id="stage_btn_link' . $si . $key+1 . '" name="stage_btn_link" class="form-control stage_btn_link" value="' . $btn->stage_btn_link . '">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>';
+    }
+    return $content;
+}
+
+function btnBlokStatus($bloks, $blok_name) {
+    $bloks_names = array_keys(json_decode($bloks, true));
+    $res = '';
+    if (in_array($blok_name, $bloks_names)) {
+        $res = ' disabled';
+    }
+    echo $res;
+}
+
+function btnBloksPageAdmin($bloks) {
+    $bloks_names = array_keys(json_decode($bloks, true));
+    $content = '';
+    foreach ($bloks_names as $key => $blok) {
+        $modalData = 'data-block="' . $blok . '"';
+        if ($blok == 'ssi') {
+            $modalData = 'data-bs-toggle="modal"
+            data-bs-target="#blockContEdit"
+            data-block="' . $blok . '"
+            onclick="btnContRender(this)"';
+        }
+        $content .= '<div class="button-block" data-block="' . $blok . '">
+            <button type="button" class="btn btn-outline-secondary w-100 text-start btn-blok"
+            ' . $modalData . '>
+            <strong>' . bloks_names($blok) . '</strong>
+            </button>
+            <span class="btn-blok-del" data-block="' . $blok . '" title="Удалить блок" onclick="btnBlocksContsDel(this)">
+            <i class="ri-delete-bin-line text-danger"></i>
+            </span>
+            </div>';
+    }
+    return $content;
+}
+
+function bloks_names($name) {
+    $bn = [
+        'ssi' => 'Этапы решения вопроса',
+        'product' => 'Шаблон',
+        'situations' => 'Ситуации'
+    ];
+    return $bn[$name];
+}
+
 function html_to_pdf($html, $fname) {
     require_once HLEB_GLOBAL_DIR . '/app/Content/dompdf/autoload.inc.php';
     $dompdf = new Dompdf\Dompdf();
@@ -204,4 +367,68 @@ function rolesTranslate($name) {
         'TRANSLATOR' => 'ПЕРЕВОДЧИК'
     ];
     return $roles[$name];
+}
+
+function rolesMaskTranslate($mask) {
+    $roles = [
+        1 => 'Админ',
+        2 => 'Автор',
+        4 => 'Сотрудник',
+        8 => 'Консультант',
+        16 => 'Потребитель',
+        32 => 'Участник',
+        64 => 'Координатор',
+        128 => 'Создатель',
+        256 => 'Разработчик',
+        512 => 'Директор',
+        1024 => 'Редактор',
+        2048 => 'Сотрудник',
+        4096 => 'Обслуживающий',
+        8192 => 'Менеджер',
+        16384 => 'Модератор',
+        32768 => 'Издатель',
+        65536 => 'Рецензент',
+        131072 => 'Подписчик',
+        262144 => 'Суперадмин',
+        524288 => 'Суперредактор',
+        1048576 => 'Супермодератор',
+        2097152 => 'Переводчик'
+    ];
+
+    return $roles[$mask];
+}
+
+function scripts_styles_render($script_rend) {
+    $script_data = [
+        'product' => '
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/suggestions-jquery@22.6.0/dist/css/suggestions.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/suggestions-jquery@22.6.0/dist/js/jquery.suggestions.min.js"></script>'
+    ];
+
+    if ($script_rend) {
+        return $script_data[$script_rend];
+    } else {
+        return;
+    }
+}
+
+function seo_meta($data, $name) {
+    $seo_title = $data['title'];
+    $seo_description = $data['description'];
+    if (array_key_exists('seo', $data['page_data'])) {
+        $seo = json_decode($data['page_data']['seo'], true);
+        if ($seo['title']) {
+            $seo_title = $seo['title'];
+        }
+        if ($seo['description']) {
+            $seo_description = $seo['description'];
+        }
+    }
+    if ($name == 'title') {
+        return $seo_title;
+    }
+    if ($name == 'description') {
+        return $seo_description;
+    }
 }

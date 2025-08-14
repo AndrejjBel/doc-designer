@@ -291,7 +291,7 @@ class VarsModel extends Model
 
     public static function getVarsAllJson()
     {
-        $sql = "SELECT id, parentid, isgr, title, descr, type, typedata, extdata FROM vars";
+        $sql = "SELECT id, parentid, isgr, title, descr, type, typedata, captholder, extdata FROM vars";
         return DB::run($sql)->fetchAll();
     }
 

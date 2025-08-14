@@ -68,18 +68,12 @@
 
     <?php insertTemplate('/templates/admin/content/footer', ['data' => $data]);
 
-    // $vars = [];
-    // foreach ($data['varsProduct'] as $var) {
-    //     $vars[] = $var['varid'];
-    // }
-    // $search = $vars;
-    // $newVars = array_filter($data['vars'], function($_array) use ($search){
-    //     return in_array($_array['id'], $search);
-    // });
-
-    // echo '<pre>';
-    // var_dump($data['product']);
-    // echo '</pre>';
+    $blocks = json_decode($data['page']['blocks'], true);
+    $modal_body = '';
+    if (array_key_exists('ssi', $blocks)) {
+        $ssi = json_decode($blocks['ssi']);
+        $modal_body = blocks_modal_render($ssi);
+    }
     ?>
 
 </div>
@@ -103,7 +97,24 @@
     <div id="warning-wrap-offcanvas" class="alert-container-offcanvas position-fixed bottom-0 end-0 p-3"></div>
 </div>
 
+<div class="modal fade block-cont-edit" id="blockContEdit" tabindex="-1" aria-labelledby="blockContEditLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="blockContEditLabel"></h1>
+                <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button> -->
+            </div>
+            <div class="modal-body">
+                <?php echo $modal_body;?>
+            </div>
+            <div class="modal-footer">
+                <button id="blockContEditSubmit" type="button" class="btn btn-primary">Сохранить</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">
-    varsAll = '<?php echo json_encode($data['varsJson'], JSON_FORCE_OBJECT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);?>';
-    // varsYes = '<?php //echo json_encode($data['varsProduct'], JSON_FORCE_OBJECT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);?>';
+    varsAll = '<?php echo addslashes(json_encode($data['varsJson'], JSON_FORCE_OBJECT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE));?>';
 </script>

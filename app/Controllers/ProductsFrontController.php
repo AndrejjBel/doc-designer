@@ -88,6 +88,7 @@ class ProductsFrontController extends Controller
                         'title' => 'Page',
                         'description' => 'Page description',
                         'mod' => 'page',
+                        'script_rend' => 'product',
                         'page_slug' => $page_slug,
                         'product' => $product,
                         'vars' => $vars,

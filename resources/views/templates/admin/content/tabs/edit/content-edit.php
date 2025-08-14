@@ -9,11 +9,12 @@
                 <div class="blocks-contents d-flex gap-1 flex-column">
                     <button type="button"
                         class="btn btn-outline-secondary w-100 text-start btn-blok"
-                        data-blok="1"
-                        onclick="btnBlockCont(this)">
-                        <strong>Этапы 1</strong>
+                        data-block="product"
+                        onclick="btnBlockCont(this)"
+                        <?php btnBlokStatus($page['blocks'], 'product');?>>
+                        <strong>Шаблон</strong>
                         <span class="btn-bloks-del inactive float-end"
-                            data-block="1"
+                            data-block="product"
                             title="Удалить блок"
                             onclick="btnBlocksContsDel(this)">
                             <i class="ri-delete-bin-line text-danger"></i>
@@ -22,11 +23,26 @@
 
                     <button type="button"
                         class="btn btn-outline-secondary w-100 text-start btn-blok"
-                        data-block="2"
-                        onclick="btnBlockCont(this)">
-                        <strong>Этапы 2</strong>
+                        data-block="ssi"
+                        onclick="btnBlockCont(this)"
+                        <?php btnBlokStatus($page['blocks'], 'ssi');?>>
+                        <strong>Этапы решения вопроса</strong>
                         <span class="btn-bloks-del inactive float-end"
-                            data-blok="2"
+                            data-block="ssi"
+                            title="Удалить блок"
+                            onclick="btnBlocksContsDel(this)">
+                            <i class="ri-delete-bin-line text-danger"></i>
+                        </span>
+                    </button>
+
+                    <button type="button"
+                        class="btn btn-outline-secondary w-100 text-start btn-blok"
+                        data-block="situations"
+                        onclick="btnBlockCont(this)"
+                        <?php btnBlokStatus($page['blocks'], 'situations');?>>
+                        <strong>Ситуации</strong>
+                        <span class="btn-bloks-del inactive float-end"
+                            data-block="situations"
                             title="Удалить блок"
                             onclick="btnBlocksContsDel(this)">
                             <i class="ri-delete-bin-line text-danger"></i>
@@ -39,11 +55,7 @@
                 <h4 class="page-title">Блоки на странице</h4>
 
                 <div class="page-contents d-flex gap-1 flex-column">
-                    <button type="button"
-                        class="btn btn-outline-secondary w-100 text-start btn-blok"
-                        data-block="product">
-                        <strong>Шаблон</strong>
-                    </button>
+                    <?php echo btnBloksPageAdmin($page['blocks']);?>
                 </div>
             </div>
         </div>
@@ -51,7 +63,7 @@
 </div>
 
 <?php
-
+// $blocks = json_decode($page['blocks'], true);
 // echo '<pre>';
-// var_dump($product);
+// var_dump(array_keys($blocks));
 // echo '</pre>';

@@ -2,25 +2,28 @@
 insertTemplate('/templates/header', ['data' => $data]);
 $user = $data['user'];
 ?>
+<div class="col-lg-8 mx-auto p-4 py-md-5">
 
-<h4 class="text-center mb-5"><?php echo $data['product']['title'];?></h4>
+    <h4 class="text-center mb-5"><?php echo $data['product']['title'];?></h4>
 
-<div class="d-flex gap-2 justify-content-between product-btn">
-    <button class="btn btn-sm btn-primary mt-2 mt-md-0"
-    type="button"
-    data-bs-toggle="offcanvas"
-    data-bs-target="#offcanvasFields"
-    aria-controls="offcanvasVars">Поля</button>
-
-    <button
-        class="btn btn-sm btn-primary mt-2 mt-md-0"
+    <div class="d-flex gap-2 justify-content-between product-btn">
+        <button class="btn btn-sm btn-primary mt-2 mt-md-0"
         type="button"
-        name="button"
-        onclick="payAction(this)">Купить за <?php echo $data['product']['price'];?>руб.</button>
-</div>
+        data-bs-toggle="offcanvas"
+        data-bs-target="#offcanvasFields"
+        aria-controls="offcanvasVars">Поля</button>
 
-<div class="product-block ql-editor">
-    <?php echo replace_vars_content($data['vars'], $data['product']['descr']);?>
+        <button
+            class="btn btn-sm btn-primary mt-2 mt-md-0"
+            type="button"
+            name="button"
+            onclick="payAction(this)">Купить за <?php echo $data['product']['price'];?>руб.</button>
+    </div>
+
+    <div class="product-block ql-editor">
+        <?php echo replace_vars_content($data['vars'], $data['product']['descr']);?>
+    </div>
+
 </div>
 
 <div id="edit-var-text-modal" class="modal fade" tabindex="-1" aria-labelledby="edit-var-text-modalLabel" aria-hidden="true">
@@ -168,39 +171,12 @@ $user = $data['user'];
 </div>
 
 <script type="text/javascript">
+    varsAll = '<?php echo addslashes(json_encode($data['varsJson'], JSON_FORCE_OBJECT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE));?>';
     prodCalc = '<?php echo addslashes($data['product']['calc']);?>';
 </script>
 
 <?php
 
-// preg_match_all("/#(.+?)#/", $data['product']['descr'], $matches);
-//
-// $searchArr = [];
-// foreach ($matches[0] as $value) {
-//     $searchArr[] = str_replace('#', '', $value);
-// }
-
-// $search = [251];
-// $newVars = array_shift(array_filter($data['vars'], function($_array) use ($search){
-//     return in_array($_array['id'], $search);
-// }));
-
-// $tt = fields_list($data['product']['descr'], $data['vars']);
-// $vars = [];
-// foreach ($tt as $var) {
-//     foreach ($var as $value) {
-//         $vars[] = $value;
-//     }
-// }
-
-// $vars = explode(',', $data['product']['vars']);
-
-// if (array_key_exists('email', $user)) {
-//     $email = $user['email'];
-// }
-
-// echo ext_user_meta($user, 'email');
-//
 // echo '<pre>';
 // var_dump($user);
 // echo '</pre>';

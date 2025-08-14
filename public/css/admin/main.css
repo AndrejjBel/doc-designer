@@ -408,6 +408,50 @@ select.form-select option:disabled {
     background: #3e4651;
 }
 
+.js-acc-item-delete {
+    position: absolute;
+    top: 16px;
+    right: 60px;
+    z-index: 9;
+}
+
+/* .accordion .accordion-item:first-child .js-acc-item-delete {
+	display: none;
+} */
+
+.js-stages-item-delete {
+    position: absolute;
+    top: 16px;
+    right: 60px;
+    z-index: 9;
+}
+
+.js-stage-item-delete {
+    position: absolute;
+    top: 16px;
+    right: 60px;
+    z-index: 9;
+}
+
+.accordion.type-dispute .accordion-item:first-child .js-acc-item-delete {
+	display: none;
+}
+
+.accordion.stages .accordion-item:first-child .js-stages-item-delete {
+	display: none;
+}
+
+.button-block {
+    position: relative;
+}
+
+.btn-blok-del {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    cursor: pointer;
+}
+
 @media (max-width: 867px) {
     .post-gallery .filepond--item {
         width: calc((100% - 2em) / 2);

@@ -64,20 +64,39 @@ class PagesFrontController extends Controller
         if ($page_slug == 'dashboard') {
             return (new AdminController())->dashboard();
         }
-
-        $page_slug = Request::param('slug')->asString();
         $page_data = PagesModel::getPostForSlug($page_slug);
-        $product = ProductsModel::getProductForId($page_data[0]['product_id']);
-        $vars = VarsModel::getVarsAll();
-        $varsJson = VarsModel::getVarsAllJsonFront();
-        return view('page',
+        $vars = '';
+        $varsJson = '';
+        $script_rend = '';
+        $view = 'page';
+        $mod = 'page';
+        $temp_header = 'header-pages';
+        $body_classes = 'page page-templates';
+        if ($page_data['product_id']) {
+            $product = ProductsModel::getProductForId($page_data['product_id']);
+            $vars = VarsModel::getVarsAll();
+            $varsJson = VarsModel::getVarsAllJsonFront();
+            $script_rend = 'product';
+            $body_classes = 'page page-templates doc-page';
+        } else {
+            $product = 0;
+        }
+
+        if ($page_data['terms'] == 'cont_page') {
+            $view = 'cont-page';
+            $mod = 'cont_page';
+            $body_classes = 'page page-templates cont-page';
+            $temp_header = 'header-cont-page';
+        }
+        return view($view,
             [
                 'data'  => [
-                    'body_classes' => 'page page-templates',
-                    'temp_header' => 'header-pages',
+                    'body_classes' => $body_classes,
+                    'temp_header' => $temp_header,
                     'title' => 'Page',
                     'description' => 'Page description',
-                    'mod' => 'page',
+                    'mod' => $mod,
+                    'script_rend' => $script_rend,
                     'page_data' => $page_data,
                     'product' => $product,
                     'vars' => $vars,

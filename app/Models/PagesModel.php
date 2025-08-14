@@ -72,6 +72,12 @@ class PagesModel extends Model
         return DB::run($sql, $params);
     }
 
+    public static function editBlocks($params)
+    {
+        $sql = "UPDATE pages SET blocks = :blocks WHERE id  = :id";
+        return DB::run($sql, $params);
+    }
+
     public static function getPagesAll()
     {
         $sql = "SELECT * FROM pages";
@@ -143,7 +149,7 @@ class PagesModel extends Model
     public static function getPostForSlug($slug)
     {
         $sql = "SELECT * FROM pages WHERE slug = :slug";
-        return DB::run($sql, ['slug' => $slug])->fetchAll();
+        return DB::run($sql, ['slug' => $slug])->fetch();
     }
 
 

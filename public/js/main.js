@@ -1,3 +1,28 @@
+function navScroll(headerId) {
+    const masthead = document.getElementById(headerId);
+    let blockHeight = masthead.offsetHeight+3;
+    const headerFixedHeight = document.querySelector('.header-fixed-height');
+    headerFixedHeight.style.height = blockHeight+'px';
+    var prevScrollpos = window.pageYOffset;
+    window.onscroll = function() {
+        var currentScrollPos = window.pageYOffset;
+        if ( currentScrollPos ) {}
+        if (prevScrollpos > currentScrollPos) {
+            masthead.style.top = "0";
+        } else {
+            if (prevScrollpos > 20) {
+                masthead.style.top = '-'+blockHeight+'px';
+            }
+        }
+        prevScrollpos = currentScrollPos;
+    };
+    window.addEventListener('resize', (e) => {
+        blockHeight = masthead.offsetHeight+3;
+        headerFixedHeight.style.height = blockHeight+'px';
+    });
+}
+navScroll('topnav');
+
 function fetchGenerale(url, formData, returnText, returnCost) {
     fetch(url, {
         method: "POST",
@@ -202,6 +227,9 @@ function varsOptions(name='') {
 }
 
 function calculatorActions() {
+    const contPage = document.querySelector('.cont-page');
+    if (contPage) return;
+    console.dir(prodCalc);
     const calc = JSON.parse(prodCalc);
 
     const inputs = [
@@ -298,10 +326,14 @@ function noselect() {
     return false;
 }
 
-const source = document.querySelector('.page-templates');
-source.onselectstart = noselect;
-// source.ondragstart = noselect;
-// source.oncontextmenu = noselect;
+const noselectAction = () => {
+    const source = document.querySelector('.doc-page');
+    if (!source) return;
+    source.onselectstart = noselect;
+    // source.ondragstart = noselect;
+    // source.oncontextmenu = noselect;
+}
+noselectAction();
 
 function payAction(elem) {
     const modalBuyDoc = new bootstrap.Modal('#modal-buy-doc');
@@ -404,6 +436,7 @@ function validateForm(form) {
 
 function validateFormValid(selector) {
     const form = document.querySelector(selector);
+    if (!form) return;
     for (var variable of form.elements) {
         variable.addEventListener('input', (e) => {
             if (e.target.value) {
@@ -480,4 +513,6 @@ function partyYur(idName) {
         }
     });
 }
-partyYur('#yur-magazin');
+if (document.querySelector('#yur-magazin')) {
+    partyYur('#yur-magazin');
+}
