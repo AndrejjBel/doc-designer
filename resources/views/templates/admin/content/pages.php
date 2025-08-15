@@ -100,7 +100,7 @@ if ($data['mod'] == 'dashboard') {
                                     $class_btn = '';
                                     $status = 1;
                                     if ($product['status']) {
-                                        $text_status = 'Активен';
+                                        $text_status = 'Активна';
                                         $class_btn = ' btn-soft-success';
                                         $status = 1;
                                     } else {

@@ -13,7 +13,7 @@ $seo = json_decode($page['seo']);
 
     <div class="col-12 col-md-6 mb-3">
         <label for="product" class="form-label">Шаблон <span class="text-danger">*</span></label>
-        <select id="product" class="form-select" name="product" onchange="pageProductChenge(this)">
+        <select id="product" class="form-select" name="product_id" onchange="pageProductChenge(this)">
             <option value="0">Выберите шаблон</option>
         </select>
     </div>

@@ -271,34 +271,52 @@ function blocks_modal_stages_btns_render($btns, $ti, $si) {
 }
 
 function btnBlokStatus($bloks, $blok_name) {
-    $bloks_names = array_keys(json_decode($bloks, true));
     $res = '';
-    if (in_array($blok_name, $bloks_names)) {
-        $res = ' disabled';
+    if ($bloks) {
+        $bloks_names = array_keys(json_decode($bloks, true));
+        if (in_array($blok_name, $bloks_names)) {
+            $res = ' disabled';
+        }
     }
     echo $res;
 }
 
 function btnBloksPageAdmin($bloks) {
-    $bloks_names = array_keys(json_decode($bloks, true));
     $content = '';
-    foreach ($bloks_names as $key => $blok) {
-        $modalData = 'data-block="' . $blok . '"';
-        if ($blok == 'ssi') {
-            $modalData = 'data-bs-toggle="modal"
-            data-bs-target="#blockContEdit"
-            data-block="' . $blok . '"
-            onclick="btnContRender(this)"';
+    if ($bloks) {
+        $bloks_names = array_keys(json_decode($bloks, true));
+        foreach ($bloks_names as $key => $blok) {
+            $modalData = 'data-block="' . $blok . '"';
+            if ($blok == 'ssi') {
+                $modalData = 'data-bs-toggle="modal"
+                data-bs-target="#blockContEdit"
+                data-block="' . $blok . '"
+                onclick="btnContRender(this)"';
+            }
+            $content .= '<div class="button-block" data-block="' . $blok . '">
+                <button type="button" class="btn btn-outline-secondary w-100 text-start btn-blok"
+                ' . $modalData . '>
+                <strong>' . bloks_names($blok) . '</strong>
+                </button>
+                <span class="btn-blok-del" data-block="' . $blok . '" title="Удалить блок" onclick="btnBlocksContsDel(this)">
+                <i class="ri-delete-bin-line text-danger"></i>
+                </span>
+                </div>';
         }
-        $content .= '<div class="button-block" data-block="' . $blok . '">
-            <button type="button" class="btn btn-outline-secondary w-100 text-start btn-blok"
-            ' . $modalData . '>
-            <strong>' . bloks_names($blok) . '</strong>
-            </button>
-            <span class="btn-blok-del" data-block="' . $blok . '" title="Удалить блок" onclick="btnBlocksContsDel(this)">
-            <i class="ri-delete-bin-line text-danger"></i>
-            </span>
-            </div>';
+    }
+    return $content;
+}
+
+function bloksPageFront($bloks) {
+    $content = '';
+    if ($bloks) {
+        $blocks = json_decode($bloks, true);
+        $bloks_names = array_keys($blocks);
+        $fb_name = '';
+        foreach ($bloks_names as $key => $blok) {
+            $arg = $blocks[$blok];
+            $content .= template('/templates/front/page-blocks/' . $blok, ['data' => json_decode($arg)]);
+        }
     }
     return $content;
 }

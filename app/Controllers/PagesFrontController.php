@@ -5,6 +5,7 @@ namespace App\Controllers;
 use Hleb\Base\Controller;
 use Hleb\Constructor\Data\View;
 use Hleb\Static\Request;
+use Hleb\Static\Redirect;
 use App\Models\{
     PagesModel,
     ProductsModel,
@@ -65,45 +66,50 @@ class PagesFrontController extends Controller
             return (new AdminController())->dashboard();
         }
         $page_data = PagesModel::getPostForSlug($page_slug);
-        $vars = '';
-        $varsJson = '';
-        $script_rend = '';
-        $view = 'page';
-        $mod = 'page';
-        $temp_header = 'header-pages';
-        $body_classes = 'page page-templates';
-        if ($page_data['product_id']) {
-            $product = ProductsModel::getProductForId($page_data['product_id']);
-            $vars = VarsModel::getVarsAll();
-            $varsJson = VarsModel::getVarsAllJsonFront();
-            $script_rend = 'product';
-            $body_classes = 'page page-templates doc-page';
-        } else {
-            $product = 0;
-        }
-
-        if ($page_data['terms'] == 'cont_page') {
-            $view = 'cont-page';
-            $mod = 'cont_page';
-            $body_classes = 'page page-templates cont-page';
+        if ($page_data) {
+            $vars = '';
+            $varsJson = '';
+            $script_rend = '';
+            $view = 'page';
+            $mod = 'page';
             $temp_header = 'header-cont-page';
-        }
-        return view($view,
-            [
-                'data'  => [
-                    'body_classes' => $body_classes,
-                    'temp_header' => $temp_header,
-                    'title' => 'Page',
-                    'description' => 'Page description',
-                    'mod' => $mod,
-                    'script_rend' => $script_rend,
-                    'page_data' => $page_data,
-                    'product' => $product,
-                    'vars' => $vars,
-                    'varsJson' => $varsJson
+            $body_classes = 'page page-templates';
+            if ((int)$page_data['product_id']) {
+                $product = ProductsModel::getProductForId($page_data['product_id']);
+                $vars = VarsModel::getVarsAll();
+                $varsJson = VarsModel::getVarsAllJsonFront();
+                $script_rend = 'product';
+                $body_classes = 'page page-templates doc-page';
+                $view = 'cont-page';
+            } else {
+                $product = 0;
+            }
+
+            if ($page_data['terms'] == 'cont_page') {
+                $view = 'cont-page';
+                $mod = 'cont_page';
+                $body_classes = 'page page-templates cont-page';
+                $temp_header = 'header-cont-page';
+            }
+            return view($view,
+                [
+                    'data'  => [
+                        'body_classes' => $body_classes,
+                        'temp_header' => $temp_header,
+                        'title' => 'Page',
+                        'description' => 'Page description',
+                        'mod' => $mod,
+                        'script_rend' => $script_rend,
+                        'page_data' => $page_data,
+                        'product' => $product,
+                        'vars' => $vars,
+                        'varsJson' => $varsJson
+                    ]
                 ]
-            ]
-        );
+            );
+        } else {
+            return view("404-page");
+        }
     }
 
     public function products_pages(): View

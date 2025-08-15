@@ -660,11 +660,11 @@ class AdminFetchController extends Controller
         if ($allPost['page_gr'] == 'cont_page') {
             $product_id = 0;
         } else {
-            if ($allPost['product'] == 0) {
+            if ($allPost['product_id'] == 0) {
                 $message['result'] = 'error';
                 $error['product'] = 'Выберите шаблон';
             }
-            $product_id = $allPost['product'];
+            $product_id = $allPost['product_id'];
         }
 
         if (count($error)) {
@@ -791,11 +791,11 @@ class AdminFetchController extends Controller
         if ($allPost['page_gr'] == 'cont_page') {
             $product_id = 0;
         } else {
-            if ($allPost['product'] == 0) {
+            if ($allPost['product_id'] == 0) {
                 $message['result'] = 'error';
                 $error['product'] = 'Выберите шаблон';
             }
-            $product_id = $allPost['product'];
+            $product_id = $allPost['product_id'];
         }
 
         if (count($error)) {
@@ -817,25 +817,26 @@ class AdminFetchController extends Controller
             }
             $date_modified = date('Y-m-d H:i:s');
 
-            $is_post_slug = unicValueNotId('pages', 'slug', $allPost['page_id'], $allPost['link']);
-            if (count($is_post_slug) == 0) {
-                $link = $allPost['link'];
-            } elseif (count($is_post_slug) == 1) {
-                if ($is_post_slug[0] == $allPost['slug']) {
-                    $link = $allPost['link'] . '-2';
-                } else {
-                    $link = $allPost['link'];
-                }
-                $link = $allPost['link'] . '-2';
-            } elseif (count($is_post_slug) > 1) {
-                $arr = [];
-                foreach ($is_post_slug as $key => $value) {
-                    if ($value != $allPost['link']) {
-                        $arr[] = (int)str_replace($allPost['link'] . '-', '', $value);
-                    }
-                }
-                $link = $allPost['link'] . '-' . max($arr)+1;
-            }
+            // $is_post_slug = unicValueNotId('pages', 'slug', $allPost['page_id'], $allPost['link']);
+            // if (count($is_post_slug) == 0) {
+            //     $link = $allPost['link'];
+            // } elseif (count($is_post_slug) == 1) {
+            //     if ($is_post_slug[0] == $allPost['slug']) {
+            //         $link = $allPost['link'] . '-2';
+            //     } else {
+            //         $link = $allPost['link'];
+            //     }
+            //     $link = $allPost['link'] . '-2';
+            // } elseif (count($is_post_slug) > 1) {
+            //     $arr = [];
+            //     foreach ($is_post_slug as $key => $value) {
+            //         if ($value != $allPost['link']) {
+            //             $arr[] = (int)str_replace($allPost['link'] . '-', '', $value);
+            //         }
+            //     }
+            //     $link = $allPost['link'] . '-' . max($arr)+1;
+            // }
+            $link = $allPost['link'];
 
             $blocks_arr = explode(',', $allPost['bloks']);
 
@@ -977,6 +978,7 @@ class AdminFetchController extends Controller
                 $message['slug'] = $allPost['slug'] . '-' . max($arr)+1;
                 $message['type'] = 'warning';
             }
+            $message['is_post_slug'] = $is_post_slug;
         }
 
         echo json_encode($message, JSON_UNESCAPED_UNICODE);
@@ -986,9 +988,14 @@ class AdminFetchController extends Controller
     {
         $page = PagesModel::getPageForId($allPost['page_id']);
         $blocks = json_decode($page['blocks'], true);
-        if (array_key_exists('ssi', $blocks)) {
-            $ssi = json_decode($blocks['ssi']);
-            $modal_html = blocks_modal_render($ssi);
+        if ($blocks) {
+            if (array_key_exists('ssi', $blocks)) {
+                $ssi = json_decode($blocks['ssi']);
+                $modal_html = blocks_modal_render($ssi);
+            } else {
+                $file_name = $allPost['block_name'];
+                $modal_html = template('/templates/modals/' . $file_name);
+            }
         } else {
             $file_name = $allPost['block_name'];
             $modal_html = template('/templates/modals/' . $file_name);
@@ -999,8 +1006,15 @@ class AdminFetchController extends Controller
 
     public function ssi_save($allPost)
     {
-        $blocks = [];
-        $blocks[$allPost['block_id']] = $allPost['block_value'];
+        $page = PagesModel::getPageForId($allPost['page_id']);
+        if ($page['blocks']) {
+            $blocks = json_decode($page['blocks'], true);
+            $blocks[$allPost['block_id']] = $allPost['block_value'];
+        } else {
+            $blocks = [];
+            $blocks[$allPost['block_id']] = $allPost['block_value'];
+        }
+
         $res = PagesModel::editBlocks([
             'id' => $allPost['page_id'],
             'blocks' => json_encode($blocks, JSON_UNESCAPED_UNICODE)
