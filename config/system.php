@@ -459,7 +459,8 @@ return [
         '/app/helpers.php',
         '/app/nav.php',
         '/app/inc.php',
-        '/app/content.php'
+        '/app/content.php',
+        '/app/faq-arr.php'
     ],
 
     /*
