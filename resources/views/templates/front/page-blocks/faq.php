@@ -1,4 +1,4 @@
-<div class="block-content block-situations mb-4">
+<div class="block-content block-faq">
     <h4 class="text-center fw-bolder mb-4">С чем мы можем вам помочь?</h4>
     <div class="accordion" id="buyingquestion">
         <div class="accordion-item rounded">

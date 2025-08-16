@@ -1,4 +1,4 @@
-<div class="block-content block-situations mb-4">
+<div class="block-content block-situations">
     <div class="row align-items-center mb-4">
         <div class="col-sm-6 col-lg-4 col-xl-2 situation-item d-flex flex-column align-items-center text-center mb-4">
             <img class="si-img" src="../public/images/situations/bit-tehn.webp" alt="">

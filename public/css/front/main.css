@@ -207,7 +207,7 @@ button::-moz-focus-inner {
 }
 
 .block-situations {
-
+    margin-bottom: 60px;
 }
 
 .situation-item {
@@ -230,6 +230,9 @@ button::-moz-focus-inner {
     left: 0;
 }
 
+.block-faq {
+    margin-bottom: 60px;
+}
 
 @media (max-width: 1349px) {
     .ql-editor .ql-indent-8:not(.ql-direction-rtl) {

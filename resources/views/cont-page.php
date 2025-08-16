@@ -8,8 +8,6 @@ insertTemplate('/templates/header-new', ['data' => $data]);
 
         <div class="content-blocks">
             <?php echo bloksPageFront($data['page_data']['blocks']);?>
-
-            <?php insertTemplate('/templates/front/page-blocks/faq', ['data' => $data]);?>
         </div>
 
     </div>

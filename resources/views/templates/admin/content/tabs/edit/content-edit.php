@@ -48,6 +48,20 @@
                             <i class="ri-delete-bin-line text-danger"></i>
                         </span>
                     </button>
+
+                    <button type="button"
+                        class="btn btn-outline-secondary w-100 text-start btn-blok"
+                        data-block="faq"
+                        onclick="btnBlockCont(this)"
+                        <?php btnBlokStatus($page['blocks'], 'faq');?>>
+                        <strong>Faq</strong>
+                        <span class="btn-bloks-del inactive float-end"
+                            data-block="faq"
+                            title="Удалить блок"
+                            onclick="btnBlocksContsDel(this)">
+                            <i class="ri-delete-bin-line text-danger"></i>
+                        </span>
+                    </button>
                 </div>
             </div>
 

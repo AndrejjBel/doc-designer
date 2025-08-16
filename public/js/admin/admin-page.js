@@ -106,6 +106,7 @@ const pageAddEdit = () => {
         formData.append('ssi', ssiValue);
         formData.append('product', '');
         formData.append('situations', '');
+        formData.append('faq', '');
         formData.append('bloks', bloks.join(','));
         url = '/admin/fetch';
 

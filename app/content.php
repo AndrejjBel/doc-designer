@@ -324,6 +324,7 @@ function bloksPageFront($bloks) {
 function bloks_names($name) {
     $bn = [
         'ssi' => 'Этапы решения вопроса',
+        'faq' => 'Faq',
         'product' => 'Шаблон',
         'situations' => 'Ситуации'
     ];
