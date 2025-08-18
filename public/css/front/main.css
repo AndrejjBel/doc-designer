@@ -179,9 +179,10 @@ button::-moz-focus-inner {
 .block-tabs .nav-pills a.nav-link {
     display: flex;
     align-items: center;
-    max-width: 250px;
+    justify-content: center;
+    max-width: 200px;
     height: 100%;
-    padding: 0.3rem 1rem;
+    padding: 0.3rem;
     background: #2f55d41a;
 }
 
@@ -202,8 +203,15 @@ button::-moz-focus-inner {
 }
 
 .block-product {
-    min-height: 300px;
+    /* max-height: 600px;
+    overflow: auto;
+    min-height: 300px; */
     margin-bottom: 60px;
+}
+
+.product-block {
+    max-height: 600px;
+    overflow: auto;
 }
 
 .block-situations {
@@ -232,6 +240,22 @@ button::-moz-focus-inner {
 
 .block-faq {
     margin-bottom: 60px;
+}
+
+.ql-editor .ql-indent-8:not(.ql-direction-rtl) {
+    padding-left: 30em;
+}
+
+.ql-editor .ql-align-center {
+    text-align: center;
+}
+
+.ql-editor .ql-align-right {
+    text-align: right;
+}
+
+.ql-editor p {
+    margin-bottom: 0.1rem;
 }
 
 @media (max-width: 1349px) {

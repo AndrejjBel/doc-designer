@@ -376,16 +376,18 @@ class AdminFetchController extends Controller
                 // 'keywords' => $allPost['post_meta_keywords']
             ];
 
-            $is_post_slug = unicValueNotId('products', 'allsit', $allPost['product_id'], $allPost['allsit']);
+            // $is_post_slug = unicValue('products', 'allsit', $allPost['allsit']);
+            $old_link = explode('-', $allPost['allsit']);
+            $is_post_slug = unicValueNotId('products', 'allsit', $allPost['product_id'], $old_link[0]);
             if (count($is_post_slug) == 0) {
                 $allsit = $allPost['allsit'];
             } elseif (count($is_post_slug) == 1) {
-                if ($is_post_slug[0] == $allPost['slug']) {
-                    $allsit = $allPost['allsit'] . '-2';
+                if ($is_post_slug[0] == $old_link[0]) {
+                    $allsit = $old_link[0] . '-2';
                 } else {
                     $allsit = $allPost['allsit'];
                 }
-                $allsit = $allPost['allsit'] . '-2';
+                // $allsit = $allPost['allsit'] . '-2';
             } elseif (count($is_post_slug) > 1) {
                 $arr = [];
                 foreach ($is_post_slug as $key => $value) {
@@ -393,7 +395,7 @@ class AdminFetchController extends Controller
                         $arr[] = (int)str_replace($allPost['allsit'] . '-', '', $value);
                     }
                 }
-                $allsit = $allPost['allsit'] . '-' . max($arr)+1;
+                $allsit = $old_link[0] . '-' . max($arr)+1;
             }
 
             // $is_post_slug = unicValueNotId('products', 'allsit', 14465, 'bytovaya-tekhnika');
@@ -423,8 +425,9 @@ class AdminFetchController extends Controller
             }
         }
 
-        // $message['post'] = $allPost;
-        //
+        $message['post'] = $allPost;
+        $message['is_post_slug'] = $is_post_slug;
+
         // $message['calc'] = $calc;
         $result = ['error' => $error, 'message' => $message];
 
@@ -729,6 +732,14 @@ class AdminFetchController extends Controller
                 $status = 1;
             }
 
+            $blocks_arr = explode(',', $allPost['bloks']);
+
+            $blocks = [];
+
+            foreach ($blocks_arr as $key => $block) {
+                $blocks[$block] = $allPost[$block];
+            }
+
             // $pContent = htmlspecialchars_decode($allPost['descr']);
             // $pContent = strip_tags($pContent);
             // $pContent = str_replace("&nbsp;", '', $pContent);
@@ -748,7 +759,7 @@ class AdminFetchController extends Controller
                 'favor'       => $favor,
                 'product_id'  => $product_id,
                 'terms'       => $allPost['page_gr'],
-                'blocks'      => '',
+                'blocks'      => json_encode($blocks, JSON_UNESCAPED_UNICODE),
                 'thumb_img'   => '',
                 'gallery_img' => '',
                 'seo'         => json_encode($post_seo, JSON_UNESCAPED_UNICODE),
@@ -817,39 +828,31 @@ class AdminFetchController extends Controller
             }
             $date_modified = date('Y-m-d H:i:s');
 
-            // $is_post_slug = unicValueNotId('pages', 'slug', $allPost['page_id'], $allPost['link']);
-            // if (count($is_post_slug) == 0) {
-            //     $link = $allPost['link'];
-            // } elseif (count($is_post_slug) == 1) {
-            //     if ($is_post_slug[0] == $allPost['slug']) {
-            //         $link = $allPost['link'] . '-2';
-            //     } else {
-            //         $link = $allPost['link'];
-            //     }
-            //     $link = $allPost['link'] . '-2';
-            // } elseif (count($is_post_slug) > 1) {
-            //     $arr = [];
-            //     foreach ($is_post_slug as $key => $value) {
-            //         if ($value != $allPost['link']) {
-            //             $arr[] = (int)str_replace($allPost['link'] . '-', '', $value);
-            //         }
-            //     }
-            //     $link = $allPost['link'] . '-' . max($arr)+1;
-            // }
-            $link = $allPost['link'];
+            $is_post_slug = unicValueNotId('pages', 'link', $allPost['page_id'], $allPost['link']);
+            if (count($is_post_slug) == 0) {
+                $link = $allPost['link'];
+            } elseif (count($is_post_slug) == 1) {
+                if ($is_post_slug[0] == $allPost['slug']) {
+                    $link = $allPost['link'] . '-2';
+                } else {
+                    $link = $allPost['link'];
+                }
+                $link = $allPost['link'] . '-2';
+            } elseif (count($is_post_slug) > 1) {
+                $arr = [];
+                foreach ($is_post_slug as $key => $value) {
+                    if ($value != $allPost['link']) {
+                        $arr[] = (int)str_replace($allPost['link'] . '-', '', $value);
+                    }
+                }
+                $link = $allPost['link'] . '-' . max($arr)+1;
+            }
 
             $blocks_arr = explode(',', $allPost['bloks']);
 
             $blocks = [];
-            // $blocks['ssi'] = $allPost['block_ssi_value'];
 
             foreach ($blocks_arr as $key => $block) {
-                // if ($block == 'ssi') {
-                //     $blocks['ssi'] = $allPost['block_ssi_value'];
-                // } else {
-                //     $blocks[$block] = $allPost[$block];
-                // }
-
                 $blocks[$block] = $allPost[$block];
             }
 
@@ -978,7 +981,6 @@ class AdminFetchController extends Controller
                 $message['slug'] = $allPost['slug'] . '-' . max($arr)+1;
                 $message['type'] = 'warning';
             }
-            $message['is_post_slug'] = $is_post_slug;
         }
 
         echo json_encode($message, JSON_UNESCAPED_UNICODE);

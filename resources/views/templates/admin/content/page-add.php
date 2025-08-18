@@ -45,7 +45,7 @@
                         <?php if ($data['duplicate']) { ?>
                             <div class="tab-content mb-5">
                                 <div class="tab-pane show active" id="general">
-                                    <?php insertTemplate('/templates/admin/content/tabs/edit/page-general', ['mod' => $data['mod'], 'page' => $data['page'], 'products_gr' => $data['products_gr']]);?>
+                                    <?php insertTemplate('/templates/admin/content/tabs/edit/page-general', ['mod' => $data['mod'], 'page' => $data['page'], 'products_gr' => $data['products_gr'], 'duplicate' => $data['duplicate']]);?>
                                 </div>
                                 <div class="tab-pane" id="text">
                                     <?php insertTemplate('/templates/admin/content/tabs/edit/content-edit', ['mod' => $data['mod'], 'page' => $data['page'], 'product' => $data['product']]);?>
@@ -64,7 +64,7 @@
 
                         <input type="hidden" name="action" value="add_page">
                         <input type="hidden" name="post_type" value="page">
-                        <input type="hidden" name="page_id" id="page_id" value="<?php //echo $data['product_id'];?>">
+                        <input type="hidden" name="page_id" id="page_id" value="<?php echo $data['duplicate'];?>">
                         <?php echo csrf_field();?>
                         <button type="submit" name="submit" data-type="add"  data-id="<?php //echo $data['product_id'];?>" class="btn btn-primary">Сохранить</button>
                     </form>
@@ -78,6 +78,19 @@
 
     <?php insertTemplate('/templates/admin/content/footer', ['data' => $data]);
 
+    if ($data['duplicate']) {
+        $blocks = json_decode($data['page']['blocks'], true);
+        $modal_body = '';
+        if ($blocks) {
+            if (array_key_exists('ssi', $blocks)) {
+                $ssi = json_decode($blocks['ssi']);
+                $modal_body = blocks_modal_render($ssi);
+            }
+        }
+    } else {
+        $modal_body = '';
+    }
+
     // $vars = [];
     // foreach ($data['varsProduct'] as $var) {
     //     $vars[] = $var['varid'];
@@ -88,9 +101,9 @@
     // });
 
     // $is_post_slug = unicValueNotId('pages', 'slug', 8, 'testovaya-stranica-3');
-    //
+
     // echo '<pre>';
-    // var_dump($is_post_slug);
+    // var_dump($data['duplicate']);
     // echo '</pre>';
     ?>
 

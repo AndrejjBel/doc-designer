@@ -39,7 +39,7 @@ $seo = json_decode($page['seo']);
                 class="form-control"
                 value="<?php echo $page['slug'];?>"
                 data-post-type="pages"
-                data-type="edit"
+                data-type="<?php echo ($duplicate)? 'add' : 'edit';?>"
                 onblur="slugUnicActions(this)">
             <a href="/<?php echo $page['slug'];?>" class="btn btn-success" title="Открыть на сайте">
                 <i class="bi bi-box-arrow-up-right"></i>

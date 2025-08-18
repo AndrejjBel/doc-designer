@@ -58,7 +58,7 @@
                         <?php if ($data['duplicate']) { ?>
                             <div class="tab-content mb-5">
                                 <div class="tab-pane show active" id="general">
-                                    <?php insertTemplate('/templates/admin/content/tabs/edit/general', ['mod' => $data['mod'], 'product' => $data['product'], 'products_gr' => $data['products_gr']]);?>
+                                    <?php insertTemplate('/templates/admin/content/tabs/edit/general', ['mod' => $data['mod'], 'product' => $data['product'], 'products_gr' => $data['products_gr'], 'duplicate' => $data['duplicate']]);?>
                                 </div>
                                 <div class="tab-pane" id="vars">
                                     <?php insertTemplate('/templates/admin/content/tabs/edit/vars', ['product' => $data['product'], 'product_id' => $data['duplicate'], 'vars' => $data['vars'], 'varsProduct' => $data['varsProduct']]);?>

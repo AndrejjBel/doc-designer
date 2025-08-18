@@ -45,7 +45,7 @@
 
                         <div class="tab-content mb-5">
                             <div class="tab-pane show active" id="general">
-                                <?php insertTemplate('/templates/admin/content/tabs/edit/page-general', ['mod' => $data['mod'], 'page' => $data['page'], 'products_gr' => $data['products_gr']]);?>
+                                <?php insertTemplate('/templates/admin/content/tabs/edit/page-general', ['mod' => $data['mod'], 'page' => $data['page'], 'products_gr' => $data['products_gr'], 'duplicate' => 0]);?>
                             </div>
                             <div class="tab-pane" id="text">
                                 <?php insertTemplate('/templates/admin/content/tabs/edit/content-edit', ['mod' => $data['mod'], 'page' => $data['page'], 'product' => $data['product']]);?>

@@ -49,8 +49,8 @@ $seo = json_decode($product['ceo']);
                 name="allsit"
                 class="form-control"
                 value="<?php echo $product['allsit'];?>"
-                data-post-type="products" 
-                data-type="edit"
+                data-post-type="products"
+                data-type="<?php echo ($duplicate)? 'add' : 'edit';?>"
                 onblur="slugUnicActions(this)">
             <a href="/products/<?php echo $product['allsit'];?>" class="btn btn-success" title="Открыть на сайте">
                 <i class="bi bi-box-arrow-up-right"></i>

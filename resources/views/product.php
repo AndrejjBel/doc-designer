@@ -152,7 +152,7 @@ $user = $data['user'];
     </div>
 </div>
 
-<div class="offcanvas offcanvas-start offcanvas-fields" tabindex="-1" id="offcanvasFields" aria-labelledby="offcanvasFieldsLabel">
+<div id="offcanvasFields" class="offcanvas offcanvas-start offcanvas-fields" tabindex="-1" aria-labelledby="offcanvasFieldsLabel">
     <div class="offcanvas-header">
         <h5 id="offcanvasFieldsLabel">Поля</h5>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>

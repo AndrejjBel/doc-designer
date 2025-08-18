@@ -307,15 +307,24 @@ function btnBloksPageAdmin($bloks) {
     return $content;
 }
 
-function bloksPageFront($bloks) {
+function bloksPageFront($bloks, $product='', $vars='') {
     $content = '';
     if ($bloks) {
         $blocks = json_decode($bloks, true);
         $bloks_names = array_keys($blocks);
         $fb_name = '';
         foreach ($bloks_names as $key => $blok) {
-            $arg = $blocks[$blok];
-            $content .= template('/templates/front/page-blocks/' . $blok, ['data' => json_decode($arg)]);
+            if ($blok == 'product') {
+                if ($product) {
+                    $arg = ['product' => $product, 'vars' => $vars];
+                    $content .= template('/templates/front/page-blocks/' . $blok, ['data' => $arg]);
+                } else {
+                    $content .= '';
+                }
+            } else {
+                $arg = $blocks[$blok];
+                $content .= template('/templates/front/page-blocks/' . $blok, ['data' => json_decode($arg)]);
+            }
         }
     }
     return $content;

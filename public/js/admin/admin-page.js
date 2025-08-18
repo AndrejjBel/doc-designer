@@ -138,13 +138,13 @@ const pageAddEdit = () => {
                 }, 5000);
             }
             if (data.message.result == 'success') {
-                alertAction(warningWrap, data.message.text, 'success', ' onclick="locUrlAddProd()"');
+                alertAction(warningWrap, data.message.text, 'success', ' onclick="locUrlAddPage()"');
                 setTimeout(function(){
                     window.location = '/admin/pages';
                 }, 5000);
             }
             if (data.message.result == 'successEdit') {
-                alertAction(warningWrap, data.message.text, 'success', ' onclick="locUrlAddProd()"');
+                alertAction(warningWrap, data.message.text, 'success', ' onclick="locUrlAddPage()"');
                 setTimeout(function(){
                     warningWrap.innerHTML = '';
                 }, 5000);
@@ -156,6 +156,10 @@ const pageAddEdit = () => {
     });
 }
 pageAddEdit();
+
+function locUrlAddPage() {
+    window.location = '/admin/pages';
+}
 
 function pageStatusChange(elem) {
     const warningWrap = document.querySelector('#warning-wrap');
