@@ -83,12 +83,16 @@
         $modal_body = '';
         if ($blocks) {
             if (array_key_exists('ssi', $blocks)) {
-                $ssi = json_decode($blocks['ssi']);
-                $modal_body = blocks_modal_render($ssi);
+                if ($blocks['ssi']) {
+                    $ssi = json_decode($blocks['ssi']);
+                    $modal_body = blocks_modal_render($ssi);
+                } else {
+                    $modal_body = template('/templates/modals/ssi');
+                }
             }
         }
     } else {
-        $modal_body = '';
+        $modal_body = template('/templates/modals/ssi');
     }
 
     // $vars = [];
