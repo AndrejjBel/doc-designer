@@ -828,7 +828,7 @@ class AdminFetchController extends Controller
             }
             $date_modified = date('Y-m-d H:i:s');
 
-            $is_post_slug = unicValueNotId('pages', 'link', $allPost['page_id'], $allPost['link']);
+            $is_post_slug = unicValueNotId('pages', 'slug', $allPost['page_id'], $allPost['link']);
             if (count($is_post_slug) == 0) {
                 $link = $allPost['link'];
             } elseif (count($is_post_slug) == 1) {
