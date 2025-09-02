@@ -127,6 +127,7 @@ class PagesFrontController extends Controller
                     'title' => 'Page',
                     'description' => 'Page description',
                     'mod' => 'page',
+                    'script_rend' => $script_rend,
                     'page_data' => $page_data,
                     'product' => $product,
                     'vars' => $vars,

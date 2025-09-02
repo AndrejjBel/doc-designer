@@ -186,6 +186,16 @@ button::-moz-focus-inner {
     background: #2f55d41a;
 }
 
+.block-tabs .block-tabs-child .nav-pills a.nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 200px;
+    height: 100%;
+    padding: 0.3rem 1.6rem;
+    background: #2f55d41a;
+}
+
 .block-tabs .nav-pills a.nav-link.active {
     background-color: var(--bs-nav-pills-link-active-bg);
 }
@@ -212,6 +222,29 @@ button::-moz-focus-inner {
 .product-block {
     max-height: 600px;
     overflow: auto;
+}
+
+.product-page {
+    background: #f2f8fc;
+}
+
+.product-page .product-block {
+    max-height: 100%;
+    overflow: auto;
+}
+
+.product-page .product-block.ql-editor p {
+    /* font-family: none; */
+    font-size: 14px;
+    line-height: 1.2;
+}
+
+.fields-list-col {
+    height: fit-content;
+}
+
+.pay-action {
+    margin-left: auto;
 }
 
 .block-situations {

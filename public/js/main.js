@@ -134,6 +134,21 @@ function fieldFillingFd(elem) {
 
 function fieldFillingForm(elem) {
     let ih = document.querySelectorAll('span[data-key="'+elem.name+'"]');
+    let inv = document.querySelectorAll('input[name="'+elem.name+'"]');
+    let tanv = document.querySelectorAll('textarea[name="'+elem.name+'"]');
+    console.dir(inv);
+    if (inv.length) {
+        for (var variable of inv) {
+            if (variable != elem) {
+                if (elem.type == 'date') {
+                    variable.value = elem.value;
+                } else if (true) {
+                    variable.value = elem.value.replace(/"/g, '&quot;');
+                }
+            }
+            variable.classList.remove('is-invalid');
+        }
+    }
     if (ih.length) {
         ih.forEach((item) => {
             if (elem.type == 'date') {
@@ -141,7 +156,17 @@ function fieldFillingForm(elem) {
             } else {
                 item.innerHTML = elem.value.replace(/"/g, '&quot;');
             }
+            item.classList.remove('is-invalid');
         });
+    }
+    if (tanv.length) {
+        for (var variable of tanv) {
+            if (variable != elem) {
+                variable.value = elem.value;
+                console.dir(variable);
+            }
+            variable.classList.remove('is-invalid');
+        }
     }
 }
 
@@ -229,15 +254,14 @@ function varsOptions(name='') {
 function calculatorActions() {
     const contPage = document.querySelector('.cont-page');
     if (contPage) return;
-    console.dir(prodCalc);
+    // console.dir(prodCalc);
     const calc = JSON.parse(prodCalc);
 
-    const inputs = [
-        document.querySelector('input[name="'+calc.dateStart+'"]'),
-        document.querySelector('input[name="'+calc.dateEnd+'"]'),
-        document.querySelector('input[name="'+calc.cost+'"]'),
+    let inputs = [
+        ...Array.from(document.querySelectorAll('input[name="'+calc.dateStart+'"]')),
+        ...Array.from(document.querySelectorAll('input[name="'+calc.dateEnd+'"]')),
+        ...Array.from(document.querySelectorAll('input[name="'+calc.cost+'"]'))
     ];
-
     for (let elem of inputs) {
         elem.addEventListener('blur', (e) => {
             if (validateInputs(inputs)) {
@@ -245,8 +269,6 @@ function calculatorActions() {
             }
         });
     }
-
-    // calculator(calc.calc);
 }
 calculatorActions();
 
@@ -274,18 +296,20 @@ function calculator(calc) {
         result = ((sum/100*keyRate)/365)*daysBetween(startDate, endDate);
     }
 
-    document.querySelector('input[name="'+calc.calculation+'"]').value = result;
+    // document.querySelector('input[name="'+calc.calculation+'"]').value = result;
+    document.querySelectorAll('input[name="'+calc.calculation+'"]').forEach((item, i) => {
+        item.value = result;
+    });
+
     let ih = document.querySelectorAll('span[data-key="'+calc.calculation+'"]');
     if (ih.length) {
         ih.forEach((item) => {
             item.innerHTML = result;
+            console.dir(item);
+            console.dir(result);
         });
     }
-
-    // console.dir(daysBetween(startDate, endDate));
 }
-
-// console.dir(JSON.parse(prodCalc));
 
 function validateInputs(inputs) {
     let i = 0;
@@ -340,9 +364,10 @@ function payAction(elem) {
     const modalWarning = new bootstrap.Modal('#warning-form-modal');
     const offcanvasFields = new bootstrap.Offcanvas('#offcanvasFields');
 
-    const form = document.querySelector('form#fields-list');
+    const forms = document.querySelectorAll('form.fields-list');
+    const btnFields = document.querySelector('#btn-fields');
 
-    if (validateForm(form)) {
+    if (validateForm(forms)) {
         modalBuyDoc.show();
     } else {
         modalWarning.show();
@@ -356,14 +381,20 @@ function payAction(elem) {
                 item.remove();
             });
         }
-        offcanvasFields.show();
+        if (btnFields.checkVisibility()) {
+            offcanvasFields.show();
+        }
     });
 }
 
 function buyDocument(elem) {
     elem.style.pointerEvents = 'none';
-    const fieldsListForm = document.querySelector('form#fields-list');
+    let fieldsListForm = document.querySelector('form#fields-list');
     const closeBtn = document.querySelector('#modal-buy-doc .btn-close');
+    const btnFields = document.querySelector('#btn-fields');
+    if (btnFields.checkVisibility()) {
+        fieldsListForm = document.querySelector('form#fields-list-mob');
+    }
     const successModal = new bootstrap.Modal('#success-form-modal', {
         // keyboard: false
     });
@@ -377,7 +408,7 @@ function buyDocument(elem) {
     // console.dir(fieldsListForm);
     // console.dir(validateForm(elem.form));
 
-    if (validateForm(elem.form)) {
+    if (validateForm([elem.form])) {
         let formData = new FormData(elem.form);
         let formDataFl = new FormData(fieldsListForm);
 
@@ -410,23 +441,25 @@ function buyDocument(elem) {
     }
 }
 
-function validateForm(form) {
+function validateForm(forms) {
     let i = 0;
-    for (var variable of form.elements) {
-        if (variable.type == 'checkbox') {
-            if (variable.required == true) {
-                if (variable.checked == false) {
+    forms.forEach((form) => {
+        for (var variable of form.elements) {
+            if (variable.type == 'checkbox') {
+                if (variable.required == true) {
+                    if (variable.checked == false) {
+                        variable.classList.add('is-invalid');
+                        i++;
+                    }
+                }
+            } else {
+                if (variable.type != 'button' && !variable.value) {
                     variable.classList.add('is-invalid');
                     i++;
                 }
             }
-        } else {
-            if (variable.type != 'button' && !variable.value) {
-                variable.classList.add('is-invalid');
-                i++;
-            }
         }
-    }
+    });
     if (i == 0) {
         return true;
     } else {
@@ -435,18 +468,35 @@ function validateForm(form) {
 }
 
 function validateFormValid(selector) {
-    const form = document.querySelector(selector);
-    if (!form) return;
-    for (var variable of form.elements) {
-        variable.addEventListener('input', (e) => {
-            if (e.target.value) {
-                e.target.classList.remove('is-invalid');
-            }
-        });
-    }
+    const forms = document.querySelectorAll(selector);
+    if (!forms.length) return;
+    // for (var variable of form.elements) {
+    //     variable.addEventListener('input', (e) => {
+    //         if (e.target.value) {
+    //             e.target.classList.remove('is-invalid');
+    //         }
+    //     });
+    // }
+
+    forms.forEach((form) => {
+        for (var variable of form.elements) {
+            variable.addEventListener('input', (e) => {
+                if (e.target.value) {
+                    e.target.classList.remove('is-invalid');
+                }
+            });
+        }
+    });
 }
 validateFormValid('form#fields-list');
 validateFormValid('form#buy_doc_form');
+
+// console.dir(document.querySelectorAll('form#fields-list'));
+
+document.querySelectorAll('form#fields-list').forEach((item, i) => {
+    console.dir(item);
+});
+
 
 function phone_mask(e) {
     var el = e.target,
@@ -482,7 +532,6 @@ function partyYur(idName) {
     $(idName).suggestions({
         token: "69cff3e74a71d5ece8579d27a89e9532c70bcbf5",
         type: "PARTY",
-        /* Вызывается, когда пользователь выбирает одну из подсказок */
         onSelect: function(suggestion) {
             console.log(suggestion);
             // $("#yur-magazin").val(suggestion.value);
@@ -490,10 +539,32 @@ function partyYur(idName) {
             // $("#yur-ogrn").val(suggestion.data.ogrn);
             // $("#yur-adres").val(suggestion.data.address.value);
 
-            document.querySelector('input[name="yur-magazin"]').value = suggestion.value;
-            document.querySelector('input[name="yur-inn"]').value = suggestion.data.inn;
-            document.querySelector('input[name="yur-ogrn"]').value = suggestion.data.ogrn;
-            document.querySelector('textarea[name="yur-adres"]').value = suggestion.data.address.value;
+            document.querySelectorAll('input[name="yur-magazin"]').forEach((item, i) => {
+                item.value = suggestion.value; //.replace(/"/g, '&quot;'); //.replace("\\\"", "&quot;");
+                item.classList.remove('is-invalid');
+
+                console.dir(suggestion.value.replaceAll('"', '\\"'));//.replace(/"/g, '&quot;'));
+                console.dir(item);
+            });
+            document.querySelectorAll('input[name="yur-inn"]').forEach((item, i) => {
+                item.value = suggestion.data.inn;
+                item.classList.remove('is-invalid');
+            });
+            document.querySelectorAll('input[name="yur-ogrn"]').forEach((item, i) => {
+                item.value = suggestion.data.ogrn;
+                item.classList.remove('is-invalid');
+            });
+            document.querySelectorAll('textarea[name="yur-adres"]').forEach((item, i) => {
+                item.value = suggestion.data.address.value;
+                item.classList.remove('is-invalid');
+                // item.innerText = suggestion.data.address.value;
+            });
+
+
+            // document.querySelector('input[name="yur-magazin"]').value = suggestion.value;
+            // document.querySelector('input[name="yur-inn"]').value = suggestion.data.inn;
+            // document.querySelector('input[name="yur-ogrn"]').value = suggestion.data.ogrn;
+            // document.querySelector('textarea[name="yur-adres"]').value = suggestion.data.address.value;
 
             document.querySelector('input[name="yur-magazin"]').classList.remove('is-invalid');
             document.querySelector('input[name="yur-inn"]').classList.remove('is-invalid');
@@ -513,6 +584,21 @@ function partyYur(idName) {
         }
     });
 }
-if (document.querySelector('#yur-magazin')) {
-    partyYur('#yur-magazin');
+const inputsSugg = document.querySelectorAll('#yur-magazin');
+if (inputsSugg.length) {
+    inputsSugg.forEach((item, i) => {
+        partyYur(item);
+    });
+}
+
+function htmlDecode(html) {
+    var elem = document.createElement('textarea');
+    elem.innerHTML = html;
+    return elem.textContent;
+}
+
+function encodeHTMLEntities(text) {
+    var textArea = document.createElement('textarea');
+    textArea.innerText = text;
+    return textArea.innerHTML;
 }

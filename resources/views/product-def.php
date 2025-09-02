@@ -2,48 +2,28 @@
 insertTemplate('/templates/header-new', ['data' => $data]);
 $user = $data['user'];
 ?>
-<div class="container">
-    <div class="row">
+<div class="col-lg-8 mx-auto p-4 py-md-5">
 
-        <div class="col-12 p-4 py-md-5">
+    <h4 class="text-center mb-5"><?php echo $data['product']['title'];?></h4>
 
-            <h4 class="text-center mb-5"><?php echo $data['product']['title'];?></h4>
+    <div class="d-flex gap-2 justify-content-between product-btn">
+        <button class="btn btn-sm btn-primary mt-2 mt-md-0"
+        type="button"
+        data-bs-toggle="offcanvas"
+        data-bs-target="#offcanvasFields"
+        aria-controls="offcanvasVars">Поля</button>
 
-            <div class="d-flex gap-2 justify-content-between product-btn">
-                <button id="btn-fields" class="btn btn-sm btn-primary mt-2 mt-md-0 d-inline-block d-lg-none"
-                type="button"
-                data-bs-toggle="offcanvas"
-                data-bs-target="#offcanvasFields"
-                aria-controls="offcanvasVars">Поля</button>
-
-                <button
-                    class="btn btn-sm btn-primary mt-2 mt-md-0 pay-action"
-                    type="button"
-                    name="button"
-                    onclick="payAction(this)">Купить за <?php echo $data['product']['price'];?>руб.</button>
-            </div>
-            <div class="row mt-3">
-                <div class="col-lg-4 d-none d-lg-flex fields-list-col">
-                    <div class="bg-white p-3 py-md-4 rounded shadow-sm">
-                        <h5 id="offcanvasFieldsLabel">Поля</h5>
-                        <form id="fields-list" class="fields-list">
-                            <?php echo fields_list_content($data['product']['descr'], $data['product']['vars'], $data['vars']);?>
-                            <input type="hidden" name="productid" value="<?php echo $data['product']['id'];?>">
-                            <input type="hidden" name="summ" value="<?php echo $data['product']['price'];?>">
-                            <?php echo csrf_field();?>
-                        </form>
-                    </div>
-                </div>
-
-                <div class="col-12 col-lg-8 p-4 py-md-4 bg-white rounded shadow-sm">
-                    <div class="product-block ql-editor bg-white">
-                        <?php echo replace_vars_content($data['vars'], $data['product']['descr']);?>
-                    </div>
-                </div>
-            </div>
-
-        </div>
+        <button
+            class="btn btn-sm btn-primary mt-2 mt-md-0"
+            type="button"
+            name="button"
+            onclick="payAction(this)">Купить за <?php echo $data['product']['price'];?>руб.</button>
     </div>
+
+    <div class="product-block ql-editor">
+        <?php echo replace_vars_content($data['vars'], $data['product']['descr']);?>
+    </div>
+
 </div>
 
 <div id="edit-var-text-modal" class="modal fade" tabindex="-1" aria-labelledby="edit-var-text-modalLabel" aria-hidden="true">
@@ -175,7 +155,7 @@ $user = $data['user'];
     </div>
 
     <div class="offcanvas-body syncscroll" name="pageSync">
-        <form id="fields-list-mob" class="fields-list">
+        <form id="fields-list" class="fields-list">
             <?php echo fields_list_content($data['product']['descr'], $data['product']['vars'], $data['vars']);?>
             <input type="hidden" name="productid" value="<?php echo $data['product']['id'];?>">
             <input type="hidden" name="summ" value="<?php echo $data['product']['price'];?>">

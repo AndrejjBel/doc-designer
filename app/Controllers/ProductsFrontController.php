@@ -63,6 +63,7 @@ class ProductsFrontController extends Controller
                     'title' => 'Page',
                     'description' => 'Page description',
                     'mod' => 'page',
+                    'script_rend' => 'product',
                     'page_data' => $page_data,
                     'product' => $product,
                     'vars' => $vars,
@@ -83,14 +84,15 @@ class ProductsFrontController extends Controller
             return view('product',
                 [
                     'data'  => [
-                        'body_classes' => 'page page-templates',
-                        'temp_header' => 'header-pages',
+                        'body_classes' => 'page page-templates product-page doc-page',
+                        'temp_header' => 'header-cont-page',
                         'title' => 'Page',
                         'description' => 'Page description',
-                        'mod' => 'page',
+                        'mod' => 'cont_page',
                         'script_rend' => 'product',
                         'page_slug' => $page_slug,
                         'product' => $product,
+                        'page_data' => $product,
                         'vars' => $vars,
                         'varsJson' => $varsJson,
                         'user' => $user

@@ -29,6 +29,7 @@
     <script src="../public/assets/js/plugins.init.js" defer></script>
     <script src="../public/assets/js/app.js" defer></script>
     <script src="../public/js/main.js?ver=<?php echo filemtime( HLEB_GLOBAL_DIR . '/public/js/main.js' );?>" defer></script>
+    <?php echo custom_styles();?>
 
 </head>
 <body class="<?php echo (array_key_exists('body_classes', $data))? $data['body_classes'] : '';?>">

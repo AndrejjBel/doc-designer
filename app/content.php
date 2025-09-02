@@ -441,6 +441,19 @@ function scripts_styles_render($script_rend) {
     }
 }
 
+function custom_styles() {
+    $site_settings = json_decode(site_settings('site_settings'));
+    $site_styles = '';
+    if ($site_settings) {
+        if (isset($site_settings->site_styles)) {
+            if ($site_settings->site_styles) {
+                $site_styles = '<style id="custom-styles">' . compress_css($site_settings->site_styles) . '</style>';
+            }
+        }
+    }
+    return $site_styles;
+}
+
 function seo_meta($data, $name) {
     $seo_title = $data['title'];
     $seo_description = $data['description'];
@@ -459,4 +472,16 @@ function seo_meta($data, $name) {
     if ($name == 'description') {
         return $seo_description;
     }
+}
+
+function compress_css($buffer) {
+    $buffer = preg_replace("!/\*[^*]*\*+([^/][^*]*\*+)*/!", "", $buffer);
+    $buffer = str_replace(array("\r\n", "\r", "\n", "\t", "  ", "    ", "    "), "", $buffer);
+    return $buffer;
+}
+
+function compress_js($buffer) {
+    $buffer = preg_replace("/(?:(?:\/\*(?:[^*]|(?:\*+[^*\/]))*\*+\/)|(?:(?<!\:|\\\|\'|\")\/\/.*))/", "", $buffer);
+    $buffer = str_replace(array("\r\n", "\r", "\n", "\t", "  ", "    ", "    "), "", $buffer);
+    return $buffer;
 }

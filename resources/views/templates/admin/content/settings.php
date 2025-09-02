@@ -95,6 +95,12 @@ if ($site_settings) {
                     </div>
                 </div>
 
+                <div class="mb-3">
+                    <label for="site_styles" class="form-label">Стили</label>
+                    <textarea class="form-control" id="site_styles"  name="site_styles" rows="5"><?php echo ($site_settings)? $site_settings->site_styles : '';?></textarea>
+                    <span class="help-block"><small>Стили для сайта</small></span>
+                </div>
+
                 <div class="row">
                     <div class="col-md-4">
                         <div class="mb-3">
