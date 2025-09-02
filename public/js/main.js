@@ -299,6 +299,7 @@ function calculator(calc) {
     // document.querySelector('input[name="'+calc.calculation+'"]').value = result;
     document.querySelectorAll('input[name="'+calc.calculation+'"]').forEach((item, i) => {
         item.value = result;
+        item.classList.remove('is-invalid');
     });
 
     let ih = document.querySelectorAll('span[data-key="'+calc.calculation+'"]');
