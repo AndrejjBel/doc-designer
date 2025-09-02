@@ -2,7 +2,7 @@
     <h4 class="text-center mb-5"><?php echo $data['product']['title'];?></h4>
 
     <div class="d-flex gap-2 justify-content-between product-btn mb-3">
-        <button class="btn btn-sm btn-primary mt-2 mt-md-0"
+        <button id="btn-fields" class="btn btn-sm btn-primary mt-2 mt-md-0"
         type="button"
         data-bs-toggle="offcanvas"
         data-bs-target="#offcanvasFields"
