@@ -9,9 +9,10 @@
 
     <!-- favicon -->
     <link rel="icon" href="../public/images/favicon/favicon.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" sizes="180x180" href="../public/images/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="../public/images/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="../public/images/favicon/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../public/images/favicon/apple-touch-icon.png" type="image/x-icon">
+    <link rel="icon" sizes="32x32" href="../public/images/favicon/favicon-32x32.png" type="image/x-icon">
+    <link rel="icon" sizes="16x16" href="../public/images/favicon/favicon-16x16.png" type="image/x-icon">
+    <link rel="shortcut icon" sizes="16x16" href="../public/images/favicon/favicon-16x16.png" type="image/x-icon">
     <?php echo scripts_styles_render($data['script_rend']);?>
 
     <!-- Css -->
