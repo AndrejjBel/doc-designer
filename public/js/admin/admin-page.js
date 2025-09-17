@@ -1,5 +1,5 @@
 function pageTermChenge(elem) {
-    const pageProductSelect = document.querySelector('#product');
+    const pageProductSelect = document.querySelector('#product_id');
     console.dir(elem.value);
     if (elem.value == 'cont_page') {
         pageProductSelect.disabled = true;
@@ -11,7 +11,7 @@ function pageTermChenge(elem) {
 
 const pageTermStart = () => {
     const pageTermSelect = document.querySelector('#page_gr');
-    const pageProductSelect = document.querySelector('#product');
+    const pageProductSelect = document.querySelector('#product_id');
     if (!pageTermSelect) return;
     if (pageTermSelect.value == 'cont_page') {
         pageProductSelect.disabled = true;
@@ -96,8 +96,8 @@ const pageAddEdit = () => {
         if (typeDispute) {
             ssiValue = JSON.stringify(ssiValueAction(typeDispute.children));
         }
-        let bloks = [];
 
+        let bloks = [];
         for (var variable of pageBloks) {
             bloks.push(variable.dataset.block);
         }

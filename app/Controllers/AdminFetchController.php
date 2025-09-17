@@ -666,12 +666,17 @@ class AdminFetchController extends Controller
             if ($allPost['product_id'] == 0) {
                 $message['result'] = 'error';
                 $error['product'] = 'Выберите шаблон';
+            } else {
+                $product_id = $allPost['product_id'];
             }
-            $product_id = $allPost['product_id'];
         }
 
         if (count($error)) {
             $message['result'] = 'error';
+            $message['post'] = $allPost;
+            $result = ['error' => $error,'message' => $message];
+
+            echo json_encode($result, JSON_UNESCAPED_UNICODE);
         } else {
             $link = '';
             // if ($allPost['link']) {
@@ -732,12 +737,13 @@ class AdminFetchController extends Controller
                 $status = 1;
             }
 
-            $blocks_arr = explode(',', $allPost['bloks']);
-
             $blocks = [];
+            if ($allPost['bloks']) {
+                $blocks_arr = explode(',', $allPost['bloks']);
 
-            foreach ($blocks_arr as $key => $block) {
-                $blocks[$block] = $allPost[$block];
+                foreach ($blocks_arr as $key => $block) {
+                    $blocks[$block] = $allPost[$block];
+                }
             }
 
             // $pContent = htmlspecialchars_decode($allPost['descr']);

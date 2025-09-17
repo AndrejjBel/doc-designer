@@ -33,9 +33,9 @@
                     ?>
                     <div class="tab-pane tab-pane-parent bg-body-tertiary rounded-2 fade show<?php echo $active_tab;?> p-3" id="pills-<?php echo $key;?>" role="tabpanel" aria-labelledby="pills-cloud-tab">
                         <h5><?php echo $item->tab_title;?></h5>
-                        <p class="text-muted mb-0 pb-3 border-bottom">
+                        <div class="mb-0 pb-3 border-bottom">
                             <?php echo htmlspecialchars_decode(nl2br($item->tab_text), ENT_NOQUOTES);?>
-                        </p>
+                        </div>
 
                         <?php if (count($item->stages)) { ?>
                             <div class="row block-tabs-child mt-4">
@@ -69,9 +69,9 @@
                                             }
                                             ?>
                                             <div class="tab-pane tab-pane-child bg-white rounded-2 fade show<?php echo $active_tab_st;?> p-3" id="pills-child-<?php echo $key.$it;?>" role="tabpanel" aria-labelledby="pills-cloud-tab">
-                                                <p class="text-muted mb-3">
+                                                <div class="mb-3">
                                                     <?php echo htmlspecialchars_decode(nl2br($stage->stage_text), ENT_NOQUOTES);?>
-                                                </p>
+                                                </div>
                                                 <?php if (count($stage->btnsStages)) {
                                                     echo '<div class="d-flex flex-column flex-md-row gap-2 mt-2">';
                                                     foreach ($stage->btnsStages as $it => $btn) {

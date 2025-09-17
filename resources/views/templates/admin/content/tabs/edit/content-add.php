@@ -8,7 +8,7 @@
 
                 <div class="blocks-contents d-flex gap-1 flex-column">
                     <button type="button"
-                        class="btn btn-outline-secondary w-100 text-start btn-blok"
+                        class="btn btn-outline-secondary w-100 text-start btn-blok btn-blok-product"
                         data-block="product"
                         onclick="btnBlockCont(this)">
                         <strong>Шаблон</strong>
