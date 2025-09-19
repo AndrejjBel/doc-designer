@@ -11,6 +11,7 @@ if (is_admin_allowed()) {
     $link_lk = '/admin';
     $link_lk_text = 'В админку';
 }
+$site_settings = json_decode(site_settings('site_settings'));
 ?>
 
 <header id="topnav" class="defaultscroll sticky">
@@ -27,7 +28,7 @@ if (is_admin_allowed()) {
             </a>
 
             <div id="navigation">
-                <ul class="navigation-menu">
+                <ul class="navigation-menu nav-light">
                     <li><a href="javascript:void(0)" class="sub-menu-item">Услуги</a></li>
                     <li><a href="javascript:void(0)" class="sub-menu-item">Документы</a></li>
                     <li><a href="javascript:void(0)" class="sub-menu-item">Сервисы</a></li>
@@ -70,7 +71,9 @@ if (is_admin_allowed()) {
                                 </form>
                             <?php } else { ?>
                                 <a href="/login/" class="dropdown-item">Авторизация</a>
-                                <a href="/signin/" class="dropdown-item">Регистрация</a>
+                                <?php if (isset($site_settings->signin_vision)) { ?>
+                                    <a href="/signin/" class="dropdown-item">Регистрация</a>
+                                <?php } ?>
                             <?php } ?>
                         </div>
                     </div>
@@ -81,4 +84,4 @@ if (is_admin_allowed()) {
     </div>
 </header>
 
-<div class="header-fixed-height"></div>
+<!-- <div class="header-fixed-height"></div> -->

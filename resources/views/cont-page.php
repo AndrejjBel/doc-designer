@@ -4,7 +4,7 @@ insertTemplate('/templates/header-new', ['data' => $data]);
 
 <div class="page-content">
     <div class="container">
-        <h4 class="page-title text-center mb-5"><?php echo $data['page_data']['title'];?></h4>
+        <h1 class="page-title text-center mb-5"><?php echo $data['page_data']['title'];?></h1>
 
         <div class="content-blocks">
             <?php echo bloksPageFront($data['page_data']['blocks'], $data['product'], $data['vars']);?>

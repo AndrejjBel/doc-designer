@@ -15,11 +15,12 @@ class HomeController extends Controller
         return view('home',
             [
                 'data'  => [
-                    'body_classes' => 'home',
-                    'temp_header' => 'header-pages',
-                    'title' => 'TxtGen - Генератор текстов',
-                    'description' => 'TxtGen description',
-                    'mod' => 'home'
+                    'body_classes' => 'home cont-page',
+                    'temp_header' => 'header-home-page',
+                    'title' => 'Онлайн конструктор быстрого создания юридических документов без ошибок',
+                    'description' => 'Все виды документов уголовного, гражданского и административного права.',
+                    'mod' => 'home',
+                    'script_rend' => 'home',
                 ]
             ]
         );

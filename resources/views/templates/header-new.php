@@ -37,4 +37,4 @@
 
     <?php if (array_key_exists('temp_header', $data)) {
         insertTemplate('/templates/' . $data['temp_header'], ['data' => $data]);
-    } ?>
+    }

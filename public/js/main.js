@@ -2,7 +2,9 @@ function navScroll(headerId) {
     const masthead = document.getElementById(headerId);
     let blockHeight = masthead.offsetHeight+3;
     const headerFixedHeight = document.querySelector('.header-fixed-height');
-    headerFixedHeight.style.height = blockHeight+'px';
+    if (headerFixedHeight) {
+        headerFixedHeight.style.height = blockHeight+'px';
+    }
     var prevScrollpos = window.pageYOffset;
     window.onscroll = function() {
         var currentScrollPos = window.pageYOffset;
@@ -18,7 +20,9 @@ function navScroll(headerId) {
     };
     window.addEventListener('resize', (e) => {
         blockHeight = masthead.offsetHeight+3;
-        headerFixedHeight.style.height = blockHeight+'px';
+        if (headerFixedHeight) {
+            headerFixedHeight.style.height = blockHeight+'px';
+        }
     });
 }
 navScroll('topnav');

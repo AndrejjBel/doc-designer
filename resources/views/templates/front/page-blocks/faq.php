@@ -1,5 +1,8 @@
-<div class="block-content block-faq">
-    <h4 class="text-center fw-bolder mb-4">С чем мы можем вам помочь?</h4>
+<div class="block-content block-faq mb-5">
+    <div class="section-title text-center mb-4 pb-2">
+        <h4 class="title mb-4">С чем мы можем вам помочь?</h4>
+    </div>
+    <!-- <h4 class="text-center fw-bolder mb-4">С чем мы можем вам помочь?</h4> -->
     <div class="accordion" id="buyingquestion">
         <?php foreach (faq_arr() as $key => $faq) { ?>
             <div class="accordion-item rounded mb-2">

@@ -431,7 +431,11 @@ function scripts_styles_render($script_rend) {
         'product' => '
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/suggestions-jquery@22.6.0/dist/css/suggestions.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/suggestions-jquery@22.6.0/dist/js/jquery.suggestions.min.js"></script>'
+    <script src="https://cdn.jsdelivr.net/npm/suggestions-jquery@22.6.0/dist/js/jquery.suggestions.min.js"></script>',
+
+        'home' => '
+    <link href="/public/assets/libs/tiny-slider/tiny-slider.css" rel="stylesheet">
+    <script src="/public/assets/libs/tiny-slider/min/tiny-slider.js"></script>'
     ];
 
     if ($script_rend) {
@@ -457,13 +461,26 @@ function custom_styles() {
 function seo_meta($data, $name) {
     $seo_title = $data['title'];
     $seo_description = $data['description'];
-    if (array_key_exists('seo', $data['page_data'])) {
-        $seo = json_decode($data['page_data']['seo'], true);
-        if ($seo['title']) {
-            $seo_title = $seo['title'];
+    if (array_key_exists('page_data', $data)) {
+        if (array_key_exists('seo', $data['page_data'])) {
+            $seo = json_decode($data['page_data']['seo'], true);
+            if ($seo['title']) {
+                $seo_title = $seo['title'];
+            }
+            if ($seo['description']) {
+                $seo_description = $seo['description'];
+            }
         }
-        if ($seo['description']) {
-            $seo_description = $seo['description'];
+    }
+    if (array_key_exists('product', $data)) {
+        if ($data['product']) {
+            $seo = json_decode($data['product']['ceo'], true);
+            if ($seo['title']) {
+                $seo_title = $seo['title'];
+            }
+            if ($seo['description']) {
+                $seo_description = $seo['description'];
+            }
         }
     }
     if ($name == 'title') {

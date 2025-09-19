@@ -81,24 +81,28 @@ class ProductsFrontController extends Controller
             $user = UsersModel::getUser();
             $vars = VarsModel::getVarsAll();
             $varsJson = VarsModel::getVarsAllJsonFront();
-            return view('product',
-                [
-                    'data'  => [
-                        'body_classes' => 'page page-templates product-page doc-page',
-                        'temp_header' => 'header-cont-page',
-                        'title' => 'Page',
-                        'description' => 'Page description',
-                        'mod' => 'cont_page',
-                        'script_rend' => 'product',
-                        'page_slug' => $page_slug,
-                        'product' => $product,
-                        'page_data' => $product,
-                        'vars' => $vars,
-                        'varsJson' => $varsJson,
-                        'user' => $user
+            if ($product['active']) {
+                return view('product',
+                    [
+                        'data'  => [
+                            'body_classes' => 'page page-templates product-page doc-page',
+                            'temp_header' => 'header-cont-page',
+                            'title' => 'Page',
+                            'description' => 'Page description',
+                            'mod' => 'cont_page',
+                            'script_rend' => 'product',
+                            'page_slug' => $page_slug,
+                            'product' => $product,
+                            'page_data' => $product,
+                            'vars' => $vars,
+                            'varsJson' => $varsJson,
+                            'user' => $user
+                        ]
                     ]
-                ]
-            );
+                );
+            } else {
+                return view('404');
+            }
         } else {
             return view('404');
         }

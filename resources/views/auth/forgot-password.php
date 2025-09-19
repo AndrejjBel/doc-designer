@@ -56,8 +56,8 @@ if (isset($data['success'])) {
                                 <!-- Logo-->
                                 <div class="auth-brand">
                                     <a href="/" class="logo-light d-flex gap-2 align-items-center">
-                                        <img src="../public/images/logo-txtgen1.png" alt="logo" height="22">
-                                        <span class="fs-4">TxtGen</span>
+                                        <img src="../public/images/favicon/android-chrome-512x512.png" alt="logo" height="22">
+                                        <span class="fs-4">Конструктор документов</span>
                                     </a>
                                 </div>
 
@@ -164,8 +164,8 @@ if (isset($data['success'])) {
                             <!-- Logo-->
                             <div class="auth-brand">
                                 <a href="/" class="logo-light d-flex gap-2 align-items-center">
-                                    <img src="../public/images/logo-txtgen1.png" alt="logo" height="22">
-                                    <span class="fs-4">TxtGen</span>
+                                    <img src="../public/images/favicon/android-chrome-512x512.png" alt="logo" height="22">
+                                    <span class="fs-4">Конструктор документов</span>
                                 </a>
                             </div>
 

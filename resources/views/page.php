@@ -2,7 +2,7 @@
 insertTemplate('/templates/header', ['data' => $data]);
 ?>
 
-<h4 class="text-center mb-5"><?php echo $data['page_data']['title'];?></h4>
+<h1 class="text-center mb-5"><?php echo $data['page_data']['title'];?></h1>
 
 <div class="product-btn">
     <button class="btn btn-sm btn-primary mt-2 mt-md-0"

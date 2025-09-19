@@ -34,7 +34,7 @@ if (is_admin_allowed()) {
                                         <li><a href="javascript:void(0)" class="text-foot"><i class="uil uil-angle-right-b me-1"></i> Услуги</a></li>
                                         <li><a href="javascript:void(0)" class="text-foot"><i class="uil uil-angle-right-b me-1"></i> Документы</a></li>
                                         <li><a href="javascript:void(0)" class="text-foot"><i class="uil uil-angle-right-b me-1"></i> Сервисы</a></li>
-                                        <li><a href="javascript:void(0)" class="text-foot"><i class="uil uil-angle-right-b me-1"></i> О нас</a></li>
+                                        <!-- <li><a href="javascript:void(0)" class="text-foot"><i class="uil uil-angle-right-b me-1"></i> О нас</a></li> -->
                                         <li><a href="javascript:void(0)" class="text-foot"><i class="uil uil-angle-right-b me-1"></i> Контакты</a></li>
                                     </ul>
                                 </div>

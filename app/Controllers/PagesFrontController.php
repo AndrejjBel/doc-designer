@@ -91,22 +91,27 @@ class PagesFrontController extends Controller
                 $body_classes = 'page page-templates cont-page';
                 $temp_header = 'header-cont-page';
             }
-            return view($view,
-                [
-                    'data'  => [
-                        'body_classes' => $body_classes,
-                        'temp_header' => $temp_header,
-                        'title' => 'Page',
-                        'description' => 'Page description',
-                        'mod' => $mod,
-                        'script_rend' => $script_rend,
-                        'page_data' => $page_data,
-                        'product' => $product,
-                        'vars' => $vars,
-                        'varsJson' => $varsJson
+
+            if ($page_data['status']) {
+                return view($view,
+                    [
+                        'data'  => [
+                            'body_classes' => $body_classes,
+                            'temp_header' => $temp_header,
+                            'title' => 'Page',
+                            'description' => 'Page description',
+                            'mod' => $mod,
+                            'script_rend' => $script_rend,
+                            'page_data' => $page_data,
+                            'product' => $product,
+                            'vars' => $vars,
+                            'varsJson' => $varsJson
+                        ]
                     ]
-                ]
-            );
+                );
+            } else {
+                return view("404-page");
+            }
         } else {
             return view("404-page");
         }

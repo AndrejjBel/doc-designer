@@ -7,7 +7,7 @@ $user = $data['user'];
 
         <div class="col-12 p-4 py-md-5">
 
-            <h4 class="text-center mb-5"><?php echo $data['product']['title'];?></h4>
+            <h1 class="text-center mb-5"><?php echo $data['product']['title'];?></h1>
 
             <div class="d-flex gap-2 justify-content-between product-btn">
                 <button id="btn-fields" class="btn btn-sm btn-primary mt-2 mt-md-0 d-inline-block d-lg-none"
@@ -24,7 +24,7 @@ $user = $data['user'];
             </div>
             <div class="row mt-3">
                 <div class="col-lg-4 d-none d-lg-flex fields-list-col">
-                    <div class="bg-white p-3 py-md-4 rounded shadow-sm">
+                    <div class="bg-white p-3 py-md-4 rounded shadow-sm w-100">
                         <h5 id="offcanvasFieldsLabel">Поля</h5>
                         <form id="fields-list" class="fields-list">
                             <?php echo fields_list_content($data['product']['descr'], $data['product']['vars'], $data['vars']);?>
