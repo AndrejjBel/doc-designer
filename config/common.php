@@ -31,7 +31,7 @@ return [
     │ Изначально: true
     │
     */
-    'debug' => env_bool('APP_DEBUG', false),
+    'debug' => env_bool('APP_DEBUG', true),
 
     /*
     │-----------------------------------------------------------------------------
