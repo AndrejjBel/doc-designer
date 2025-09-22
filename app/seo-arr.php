@@ -1,1 +1,2 @@
 <?php
+$seo_pages = [];

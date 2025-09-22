@@ -6,6 +6,8 @@
 \.vscode
 \.vscode/*
 
+/app/seo-arr.php
+
 # working files
 storage/*
 ^storage/*.gitsavethequeen
