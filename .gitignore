@@ -3,6 +3,7 @@
 /resources/maintenances.php
 /app/faq-arr.php
 /app/blocks-arr.php
+/app/seo-arr.php
 # phpstorm project files
 /.idea
 /.idea/*
