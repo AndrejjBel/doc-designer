@@ -460,7 +460,9 @@ return [
         '/app/nav.php',
         '/app/inc.php',
         '/app/content.php',
-        '/app/faq-arr.php'
+        '/app/faq-arr.php',
+        '/app/blocks-arr.php',
+        '/app/seo-arr.php'
     ],
 
     /*
