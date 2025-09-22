@@ -2,6 +2,7 @@
 /resources/maintenance.php
 /resources/maintenances.php
 /app/faq-arr.php
+/app/seo-arr.php
 # phpstorm project files
 /.idea
 /.idea/*
