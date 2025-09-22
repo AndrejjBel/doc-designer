@@ -501,6 +501,18 @@ button::-moz-focus-inner {
     margin-bottom: .5rem;
 }
 
+.service-item {
+    position: relative;
+}
+
+.service-item-link {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
 @media (min-width: 1200px) {
     .doc-page .h1, h1 {
         font-size: 1.75rem;

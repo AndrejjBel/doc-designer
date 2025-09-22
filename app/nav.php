@@ -273,7 +273,7 @@ function top_nav_site($nav_light='') {
 
     $top_nav .= '<li><a href="javascript:void(0)" class="sub-menu-item">Документы</a></li>';
     $top_nav .= '<li><a href="javascript:void(0)" class="sub-menu-item">Услуги</a></li>';
-    $top_nav .= '<li><a href="javascript:void(0)" class="sub-menu-item">Сервисы</a></li>';
+    $top_nav .= '<li><a href="/services" class="sub-menu-item">Сервисы</a></li>';
 
     $top_nav .= '</ul>';
     return $top_nav;
@@ -285,8 +285,7 @@ function footer_nav_site_1($nav_light='') {
 
     $footer_nav .= '<li><a href="javascript:void(0)" class="text-foot"><i class="uil uil-angle-right-b me-1"></i> Услуги</a></li>';
     $footer_nav .= '<li><a href="javascript:void(0)" class="text-foot"><i class="uil uil-angle-right-b me-1"></i> Документы</a></li>';
-    $footer_nav .= '<li><a href="javascript:void(0)" class="text-foot"><i class="uil uil-angle-right-b me-1"></i> Сервисы</a></li>';
-    $footer_nav .= '<li><a href="javascript:void(0)" class="text-foot"><i class="uil uil-angle-right-b me-1"></i> Контакты</a></li>';
+    $footer_nav .= '<li><a href="/services" class="text-foot"><i class="uil uil-angle-right-b me-1"></i> Сервисы</a></li>';
 
     $footer_nav .= '</ul>';
     return $footer_nav;
@@ -296,7 +295,8 @@ function footer_nav_site_2($nav_light='') {
     $footer_nav = '';
     $footer_nav .= '<ul class="list-unstyled footer-list mt-4">';
 
-    $footer_nav .= '<li><a href="javascript:void(0)" class="text-foot"><i class="uil uil-angle-right-b me-1"></i> Инструкции</a></li>';
+
+    $footer_nav .= '<li><a href="javascript:void(0)" class="text-foot"><i class="uil uil-angle-right-b me-1"></i> Контакты</a></li>';
     $footer_nav .= '<li><a href="/privacy-policy" class="text-foot"><i class="uil uil-angle-right-b me-1"></i> Политика конфиденциальности</a></li>';
 
     $footer_nav .= '</ul>';

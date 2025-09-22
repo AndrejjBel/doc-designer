@@ -79,6 +79,20 @@ class PagesFrontController extends Controller
                 ]
             );
         }
+        if ($page_slug == 'services') {
+            return view('services',
+                [
+                    'data'  => [
+                        'body_classes' => 'page cont-page privacy-policy',
+                        'temp_header' => 'header-cont-page',
+                        'title' => 'Сервисы',
+                        'description' => 'Сервисы в Онлайн конструкторе быстрого создания юридических документов без ошибок.',
+                        'mod' => 'page',
+                        'script_rend' => '',
+                    ]
+                ]
+            );
+        }
         $page_data = PagesModel::getPostForSlug($page_slug);
         if ($page_data) {
             $vars = '';
