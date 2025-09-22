@@ -20,12 +20,12 @@ if (is_admin_allowed()) {
                                         <img src="<?php //echo $home_url;?>/public/images/favicon/android-chrome-512x512.png" height="24" alt="">
                                     </a> -->
                                     <div class="mt-4"><span class="footer-logo-title">Верный метод</span><br>юридическая помощь<br>юристы И адвокаты</div>
-                                    <ul class="list-unstyled social-icon foot-social-icon mb-0 mt-4">
+                                    <!-- <ul class="list-unstyled social-icon foot-social-icon mb-0 mt-4">
                                         <li class="list-inline-item mb-0"><a href="javascript:void(0)" target="_blank" class="rounded"><i class="uil uil-facebook-f align-middle" title="facebook"></i></a></li>
                                         <li class="list-inline-item mb-0"><a href="javascript:void(0)" target="_blank" class="rounded"><i class="uil uil-instagram align-middle" title="instagram"></i></a></li>
                                         <li class="list-inline-item mb-0"><a href="javascript:void(0)" target="_blank" class="rounded"><i class="uil uil-twitter align-middle" title="twitter"></i></a></li>
                                         <li class="list-inline-item mb-0"><a href="mailto:support@support.in" class="rounded"><i class="uil uil-envelope align-middle" title="email"></i></a></li>
-                                    </ul>
+                                    </ul> -->
                                 </div>
 
                                 <div class="col-lg-4 col-md-6 col-12 mt-4 mt-sm-0 pt-2 pt-sm-0">
