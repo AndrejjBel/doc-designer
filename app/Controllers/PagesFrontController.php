@@ -65,6 +65,20 @@ class PagesFrontController extends Controller
         if ($page_slug == 'dashboard') {
             return (new AdminController())->dashboard();
         }
+        if ($page_slug == 'privacy-policy') {
+            return view('privacy-policy',
+                [
+                    'data'  => [
+                        'body_classes' => 'page cont-page privacy-policy',
+                        'temp_header' => 'header-cont-page',
+                        'title' => 'Политика конфиденциальности',
+                        'description' => 'Политика конфиденциальности в Онлайн конструкторе быстрого создания юридических документов без ошибок.',
+                        'mod' => 'page',
+                        'script_rend' => '',
+                    ]
+                ]
+            );
+        }
         $page_data = PagesModel::getPostForSlug($page_slug);
         if ($page_data) {
             $vars = '';
@@ -141,4 +155,7 @@ class PagesFrontController extends Controller
             ]
         );
     }
+
+    public function privacy_policy(): View
+    {}
 }

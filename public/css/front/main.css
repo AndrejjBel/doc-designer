@@ -489,6 +489,18 @@ button::-moz-focus-inner {
     font-size: calc(1.375rem);
 }
 
+.page h1 {
+    font-size: 2rem;
+}
+
+.page h2 {
+    font-size: 1.5rem;
+}
+
+.page p {
+    margin-bottom: .5rem;
+}
+
 @media (min-width: 1200px) {
     .doc-page .h1, h1 {
         font-size: 1.75rem;

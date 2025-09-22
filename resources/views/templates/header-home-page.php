@@ -28,12 +28,7 @@ $site_settings = json_decode(site_settings('site_settings'));
             </a>
 
             <div id="navigation">
-                <ul class="navigation-menu nav-light">
-                    <li><a href="javascript:void(0)" class="sub-menu-item">Услуги</a></li>
-                    <li><a href="javascript:void(0)" class="sub-menu-item">Документы</a></li>
-                    <li><a href="javascript:void(0)" class="sub-menu-item">Сервисы</a></li>
-
-                </ul>
+                <?php echo top_nav_site('nav-light');?>
             </div>
 
             <div class="menu-extras">

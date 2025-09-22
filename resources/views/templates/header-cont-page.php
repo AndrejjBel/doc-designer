@@ -27,12 +27,7 @@ if (is_admin_allowed()) {
             </a>
 
             <div id="navigation">
-                <ul class="navigation-menu">
-                    <li><a href="javascript:void(0)" class="sub-menu-item">Услуги</a></li>
-                    <li><a href="javascript:void(0)" class="sub-menu-item">Документы</a></li>
-                    <li><a href="javascript:void(0)" class="sub-menu-item">Сервисы</a></li>
-
-                </ul>
+                <?php echo top_nav_site();?>
             </div>
 
             <div class="menu-extras">
