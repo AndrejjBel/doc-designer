@@ -6,11 +6,11 @@ insertTemplate('/templates/header-home', ['data' => $data]);
     <div class="row">
         <div class="col-12">
             <div class="page-title text-center mb-4 pb-2">
-                <h1 class="mb-4">Услуги</h1>
+                <h1 class="mb-4">Документы</h1>
             </div>
         </div>
 
-        <div class="page-content services"></div>
+        <div class="page-content documents"></div>
     </div>
 </div>
 

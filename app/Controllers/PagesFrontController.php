@@ -79,14 +79,56 @@ class PagesFrontController extends Controller
                 ]
             );
         }
+        if ($page_slug == 'official-services') {
+            return view('official-services',
+                [
+                    'data'  => [
+                        'body_classes' => 'page cont-page official-services',
+                        'temp_header' => 'header-cont-page',
+                        'title' => 'Официальный перечень служб для мониторинга ситуации',
+                        'description' => 'Официальный перечень служб для мониторинга ситуации в Онлайн конструкторе быстрого создания юридических документов без ошибок.',
+                        'mod' => 'page',
+                        'script_rend' => '',
+                    ]
+                ]
+            );
+        }
         if ($page_slug == 'services') {
             return view('services',
                 [
                     'data'  => [
-                        'body_classes' => 'page cont-page privacy-policy',
+                        'body_classes' => 'page cont-page services',
                         'temp_header' => 'header-cont-page',
-                        'title' => 'Сервисы',
-                        'description' => 'Сервисы в Онлайн конструкторе быстрого создания юридических документов без ошибок.',
+                        'title' => 'Услуги',
+                        'description' => 'Услуги в Онлайн конструкторе быстрого создания юридических документов без ошибок.',
+                        'mod' => 'page',
+                        'script_rend' => '',
+                    ]
+                ]
+            );
+        }
+        if ($page_slug == 'documents') {
+            return view('documents',
+                [
+                    'data'  => [
+                        'body_classes' => 'page cont-page documents',
+                        'temp_header' => 'header-cont-page',
+                        'title' => 'Документы',
+                        'description' => 'Документы в Онлайн конструкторе быстрого создания юридических документов без ошибок.',
+                        'mod' => 'page',
+                        'script_rend' => '',
+                    ]
+                ]
+            );
+        }
+        if ($page_slug == 'contacts') {
+            return view('contacts',
+                [
+                    'data'  => [
+                        'body_classes' => 'page cont-page contacts bg-light bg-gradient',
+                        'temp_header' => 'header-cont-page',
+                        'title' => 'Контакты',
+                        'description' => 'Контакты в Онлайн конструкторе быстрого создания юридических документов без ошибок.',
                         'mod' => 'page',
                         'script_rend' => '',
                     ]

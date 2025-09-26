@@ -170,7 +170,7 @@ if ($data['product']) {
 }
 
 // echo '<pre>';
-// var_dump($data['product']['calc']);
+// var_dump($data);
 // echo '</pre>';
 
 insertTemplate('/templates/footer-new', ['data' => $data]);

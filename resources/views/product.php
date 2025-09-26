@@ -194,7 +194,7 @@ $user = $data['user'];
 <?php
 
 // echo '<pre>';
-// var_dump($user);
+// var_dump($data);
 // echo '</pre>';
 
 insertTemplate('/templates/footer-new', ['data' => $data]);
