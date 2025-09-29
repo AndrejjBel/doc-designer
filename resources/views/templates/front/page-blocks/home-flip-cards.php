@@ -18,6 +18,9 @@ $situations = situations_arr();
                     </div>
                     <div class="flip-card-back bg-secondary bg-gradient">
                         <h3><?php echo $situation['back_items']['title']?></h3>
+                        <?php if ($situation['back_items']['text']) { ?>
+                            <p><?php echo $situation['back_items']['text'];?></p>
+                        <?php } ?>
                         <?php foreach ($situation['back_items']['items'] as $key => $back_items) { ?>
                             <a href="<?php echo $back_items['link']?>"><?php echo $back_items['text']?></a>
                         <?php } ?>
