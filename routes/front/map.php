@@ -13,4 +13,4 @@ Route::get('/')->controller(HomeController::class)->name('homepage');
 // Page
 Route::get('/{slug}/')->controller(PagesFrontController::class, 'pages_item')->name('pages-item');
 
-Route::get('/products/{slug}/')->controller(ProductsFrontController::class, 'products_pages')->name('products-pages');
+Route::get('/documents/{slug}/')->controller(ProductsFrontController::class, 'products_pages')->name('products-pages');

@@ -108,6 +108,7 @@ class PagesFrontController extends Controller
             );
         }
         if ($page_slug == 'documents') {
+            $products = ProductsModel::getProductsDocPage();
             return view('documents',
                 [
                     'data'  => [
@@ -117,6 +118,7 @@ class PagesFrontController extends Controller
                         'description' => 'Документы в Онлайн конструкторе быстрого создания юридических документов без ошибок.',
                         'mod' => 'page',
                         'script_rend' => '',
+                        'products' => $products
                     ]
                 ]
             );

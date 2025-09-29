@@ -15,4 +15,9 @@ insertTemplate('/templates/header-home', ['data' => $data]);
 </div>
 
 <?php
+
+// echo '<pre>';
+// var_dump($data['products']);
+// echo '</pre>';
+
 insertTemplate('/templates/footer-new', ['data' => $data]);

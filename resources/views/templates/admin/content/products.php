@@ -128,7 +128,7 @@ if ($data['mod'] == 'dashboard') {
                                                 title="Изменить статус"><?php echo $text_status;?></button>
                                         </td>
                                         <td class="actions-product">
-                                            <a href="/products/<?php echo $product['allsit'];?>" target="_blank" class="text-reset fs-16 mx-1" data-state="def" title="Смотреть">
+                                            <a href="/documents/<?php echo $product['allsit'];?>" target="_blank" class="text-reset fs-16 mx-1" data-state="def" title="Смотреть">
                                                 <i class="ri-eye-line"></i>
                                             </a>
                                             <a href="/admin/product-edit?id=<?php echo $product['id'];?>" class="text-reset fs-16 mx-1 js-user-settings" data-id="product<?php echo $product['id']?>" title="Редактировать">

@@ -187,6 +187,12 @@ class ProductsModel extends Model
         return DB::run($sql)->rowCount();
     }
 
+    public static function getProductsDocPage($isgr=0)
+    {
+        $sql = "SELECT id, parentid, title, allsit FROM products WHERE active = 1 AND isgr = :isgr";
+        return  DB::run($sql, ['isgr' => $isgr])->fetchAll();
+    }
+
     public static function getProductsGr()
     {
         $sql = "SELECT * FROM products WHERE isgr = 1";
