@@ -76,7 +76,7 @@
                                                     echo '<div class="d-flex flex-column flex-md-row gap-2 mt-2">';
                                                     foreach ($stage->btnsStages as $it => $btn) {
                                                         ?>
-                                                        <a href="/documents/<?php echo $btn->stage_btn_link;?>" class="btn btn-primary text-uppercase"> <?php echo $btn->stage_btn_text;?> </a>
+                                                        <a href="/documents/<?php echo $btn->stage_btn_link;?>" class="btn btn-primary text-uppercase" target="_blank"> <?php echo $btn->stage_btn_text;?> </a>
                                                     <?php }
                                                     echo '</div>';
                                                 } ?>
