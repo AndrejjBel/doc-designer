@@ -82,12 +82,10 @@ if (array_key_exists('page_data', $data)) {
 
 <div class="header-fixed-height"></div>
 
-<nav aria-label="breadcrumb" class="container d-inline-block mb-5">
-    <ul class="breadcrumb mb-0 px-0 py-2">
-        <li class="breadcrumb-item"><a href="/">Главная</a></li>
-        <?php if (array_key_exists('product_page', $data)) { ?>
-            <li class="breadcrumb-item"><a href="/documents">Документы</a></li>
-        <?php } ?>
-        <li class="breadcrumb-item active" aria-current="page"><?php echo $page_title;?></li>
-    </ul>
-</nav>
+<div class="container">
+    <?php
+    if (array_key_exists('breadcrumbs', $data)) {
+        echo $data['breadcrumbs'];
+    }
+    ?>
+</div>

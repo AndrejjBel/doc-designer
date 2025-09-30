@@ -14,3 +14,7 @@ Route::get('/')->controller(HomeController::class)->name('homepage');
 Route::get('/{slug}/')->controller(PagesFrontController::class, 'pages_item')->name('pages-item');
 
 Route::get('/documents/{slug}/')->controller(ProductsFrontController::class, 'products_pages')->name('products-pages');
+
+Route::toGroup()->prefix('calculators');
+    Route::get('/neustojka-brak/')->controller(PagesFrontController::class, 'neustojka_brak')->name('neustojka-brak');
+Route::endGroup();

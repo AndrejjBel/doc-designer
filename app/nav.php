@@ -272,7 +272,7 @@ function top_nav_site($nav_light='') {
     $top_nav .= '<ul class="navigation-menu ' . $nav_light . '">';
 
     $top_nav .= '<li><a href="/documents" class="sub-menu-item">Документы</a></li>';
-    $top_nav .= '<li><a href="/services" class="sub-menu-item">Услуги</a></li>';
+    $top_nav .= '<li><a href="/calculators" class="sub-menu-item">Калькуляторы</a></li>';
     $top_nav .= '<li><a href="/official-services" class="sub-menu-item">Сервисы</a></li>';
 
     $top_nav .= '</ul>';
@@ -282,9 +282,8 @@ function top_nav_site($nav_light='') {
 function footer_nav_site_1($nav_light='') {
     $footer_nav = '';
     $footer_nav .= '<ul class="list-unstyled footer-list mt-4">';
-
-    $footer_nav .= '<li><a href="/services" class="text-foot"><i class="uil uil-angle-right-b me-1"></i> Услуги</a></li>';
     $footer_nav .= '<li><a href="/documents" class="text-foot"><i class="uil uil-angle-right-b me-1"></i> Документы</a></li>';
+    $footer_nav .= '<li><a href="/calculators" class="text-foot"><i class="uil uil-angle-right-b me-1"></i> Калькуляторы</a></li>';
     $footer_nav .= '<li><a href="/official-services" class="text-foot"><i class="uil uil-angle-right-b me-1"></i> Сервисы</a></li>';
 
     $footer_nav .= '</ul>';

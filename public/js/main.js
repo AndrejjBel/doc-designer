@@ -607,3 +607,26 @@ function encodeHTMLEntities(text) {
     textArea.innerText = text;
     return textArea.innerHTML;
 }
+
+function calculatorNb(btn) {
+    let form = btn.parentElement.previousElementSibling;
+    let cena = form.elements.cena.value;
+    if (!cena) {
+        form.elements.cena.classList.add('is-invalid');
+    } else {
+        form.elements.cena.classList.remove('is-invalid');
+        let startDate = new Date(form.elements.payment_date.value);
+        let endDate = new Date(form.elements.current_date.value);
+        let days = daysBetween(startDate, endDate);
+        let rnd = (cena/100).toFixed(2);
+        let rnAll = (rnd*days).toFixed(2);
+        document.querySelector('.cena-neust').innerText = cena;
+        document.querySelector('.days-neust').innerText = days;
+        document.querySelector('.rnAll-neust').innerText = rnAll;
+        document.querySelectorAll('.rnd-neust').forEach((item) => {
+            item.innerText = rnd;
+        });
+        btn.parentElement.nextElementSibling.classList.add('active');
+        document.querySelector('#calc-btn').scrollIntoView({ behavior: 'smooth' });
+    }
+}

@@ -18,6 +18,11 @@ use App\Controllers\{
     Auth\VerifyController
 };
 
+use App\Content\{
+    Breadcrumb,
+    Paginator
+};
+
 class PagesFrontController extends Controller
 {
     public function index(): View
@@ -66,6 +71,8 @@ class PagesFrontController extends Controller
             return (new AdminController())->dashboard();
         }
         if ($page_slug == 'privacy-policy') {
+            Breadcrumb::add('/privacy-policy/', 'Политика конфиденциальности', 0);
+            $breadcrumbs = Breadcrumb::out();
             return view('privacy-policy',
                 [
                     'data'  => [
@@ -75,11 +82,14 @@ class PagesFrontController extends Controller
                         'description' => 'Политика конфиденциальности в Онлайн конструкторе быстрого создания юридических документов без ошибок.',
                         'mod' => 'page',
                         'script_rend' => '',
+                        'breadcrumbs' => $breadcrumbs
                     ]
                 ]
             );
         }
         if ($page_slug == 'official-services') {
+            Breadcrumb::add('/official-services/', 'Официальный перечень служб', 0);
+            $breadcrumbs = Breadcrumb::out();
             return view('official-services',
                 [
                     'data'  => [
@@ -89,11 +99,14 @@ class PagesFrontController extends Controller
                         'description' => 'Официальный перечень служб для мониторинга ситуации в Онлайн конструкторе быстрого создания юридических документов без ошибок.',
                         'mod' => 'page',
                         'script_rend' => '',
+                        'breadcrumbs' => $breadcrumbs
                     ]
                 ]
             );
         }
         if ($page_slug == 'services') {
+            Breadcrumb::add('/services/', 'Услуги', 0);
+            $breadcrumbs = Breadcrumb::out();
             return view('services',
                 [
                     'data'  => [
@@ -103,12 +116,15 @@ class PagesFrontController extends Controller
                         'description' => 'Услуги в Онлайн конструкторе быстрого создания юридических документов без ошибок.',
                         'mod' => 'page',
                         'script_rend' => '',
+                        'breadcrumbs' => $breadcrumbs,
                     ]
                 ]
             );
         }
         if ($page_slug == 'documents') {
             $products = ProductsModel::getProductsDocPage();
+            Breadcrumb::add('/documents/', 'Документы', 0);
+            $breadcrumbs = Breadcrumb::out();
             return view('documents',
                 [
                     'data'  => [
@@ -118,12 +134,15 @@ class PagesFrontController extends Controller
                         'description' => 'Документы в Онлайн конструкторе быстрого создания юридических документов без ошибок.',
                         'mod' => 'page',
                         'script_rend' => '',
-                        'products' => $products
+                        'products' => $products,
+                        'breadcrumbs' => $breadcrumbs
                     ]
                 ]
             );
         }
         if ($page_slug == 'contacts') {
+            Breadcrumb::add('/contacts/', 'Контакты', 0);
+            $breadcrumbs = Breadcrumb::out();
             return view('contacts',
                 [
                     'data'  => [
@@ -133,6 +152,24 @@ class PagesFrontController extends Controller
                         'description' => 'Контакты в Онлайн конструкторе быстрого создания юридических документов без ошибок.',
                         'mod' => 'page',
                         'script_rend' => '',
+                        'breadcrumbs' => $breadcrumbs
+                    ]
+                ]
+            );
+        }
+        if ($page_slug == 'calculators') {
+            Breadcrumb::add('/calculators/', 'Калькуляторы', 0);
+            $breadcrumbs = Breadcrumb::out();
+            return view('calculators',
+                [
+                    'data'  => [
+                        'body_classes' => 'page cont-page calculators neustojka-brak',
+                        'temp_header' => 'header-cont-page',
+                        'title' => 'Калькуляторы',
+                        'description' => 'Калькуляторы в Онлайн конструкторе быстрого создания юридических документов без ошибок.',
+                        'mod' => 'page',
+                        'script_rend' => '',
+                        'breadcrumbs' => $breadcrumbs,
                     ]
                 ]
             );
@@ -214,6 +251,23 @@ class PagesFrontController extends Controller
         );
     }
 
-    public function privacy_policy(): View
-    {}
+    public function neustojka_brak(): View
+    {
+        Breadcrumb::add('/calculators/', 'Калькуляторы');
+        Breadcrumb::add('/neustojka-brak/', 'Калькулятор - неустойка, брак', 0);
+        $breadcrumbs = Breadcrumb::out();
+        return view('templates/calculators/neustojka_brak',
+            [
+                'data'  => [
+                    'body_classes' => 'page cont-page calculators neustojka-brak',
+                    'temp_header' => 'header-cont-page',
+                    'title' => 'Калькулятор - неустойка, брак',
+                    'description' => 'Калькулятор - неустойка, брак в Онлайн конструкторе быстрого создания юридических документов без ошибок.',
+                    'mod' => 'page',
+                    'script_rend' => '',
+                    'breadcrumbs' => $breadcrumbs,
+                ]
+            ]
+        );
+    }
 }

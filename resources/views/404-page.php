@@ -11,7 +11,7 @@
 <div class="hl-error-page-content" style="pointer-events: auto;">
     <h1 class="hl-error-page-message">
         <span class="hl-error-page-code">404</span>
-        Not Found!!!        <br>
+        Not Found<br>
         <a href="/"  style="display: block; margin-top: 40px;">На главную</a>
     </h1>
 </div>
