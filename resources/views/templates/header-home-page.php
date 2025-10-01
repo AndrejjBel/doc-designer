@@ -18,8 +18,8 @@ $site_settings = json_decode(site_settings('site_settings'));
     <div class="container">
         <div class="header-container">
             <a class="logo" href="<?php echo $home_link;?>">
-                <img src="<?php echo $home_url;?>/public/images/favicon/android-chrome-512x512.png" height="24" class="logo-light-mode" alt="">
-                <img src="<?php echo $home_url;?>/public/images/favicon/android-chrome-512x512.png" height="24" class="logo-dark-mode" alt="">
+                <img src="../public/images/favicon/android-chrome-512x512.png" height="24" class="logo-light-mode" alt="">
+                <img src="../public/images/favicon/android-chrome-512x512.png" height="24" class="logo-dark-mode" alt="">
                 <div class="text-logo">
                     <span class="d-block fw-bolder text-logo-top">ВЕРНЫЙ МЕТОД</span>
                     <span class="d-block fs-6 fw-medium text-logo-bottom">юридическая помощь</span>
