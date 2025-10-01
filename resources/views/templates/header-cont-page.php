@@ -21,8 +21,8 @@ if (array_key_exists('page_data', $data)) {
     <div class="container">
         <div class="header-container">
             <a class="logo" href="<?php echo $home_link;?>">
-                <img src="<?php echo $home_url;?>/public/images/favicon/android-chrome-512x512.png" height="24" class="logo-light-mode" alt="">
-                <img src="<?php echo $home_url;?>/public/images/favicon/android-chrome-512x512.png" height="24" class="logo-dark-mode" alt="">
+                <img src="../public/images/favicon/android-chrome-512x512.png" height="24" class="logo-light-mode" alt="">
+                <img src="../public/images/favicon/android-chrome-512x512.png" height="24" class="logo-dark-mode" alt="">
                 <div class="text-logo">
                     <span class="d-block fw-bolder text-logo-top">ВЕРНЫЙ МЕТОД</span>
                     <span class="d-block fs-6 fw-medium text-logo-bottom">юридическая помощь</span>
@@ -56,7 +56,7 @@ if (array_key_exists('page_data', $data)) {
                         <div class="dropdown-menu mt-2">
                             <?php if (is_login()) { ?>
                                 <a class="dropdown-item d-flex align-items-center text-dark pb-3" href="/dashboard/">
-                                    <img src="<?php echo $home_url;?>/public/assets/images/no-avatar.png" class="avatar avatar-md-sm rounded-circle border shadow" alt="">
+                                    <img src="../public/assets/images/no-avatar.png" class="avatar avatar-md-sm rounded-circle border shadow" alt="">
                                     <div class="flex-1 ms-2">
                                         <span class="d-block"><?php echo ($currUser['first_name'])? $currUser['first_name'] : $currUser['username'];?></span>
                                         <small class="text-muted"><?php echo rolesMaskTranslate($currUser['roles_mask']);?></small>
