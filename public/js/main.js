@@ -652,8 +652,11 @@ function pleloadImgsNavActive() {
 }
 
 function pleloadImgsHeight() {
-    let piHeight = document.querySelector('.pleload-img img').offsetHeight;
-    document.querySelector('.pleload-imgs').style.height = piHeight+'px';
+    let pi = document.querySelector('.pleload-img img');
+    if (pi) {
+        let piHeight = pi.offsetHeight;
+        document.querySelector('.pleload-imgs').style.height = piHeight+'px';
+    }
 }
 pleloadImgsHeight();
 
