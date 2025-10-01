@@ -1,11 +1,18 @@
 <?php
 $situations = situations_arr();
+$cols = 'col-md-6 col-lg-4 col-xl-3 ';
+$flip_card = '';
+if ($location) {
+    $situations = situations_calc_arr();
+    $cols = 'col-md-6 col-lg-4 ';
+    $flip_card = ' high';
+}
 ?>
 
 <div class="row home-flip-cards">
     <?php foreach ($situations as $key => $situation) { ?>
-        <div class="col-md-6 col-lg-4 col-xl-3 mb-4 home-flip-card">
-            <div class="flip-card mx-auto">
+        <div class="<?php echo $cols;?>mb-4 home-flip-card">
+            <div class="flip-card<?php echo $flip_card;?> mx-auto">
                 <div class="flip-card-inner">
                     <div class="flip-card-front">
                         <img src="../public/images/products-group/<?php echo $situation['img']?>" alt="">

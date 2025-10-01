@@ -428,14 +428,18 @@ function rolesMaskTranslate($mask) {
 
 function scripts_styles_render($script_rend) {
     $script_data = [
-        'product' => '
+    'product' => '
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/suggestions-jquery@22.6.0/dist/css/suggestions.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/suggestions-jquery@22.6.0/dist/js/jquery.suggestions.min.js"></script>',
 
-        'home' => '
+    'home' => '
     <link href="/public/assets/libs/tiny-slider/tiny-slider.css" rel="stylesheet">
-    <script src="/public/assets/libs/tiny-slider/min/tiny-slider.js"></script>'
+    <script src="/public/assets/libs/tiny-slider/min/tiny-slider.js"></script>',
+
+    'calculators' => '
+    <link href="../public/assets/libs/tobii/css/tobii.min.css" rel="stylesheet">
+    <script src="../public/assets/libs/tobii/js/tobii.min.js"></script>',
     ];
 
     if ($script_rend) {

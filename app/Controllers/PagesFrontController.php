@@ -264,7 +264,7 @@ class PagesFrontController extends Controller
                     'title' => 'Калькулятор - неустойка, брак',
                     'description' => 'Калькулятор - неустойка, брак в Онлайн конструкторе быстрого создания юридических документов без ошибок.',
                     'mod' => 'page',
-                    'script_rend' => '',
+                    'script_rend' => 'calculators',
                     'breadcrumbs' => $breadcrumbs,
                 ]
             ]

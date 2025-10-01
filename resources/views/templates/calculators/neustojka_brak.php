@@ -50,7 +50,68 @@ insertTemplate('/templates/header-home', ['data' => $data]);
                     <p><span class="rnd-neust"></span> руб. × <span class="days-neust"></span> дн. = <span class="rnAll-neust fw-bolder"></span> руб.</p>
                 </div>
 
-                <button class="btn btn-success" type="button" name="button">Составить претензию</button>
+                <a href="#preloaddocBtn" id="preloaddocBtn" class="btn btn-success">Составить претензию</a>
+            </div>
+
+            <div id="preload-doc" class="preload-doc mb-5">
+                <div class="row">
+                    <div class="col-lg-6 d-flex flex-column flex-lg-row align-items-center justify-content-center">
+                        <div class="pleload-imgs-wrap d-flex flex-column bg-light border border-2 rounded p-3 ms-auto">
+                            <div class="pleload-imgs d-flex flex-column">
+                                <a href="../public/images/preload/1.png" class="pleload-img rounded lightbox d-inline-block" title="">
+                                    <img src="../public/images/preload/1.png" class="img-fluid" alt="">
+                                </a>
+                                <a href="../public/images/preload/2.png" class="pleload-img rounded lightbox d-inline-block" title="">
+                                    <img src="../public/images/preload/2.png" class="img-fluid" alt="">
+                                </a>
+                                <a href="../public/images/preload/3.png" class="pleload-img rounded lightbox d-inline-block" title="">
+                                    <img src="../public/images/preload/3.png" class="img-fluid" alt="">
+                                </a>
+                                <a href="../public/images/preload/4.png" class="pleload-img rounded lightbox d-inline-block" title="">
+                                    <img src="../public/images/preload/4.png" class="img-fluid" alt="">
+                                </a>
+                                <a href="../public/images/preload/5.png" class="pleload-img rounded lightbox d-inline-block" title="">
+                                    <img src="../public/images/preload/5.png" class="img-fluid" alt="">
+                                </a>
+                                <div class="page-count border">Страница <span>1</span></div>
+                            </div>
+                        </div>
+
+                        <div class="pleload-imgs-nav d-flex flex-lg-column me-lg-auto">
+                            <div class="pleload-imgs-nav-item">
+                                <button class="btn btn-primary" type="button" data-page="1" onclick="pleloadImgsNav(this)" disabled>1</button>
+                            </div>
+                            <div class="pleload-imgs-nav-item">
+                                <button class="btn btn-primary" type="button" data-page="2" onclick="pleloadImgsNav(this)">2</button>
+                            </div>
+                            <div class="pleload-imgs-nav-item">
+                                <button class="btn btn-primary" type="button" data-page="3" onclick="pleloadImgsNav(this)">3</button>
+                            </div>
+                            <div class="pleload-imgs-nav-item">
+                                <button class="btn btn-primary" type="button" data-page="4" onclick="pleloadImgsNav(this)">4</button>
+                            </div>
+                            <div class="pleload-imgs-nav-item">
+                                <button class="btn btn-primary" type="button" data-page="5" onclick="pleloadImgsNav(this)">5</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 order-first order-lg-last mb-4 mb-lg-0">
+                        <p class="fw-bolder">Если вы обнаружили недостатки в качестве купленного товара, вы имеете право потребовать от продавца вернуть бракованную вещь или обменять её на аналогичную.</p>
+                        <p class="fw-bolder">В таком случае ваша претензия должна включать в себя:</p>
+                        <ul class="fw-semibold">
+                            <li>изложения обстоятельств, при которых была совершена покупка, с указанием ее даты, времени и места;</li>
+                            <li>реквизиты товарного или кассового чека (отсутствие платежного документа не является причиной отказа в принятии претензии);</li>
+                            <li>описание товара и его основные эксплуатационные характеристики, в том числе серийный номер, артикул и другие данные; описание выявленных недостатков и их влияние на потребительские свойства продукта;</li>
+                            <li>предложение к продавцу организовать экспертизу вещи за его счет, в случае сомнений в справедливости ваших утверждений;</li>
+                            <li>способ доставки в торговую точку товара большого размера и весом свыше 5 килограмм (согласно законодательству эта обязанность ложится на продавца).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-situation">
+                <?php insertTemplate('/templates/front/page-blocks/home-flip-cards', ['location' => 'calculators']); ?>
             </div>
         </div>
     </div>

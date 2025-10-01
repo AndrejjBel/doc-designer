@@ -630,3 +630,37 @@ function calculatorNb(btn) {
         document.querySelector('#calc-btn').scrollIntoView({ behavior: 'smooth' });
     }
 }
+
+function pleloadImgsNav(btn) {
+    console.dir(btn.dataset.page);
+    console.dir(btn.parentElement.parentElement.children[0]);
+    let piHeight = document.querySelector('.pleload-img img').offsetHeight+16;
+    let pageNum = btn.dataset.page-1;
+    btn.parentElement.parentElement.previousElementSibling.children[0].children[0].style.marginTop = '-'+pageNum*piHeight+'px';
+    document.querySelector('.page-count span').innerText = btn.dataset.page;
+    pleloadImgsNavActive();
+    btn.disabled = true;
+}
+
+function pleloadImgsNavActive() {
+    let navs = document.querySelectorAll('.pleload-imgs-nav-item button');
+    if (navs) {
+        navs.forEach((nav) => {
+            nav.disabled = false;
+        });
+    }
+}
+
+function pleloadImgsHeight() {
+    let piHeight = document.querySelector('.pleload-img img').offsetHeight;
+    document.querySelector('.pleload-imgs').style.height = piHeight+'px';
+}
+pleloadImgsHeight();
+
+window.addEventListener('resize', () => {
+    pleloadImgsHeight();
+    pleloadImgsNavActive();
+    document.querySelector('.pleload-imgs-nav').children[0].children[0].disabled = true;
+    document.querySelector('.page-count span').innerText = 1;
+    document.querySelector('.pleload-imgs').children[0].style.marginTop = '0'
+});
