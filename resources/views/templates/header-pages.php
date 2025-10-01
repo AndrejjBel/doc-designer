@@ -15,7 +15,7 @@ if (is_admin_allowed()) {
 <header id="masthead" class="header-page">
     <div class="container-fluid d-flex gap-1 align-items-center justify-content-between w-100 pt-2 pb-2 border-bottom">
         <a href="/" class="d-flex align-items-center text-body-emphasis text-decoration-none">
-            <img src="<?php echo $home_url;?>/public/images/favicon/android-chrome-512x512.png" class="logo-img me-2" alt="logo">
+            <img src="../public/images/favicon/android-chrome-512x512.png" class="logo-img me-2" alt="logo">
             <!-- <img src="../public/images/logo-txtgen1.png" class="logo-img me-2" alt=""> -->
             <div class="text-logo">
                 <span class="d-block fs-28 fw-bolder">ВЕРНЫЙ МЕТОД</span>
