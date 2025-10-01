@@ -202,6 +202,8 @@ class PagesFrontController extends Controller
             }
 
             if ($page_data['status']) {
+                Breadcrumb::add($page_slug, $page_data['title'], 0);
+                $breadcrumbs = Breadcrumb::out();
                 return view($view,
                     [
                         'data'  => [
@@ -214,7 +216,8 @@ class PagesFrontController extends Controller
                             'page_data' => $page_data,
                             'product' => $product,
                             'vars' => $vars,
-                            'varsJson' => $varsJson
+                            'varsJson' => $varsJson,
+                            'breadcrumbs' => $breadcrumbs
                         ]
                     ]
                 );
