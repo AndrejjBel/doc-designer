@@ -53,7 +53,7 @@ $site_settings = json_decode(site_settings('site_settings'));
                         <div class="dropdown-menu mt-2">
                             <?php if (is_login()) { ?>
                                 <a class="dropdown-item d-flex align-items-center text-dark pb-3" href="/dashboard/">
-                                    <img src="<?php echo $home_url;?>/public/assets/images/no-avatar.png" class="avatar avatar-md-sm rounded-circle border shadow" alt="">
+                                    <img src="../public/assets/images/no-avatar.png" class="avatar avatar-md-sm rounded-circle border shadow" alt="">
                                     <div class="flex-1 ms-2">
                                         <span class="d-block"><?php echo ($currUser['first_name'])? $currUser['first_name'] : $currUser['username'];?></span>
                                         <small class="text-muted"><?php echo rolesMaskTranslate($currUser['roles_mask']);?></small>
