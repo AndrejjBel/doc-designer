@@ -70,12 +70,15 @@ $user = $data['user'];
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body mt-3 mb-3">
-                <h4 class="modal-title" id="warning-form-modal-modalLabel">Заполните все поля формы!</h4>
+                <h4 class="modal-title" id="warning-form-modal-modalLabel">Не все поля формы заполнены!</h4>
             </div>
-            <!-- <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Отмена</button>
-                <button id="delete-product" type="button" class="btn btn-success" data-bs-dismiss="modal" data-id="0" onclick="productDelete(this)">Да, удалить</button>
-            </div> -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-bs-dismiss="modal">Заполнить поля</button>
+                <!-- <button id="buy-product" type="button" class="btn btn-warning"
+                    data-bs-dismiss="modal"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modal-buy-doc">Все равно купить</button> -->
+            </div>
         </div>
     </div>
 </div>

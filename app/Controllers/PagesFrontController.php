@@ -122,6 +122,7 @@ class PagesFrontController extends Controller
             );
         }
         if ($page_slug == 'documents') {
+            // $products_all = ProductsModel::getProductsAll();
             $products = ProductsModel::getProductsDocPage();
             Breadcrumb::add('/documents/', 'Документы', 0);
             $breadcrumbs = Breadcrumb::out();
@@ -135,6 +136,7 @@ class PagesFrontController extends Controller
                         'mod' => 'page',
                         'script_rend' => '',
                         'products' => $products,
+                        // 'products_all' => $products_all,
                         'breadcrumbs' => $breadcrumbs
                     ]
                 ]

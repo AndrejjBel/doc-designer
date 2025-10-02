@@ -330,6 +330,18 @@ function bloksPageFront($bloks, $product='', $vars='') {
     return $content;
 }
 
+function documents_list($docs) {
+    $content = '';
+    if (count($docs)) {
+        foreach ($docs as $key => $doc) {
+            $content .= '<div class="documents-list-item">';
+            $content .= '<a href="/documents/' . $doc['allsit'] . '" target="_blanc">' . $doc['title'] . '</a>';
+            $content .= '</div>';
+        }
+    }
+    return $content;
+}
+
 function bloks_names($name) {
     $bn = [
         'ssi' => 'Этапы решения вопроса',

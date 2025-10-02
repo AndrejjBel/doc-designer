@@ -52,7 +52,10 @@ $seo = json_decode($product['ceo']);
                 data-post-type="products"
                 data-type="<?php echo ($duplicate)? 'add' : 'edit';?>"
                 onblur="slugUnicActions(this)">
-            <a href="/products/<?php echo $product['allsit'];?>" class="btn btn-success" title="Открыть на сайте">
+            <button id="generate-link" class="btn btn-primary" type="button" name="button" onclick="generateLink()" title="Сгенерировать из наименования">
+                <i class="bi bi-bootstrap-reboot"></i>
+            </button>
+            <a href="/documents/<?php echo $product['allsit'];?>" class="btn btn-success" target="_blank" title="Открыть на сайте">
                 <i class="bi bi-box-arrow-up-right"></i>
             </a>
             <div id="title" class="warning-feedback">Ссылка уникализирована</div>

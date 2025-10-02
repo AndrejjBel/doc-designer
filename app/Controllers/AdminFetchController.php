@@ -378,12 +378,12 @@ class AdminFetchController extends Controller
 
             // $is_post_slug = unicValue('products', 'allsit', $allPost['allsit']);
             $old_link = explode('-', $allPost['allsit']);
-            $is_post_slug = unicValueNotId('products', 'allsit', $allPost['product_id'], $old_link[0]);
+            $is_post_slug = unicValueNotId('products', 'allsit', $allPost['product_id'], $allPost['allsit']);
             if (count($is_post_slug) == 0) {
                 $allsit = $allPost['allsit'];
             } elseif (count($is_post_slug) == 1) {
-                if ($is_post_slug[0] == $old_link[0]) {
-                    $allsit = $old_link[0] . '-2';
+                if ($is_post_slug[0] == $allPost['allsit']) {
+                    $allsit = $allPost['allsit'] . '-2';
                 } else {
                     $allsit = $allPost['allsit'];
                 }
@@ -426,7 +426,7 @@ class AdminFetchController extends Controller
         }
 
         $message['post'] = $allPost;
-        $message['is_post_slug'] = $is_post_slug;
+        $message['allsit'] = $allsit;
 
         // $message['calc'] = $calc;
         $result = ['error' => $error, 'message' => $message];

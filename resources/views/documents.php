@@ -10,14 +10,18 @@ insertTemplate('/templates/header-home', ['data' => $data]);
             </div>
         </div>
 
-        <div class="page-content documents"></div>
+        <div class="page-content documents">
+            <div class="documents-list">
+                <?php echo documents_list($data['products']);?>
+            </div>
+        </div>
     </div>
 </div>
 
 <?php
 
-// echo '<pre>';
-// var_dump($data['products']);
-// echo '</pre>';
+echo '<pre>';
+var_dump($data['products']);
+echo '</pre>';
 
 insertTemplate('/templates/footer-new', ['data' => $data]);

@@ -661,9 +661,15 @@ function pleloadImgsHeight() {
 pleloadImgsHeight();
 
 window.addEventListener('resize', () => {
-    pleloadImgsHeight();
-    pleloadImgsNavActive();
-    document.querySelector('.pleload-imgs-nav').children[0].children[0].disabled = true;
-    document.querySelector('.page-count span').innerText = 1;
-    document.querySelector('.pleload-imgs').children[0].style.marginTop = '0'
+    if (document.querySelector('.calculators')) {
+        pleloadImgsHeight();
+        pleloadImgsNavActive();
+        document.querySelector('.pleload-imgs-nav').children[0].children[0].disabled = true;
+        document.querySelector('.page-count span').innerText = 1;
+        document.querySelector('.pleload-imgs').children[0].style.marginTop = '0'
+    }
 });
+
+function inputIsvalid(input) {
+    input.classList.remove('is-invalid');
+}

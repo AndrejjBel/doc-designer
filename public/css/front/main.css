@@ -619,6 +619,8 @@ button::-moz-focus-inner {
     border-radius: 0px 8px 8px 0px;
 }
 
+.documents-list {}
+
 @media (min-width: 1200px) {
     .doc-page .h1, h1 {
         font-size: 1.75rem;

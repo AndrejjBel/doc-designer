@@ -18,7 +18,7 @@ insertTemplate('/templates/header-home', ['data' => $data]);
                 <div class="row flex-column align-items-center justify-content-center">
                     <div class="col-md-6 mb-3">
                         <label for="cena" class="form-label">Цена товара</label>
-                        <input id="cena" name="cena" type="number" class="form-control">
+                        <input id="cena" name="cena" type="number" class="form-control" oninput="inputIsvalid(this)">
                     </div>
 
                     <div class="col-md-6 mb-3">
