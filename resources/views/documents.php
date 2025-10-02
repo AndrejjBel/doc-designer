@@ -20,8 +20,8 @@ insertTemplate('/templates/header-home', ['data' => $data]);
 
 <?php
 
-echo '<pre>';
-var_dump($data['products']);
-echo '</pre>';
+// echo '<pre>';
+// var_dump($data['products']);
+// echo '</pre>';
 
 insertTemplate('/templates/footer-new', ['data' => $data]);
