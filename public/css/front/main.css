@@ -619,6 +619,12 @@ button::-moz-focus-inner {
     border-radius: 0px 8px 8px 0px;
 }
 
+.btn-close-custom {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+
 .documents-list {}
 
 @media (min-width: 1200px) {

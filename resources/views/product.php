@@ -1,6 +1,10 @@
 <?php
 insertTemplate('/templates/header-new', ['data' => $data]);
 $user = $data['user'];
+$link_lk = '/login';
+if (is_login()) {
+    $link_lk = '/dashboard/user-orders';
+}
 ?>
 <div class="container">
     <div class="row">
@@ -9,15 +13,24 @@ $user = $data['user'];
 
             <h1 class="text-center mb-5"><?php echo $data['product']['title'];?></h1>
 
+            <div class="description mb-4">
+                <?php echo htmlspecialchars_decode($data['product']['description'], ENT_NOQUOTES);?>
+
+                <div class="description-bottom mt-2">
+                    <p>После заполнения всех полей и оплаты, документ будет полностью сформирован и отправлен в форме файла .pdf на указанный Вами e-mail.</p>
+                    <p>После оплаты будет доступен для скачивания в <a href="<?php echo $link_lk;?>" target="_blank">Личном кабинете</a>.</p>
+                </div>
+            </div>
+
             <div class="d-flex gap-2 justify-content-between product-btn">
-                <button id="btn-fields" class="btn btn-sm btn-primary mt-2 mt-md-0 d-inline-block d-lg-none"
+                <button id="btn-fields" class="btn btn-primary mt-2 mt-md-0 d-inline-block d-lg-none"
                 type="button"
                 data-bs-toggle="offcanvas"
                 data-bs-target="#offcanvasFields"
                 aria-controls="offcanvasVars">Поля</button>
 
                 <button
-                    class="btn btn-sm btn-primary mt-2 mt-md-0 pay-action"
+                    class="btn btn-primary mt-2 mt-md-0 pay-action"
                     type="button"
                     name="button"
                     onclick="payAction(this)">Купить за <?php echo $data['product']['price'];?>руб.</button>
@@ -174,8 +187,8 @@ $user = $data['user'];
 <div id="offcanvasFields" class="offcanvas offcanvas-start offcanvas-fields" tabindex="-1" aria-labelledby="offcanvasFieldsLabel">
     <div class="offcanvas-header">
         <h5 id="offcanvasFieldsLabel">Поля</h5>
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
+    <button type="button" class="btn-close text-reset btn-close-custom" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 
     <div class="offcanvas-body syncscroll" name="pageSync">
         <form id="fields-list-mob" class="fields-list">

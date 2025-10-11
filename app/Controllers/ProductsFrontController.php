@@ -12,6 +12,10 @@ use App\Models\{
     User\UsersModel
 };
 use App\Controllers\Admin\AdminController;
+use App\Content\{
+    Breadcrumb,
+    Paginator
+};
 
 class ProductsFrontController extends Controller
 {
@@ -77,6 +81,9 @@ class ProductsFrontController extends Controller
     {
         $page_slug = Request::param('slug')->asString();
         $product = ProductsModel::getProductForSlug($page_slug);
+        Breadcrumb::add('/documents/', 'Документы');
+        Breadcrumb::add('/neustojka-brak/', $product['title'], 0);
+        $breadcrumbs = Breadcrumb::out();
         if ($product) {
             $user = UsersModel::getUser();
             $vars = VarsModel::getVarsAll();
@@ -97,7 +104,8 @@ class ProductsFrontController extends Controller
                             'page_data' => $product,
                             'vars' => $vars,
                             'varsJson' => $varsJson,
-                            'user' => $user
+                            'user' => $user,
+                            'breadcrumbs' => $breadcrumbs
                         ]
                     ]
                 );

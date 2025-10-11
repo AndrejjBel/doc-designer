@@ -335,7 +335,7 @@ function documents_list($docs) {
     if (count($docs)) {
         foreach ($docs as $key => $doc) {
             $content .= '<div class="documents-list-item">';
-            $content .= '<a href="/documents/' . $doc['allsit'] . '" target="_blanc">' . $doc['title'] . '</a>';
+            $content .= '<a href="/documents/' . $doc['allsit'] . '" target="_blanc">' . $doc['title'] . ' - ' . $doc['price'] . 'руб.</a>';
             $content .= '</div>';
         }
     }

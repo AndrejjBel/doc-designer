@@ -189,7 +189,7 @@ class ProductsModel extends Model
 
     public static function getProductsDocPage($isgr=0)
     {
-        $sql = "SELECT id, parentid, title, allsit FROM products WHERE active = 1 AND isgr = :isgr";
+        $sql = "SELECT id, parentid, title, description, price, allsit FROM products WHERE active = 1 AND isgr = :isgr";
         return  DB::run($sql, ['isgr' => $isgr])->fetchAll();
     }
 
