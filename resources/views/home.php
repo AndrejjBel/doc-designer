@@ -36,7 +36,7 @@ insertTemplate('/templates/header-home', ['data' => $data]);
             </div>
         </div>
     </div>
-    <?php insertTemplate('/templates/front/page-blocks/home-flip-cards'); ?>
+    <?php insertTemplate('/templates/front/page-blocks/home-flip-cards', ['location' => 'home']); ?>
 </div>
 
 <div class="container">

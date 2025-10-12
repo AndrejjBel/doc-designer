@@ -2,7 +2,7 @@
 $situations = situations_arr();
 $cols = 'col-md-6 col-lg-4 col-xl-3 ';
 $flip_card = '';
-if ($location) {
+if ($location == 'calculators') {
     $situations = situations_calc_arr();
     $cols = 'col-md-6 col-lg-4 ';
     $flip_card = ' high';

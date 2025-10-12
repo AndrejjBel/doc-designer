@@ -334,8 +334,12 @@ function documents_list($docs) {
     $content = '';
     if (count($docs)) {
         foreach ($docs as $key => $doc) {
-            $content .= '<div class="documents-list-item">';
-            $content .= '<a href="/documents/' . $doc['allsit'] . '" target="_blanc">' . $doc['title'] . ' - ' . $doc['price'] . 'руб.</a>';
+            $content .= '<div class="documents-list-item col-md-6 col-lg-4 mb-4 pb-2">';
+            $content .= '<div class="card blog blog-primary document-card rounded border-0 shadow overflow-hidden p-3">';
+            $content .= '<a href="/documents/' . $doc['allsit'] . '" title="Купить за ' . $doc['price'] . 'руб." target="_blanc"></a>';
+            $content .= '<h3 class="">' . $doc['title'] . '</h1>';
+            $content .= '<div class="doc-price text-end fw-bolder text-primary">' . $doc['price'] . 'руб.</div>';
+            $content .= '</div>';
             $content .= '</div>';
         }
     }
