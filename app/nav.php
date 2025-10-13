@@ -296,6 +296,7 @@ function footer_nav_site_2($nav_light='') {
 
 
     $footer_nav .= '<li><a href="/contacts" class="text-foot"><i class="uil uil-angle-right-b me-1"></i> Контакты</a></li>';
+    $footer_nav .= '<li><a href="/payment-return-terms" class="text-foot"><i class="uil uil-angle-right-b me-1"></i> Условия оплаты и возврата</a></li>';
     $footer_nav .= '<li><a href="/privacy-policy" class="text-foot"><i class="uil uil-angle-right-b me-1"></i> Политика конфиденциальности</a></li>';
 
     $footer_nav .= '</ul>';

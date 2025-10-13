@@ -161,6 +161,23 @@ class PagesFrontController extends Controller
                 ]
             );
         }
+        if ($page_slug == 'payment-return-terms') {
+            Breadcrumb::add('/payment-return-terms/', 'Условия оплаты и возврата', 0);
+            $breadcrumbs = Breadcrumb::out();
+            return view('payment-return',
+                [
+                    'data'  => [
+                        'body_classes' => 'page cont-page payment-return',
+                        'temp_header' => 'header-cont-page',
+                        'title' => 'Условия оплаты и возврата',
+                        'description' => 'Условия оплаты и возврата в Онлайн конструкторе быстрого создания юридических документов без ошибок.',
+                        'mod' => 'page',
+                        'script_rend' => '',
+                        'breadcrumbs' => $breadcrumbs
+                    ]
+                ]
+            );
+        }
         if ($page_slug == 'calculators') {
             Breadcrumb::add('/calculators/', 'Калькуляторы', 0);
             $breadcrumbs = Breadcrumb::out();

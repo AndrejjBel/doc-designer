@@ -498,9 +498,9 @@ validateFormValid('form#buy_doc_form');
 
 // console.dir(document.querySelectorAll('form#fields-list'));
 
-document.querySelectorAll('form#fields-list').forEach((item, i) => {
-    console.dir(item);
-});
+// document.querySelectorAll('form#fields-list').forEach((item, i) => {
+//     console.dir(item);
+// });
 
 
 function phone_mask(e) {
