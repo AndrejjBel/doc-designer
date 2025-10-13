@@ -79,7 +79,7 @@ insertTemplate('/templates/header-home', ['data' => $data]);
                             </div>
                             <div class="flex-1 content">
                                 <h6 class="title fw-bold mb-0">Email</h6>
-                                <a href="mailto:contact@example.com" class="text-primary">contact@example.com</a>
+                                <a href="mailto:info@vernyj-metod.ru" class="text-primary">info@vernyj-metod.ru</a>
                             </div>
                         </div>
 
@@ -99,7 +99,7 @@ insertTemplate('/templates/header-home', ['data' => $data]);
                             </div>
                             <div class="flex-1 content">
                                 <h6 class="title fw-bold mb-0">Адрес</h6>
-                                <p>Россия, Краснодарский край г. Краснодар, ул. Офицерская, дом № 37,офис №1</p>
+                                <p>Россия, Краснодарский край г. Краснодар, ул.Красная, д.149, оф.№1</p>
                             </div>
                         </div>
                     </div>
