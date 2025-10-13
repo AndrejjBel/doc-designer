@@ -648,6 +648,15 @@ button::-moz-focus-inner {
     margin-top: auto;
 }
 
+/* .documents-filtr {
+    max-height: 116px;
+    overflow: hidden;
+}
+
+.documents-filtr.vision {
+    max-height: 100%;
+} */
+
 @media (min-width: 1200px) {
     .doc-page .h1, h1 {
         font-size: 1.75rem;
@@ -700,6 +709,10 @@ button::-moz-focus-inner {
 @media (max-width: 576px) {
     .block-tabs .nav-pills a.nav-link {
         max-width: 100%;
+    }
+
+    .documents-filtr-item button {
+        width: 100%;
     }
 }
 

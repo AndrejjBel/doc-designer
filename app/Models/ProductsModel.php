@@ -199,6 +199,12 @@ class ProductsModel extends Model
         return DB::run($sql)->fetchAll();
     }
 
+    public static function getProductsGrNames()
+    {
+        $sql = "SELECT id, parentid, title FROM products WHERE isgr = 1";
+        return DB::run($sql)->fetchAll();
+    }
+
     public static function getProductsNogr()
     {
         $sql = "SELECT id FROM products WHERE isgr = 0";

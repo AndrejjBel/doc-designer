@@ -330,16 +330,59 @@ function bloksPageFront($bloks, $product='', $vars='') {
     return $content;
 }
 
-function documents_list($docs) {
+function documents_list($docs, $groups) {
+    $groups_parent = [];
     $content = '';
     if (count($docs)) {
+        foreach ($groups as $key => $group) {
+            $groups_parent[$group['id']] = $group['parentid'];
+        }
+
         foreach ($docs as $key => $doc) {
-            $content .= '<div class="documents-list-item col-md-6 col-lg-4 mb-4 pb-2">';
+            $content .= '<div class="documents-list-item col-md-6 col-lg-4 mb-4 pb-2" data-parentid="' . $groups_parent[$doc['parentid']] . '">';
             $content .= '<div class="card blog blog-primary document-card rounded border-0 shadow overflow-hidden p-3">';
             $content .= '<a href="/documents/' . $doc['allsit'] . '" title="Купить за ' . $doc['price'] . 'руб." target="_blanc"></a>';
-            $content .= '<h3 class="">' . $doc['title'] . '</h1>';
+            $content .= '<h3 class="">' . trim(mb_eregi_replace('[0-9./]', '', $doc['title'])) . '</h1>';
             $content .= '<div class="doc-price text-end fw-bolder text-primary">' . $doc['price'] . 'руб.</div>';
             $content .= '</div>';
+            $content .= '</div>';
+        }
+    }
+    return ['content' => $content, 'count' => count($docs)];
+}
+
+function documents_list_filtr($docs, $groups) {
+    $groups_parent = [];
+    $groups_names = [];
+    $groups_cur_prod = [];
+    $groups_filtr = [];
+    $content = '';
+    if (count($docs)) {
+        foreach ($groups as $key => $group) {
+            $groups_parent[$group['id']] = $group['parentid'];
+        }
+
+        foreach ($groups as $key => $group) {
+            $groups_names[$group['id']] = $group['title'];
+        }
+
+        foreach ($docs as $key => $doc) {
+            $groups_cur_prod[] = $doc['parentid'];
+        }
+
+        foreach (array_unique($groups_cur_prod) as $key => $group) {
+            $groups_filtr[$group] = $groups_parent[$group];
+        }
+
+        $content .= '<div class="col-12 col-sm-auto mb-3 documents-filtr-item">
+        <button class="btn btn-soft-success" type="button" data-groupid="all" onclick="documentsFiltr(this)" disabled>Все документы</button>
+        </div>';
+
+        foreach (array_unique($groups_filtr) as $key => $group) {
+            $content .= '<div class="col-12 col-sm-auto mb-3 documents-filtr-item">';
+            $content .= '<button class="btn btn-soft-secondary" type="button" data-groupid="' . $group . '" onclick="documentsFiltr(this)">';
+            $content .= $groups_names[$group];
+            $content .= '</button>';
             $content .= '</div>';
         }
     }
@@ -456,6 +499,9 @@ function scripts_styles_render($script_rend) {
     'calculators' => '
     <link href="../public/assets/libs/tobii/css/tobii.min.css" rel="stylesheet">
     <script src="../public/assets/libs/tobii/js/tobii.min.js"></script>',
+
+    'documents' => '
+    <script src="../public/js/front/documents.js?ver=' . filemtime( HLEB_GLOBAL_DIR . '/public/js/front/documents.js' ) . '" defer></script>',
     ];
 
     if ($script_rend) {
@@ -521,4 +567,20 @@ function compress_js($buffer) {
     $buffer = preg_replace("/(?:(?:\/\*(?:[^*]|(?:\*+[^*\/]))*\*+\/)|(?:(?<!\:|\\\|\'|\")\/\/.*))/", "", $buffer);
     $buffer = str_replace(array("\r\n", "\r", "\n", "\t", "  ", "    ", "    "), "", $buffer);
     return $buffer;
+}
+
+function num_word($value, $words, $show = true) {
+	$num = $value % 100;
+	if ($num > 19) {
+		$num = $num % 10;
+	}
+	$out = ($show) ?  $value . ' ' : '';
+	switch ($num) {
+		case 1:  $out .= $words[0]; break;
+		case 2:
+		case 3:
+		case 4:  $out .= $words[1]; break;
+		default: $out .= $words[2]; break;
+	}	
+	return $out;
 }

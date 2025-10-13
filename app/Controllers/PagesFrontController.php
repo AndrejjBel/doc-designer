@@ -124,6 +124,7 @@ class PagesFrontController extends Controller
         if ($page_slug == 'documents') {
             // $products_all = ProductsModel::getProductsAll();
             $products = ProductsModel::getProductsDocPage();
+            $prodGroups = ProductsModel::getProductsGrNames();
             Breadcrumb::add('/documents/', 'Документы', 0);
             $breadcrumbs = Breadcrumb::out();
             return view('documents',
@@ -134,8 +135,9 @@ class PagesFrontController extends Controller
                         'title' => 'Документы',
                         'description' => 'Документы в Онлайн конструкторе быстрого создания юридических документов без ошибок.',
                         'mod' => 'page',
-                        'script_rend' => '',
+                        'script_rend' => 'documents',
                         'products' => $products,
+                        'prodGroups' => $prodGroups,
                         // 'products_all' => $products_all,
                         'breadcrumbs' => $breadcrumbs
                     ]
