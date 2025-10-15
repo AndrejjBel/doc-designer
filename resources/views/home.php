@@ -43,16 +43,7 @@ insertTemplate('/templates/header-home', ['data' => $data]);
     <?php insertTemplate('/templates/front/page-blocks/faq'); ?>
 </div>
 
-<div class="container mb-6">
-    <div class="row justify-content-center">
-        <div class="col-12 text-center">
-            <div class="section-title mb-4 pb-2">
-                <h4 class="title mb-4">Отзывы пользователей</h4>
-            </div>
-        </div>
-    </div>
-    <?php insertTemplate('/templates/front/page-blocks/home-reviews'); ?>
-</div>
+<?php insertTemplate('/templates/front/page-blocks/home-reviews'); ?>
 
 <section class="section" id="contact">
     <div class="container">
