@@ -25,8 +25,8 @@ class PayCallbackController extends Controller
 
     public function payCallback()
     {
-        $site_settings = json_decode(site_settings('site_settings_pay'));
         $allPost = Request::allPost();
+        $site_settings = json_decode(site_settings('site_settings_pay'));
         $secret_seed = $site_settings->secret_seed;
         $id = $allPost['id'];
         $sum = $allPost['sum'];
@@ -34,7 +34,7 @@ class PayCallbackController extends Controller
         $orderid = $allPost['orderid'];
         $key = $allPost['key'];
 
-        if ($key != md5 ($id.number_format($sum, 2, ".", "").$clientid.$orderid.$secret_seed))
+        if ($key != md5($id.number_format($sum, 2, ".", "").$clientid.$orderid.$secret_seed))
         {
             echo "Error! Hash mismatch";
             exit;
@@ -49,20 +49,20 @@ class PayCallbackController extends Controller
         # нужно отметить, что он оплачен
         // ...
 
-        echo "OK ".md5($id.$secret_seed);
+        echo "OK " . md5($id.$secret_seed);
     }
 
     public function getPayLink()
     {
-        $site_settings = json_decode(site_settings('site_settings_pay'));
         $allPost = Request::allPost();
+        $site_settings = json_decode(site_settings('site_settings_pay'));
         # Логин и пароль от личного кабинета PayKeeper
         $user = $site_settings->pay_user;
         $password = hex2bin($site_settings->pay_pass);
 
         # Basic-авторизация передаётся как base64
-        $base64=base64_encode("$user:$password");
-        $headers=Array();
+        $base64 = base64_encode("$user:$password");
+        $headers = Array();
         array_push($headers,'Content-Type: application/x-www-form-urlencoded');
 
         # Подготавливаем заголовок для авторизации
@@ -74,19 +74,19 @@ class PayCallbackController extends Controller
         # Параметры платежа, сумма - обязательный параметр
         # Остальные параметры можно не задавать
         $payment_data = array (
-            "pay_amount" => 42.50,
-            "clientid" => "Иванов Иван Иванович",
-            "orderid" => "Заказ № 10",
-            "client_email" => "test@example.com",
-            "service_name" => "Услуга",
-            "client_phone" => "8 (910) 123-45-67"
+            "pay_amount" => 42.50, // $allPost['pay_amount'];
+            "clientid" => "Иванов Иван Иванович", // $allPost['clientid'];
+            "orderid" => "Заказ № 10", // $allPost['orderid'];
+            "client_email" => "test@example.com", // $allPost['client_email'];
+            "service_name" => "Услуга", // $allPost['service_name'];
+            "client_phone" => "8 (910) 123-45-67" // $allPost['client_phone'];
         );
 
         # Готовим первый запрос на получение токена безопасности
-        $uri="/info/settings/token/";
+        $uri = "/info/settings/token/";
 
         # Для сетевых запросов в этом примере используется cURL
-        $curl=curl_init();
+        $curl = curl_init();
 
         curl_setopt($curl,CURLOPT_RETURNTRANSFER,true);
         curl_setopt($curl,CURLOPT_URL,$server_paykeeper.$uri);
@@ -95,15 +95,15 @@ class PayCallbackController extends Controller
         curl_setopt($curl,CURLOPT_HEADER,false);
 
         # Инициируем запрос к API
-        $response=curl_exec($curl);
-        $php_array=json_decode($response,true);
+        $response = curl_exec($curl);
+        $php_array = json_decode($response,true);
 
         # В ответе должно быть заполнено поле token, иначе - ошибка
-        if (isset($php_array['token'])) $token=$php_array['token']; else die();
+        if (isset($php_array['token'])) $token = $php_array['token']; else die();
 
 
         # Готовим запрос 3.4 JSON API на получение счёта
-        $uri="/change/invoice/preview/";
+        $uri = "/change/invoice/preview/";
 
         # Формируем список POST параметров
         $request = http_build_query(array_merge($payment_data, array ('token'=>$token)));
@@ -116,7 +116,7 @@ class PayCallbackController extends Controller
         curl_setopt($curl,CURLOPT_POSTFIELDS,$request);
 
 
-        $response=json_decode(curl_exec($curl),true);
+        $response = json_decode(curl_exec($curl),true);
         # В ответе должно быть поле invoice_id, иначе - ошибка
         if (isset($response['invoice_id'])) $invoice_id = $response['invoice_id']; else die();
 
