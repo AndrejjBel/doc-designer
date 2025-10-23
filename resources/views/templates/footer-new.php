@@ -54,10 +54,10 @@ if (is_admin_allowed()) {
 
                         <div class="col-sm-6 mt-4 mt-sm-0 pt-2 pt-sm-0">
                             <ul class="list-unstyled text-sm-end mb-0">
-                                <li class="list-inline-item"><a href="javascript:void(0)"><img src="../public/images/payments-logos/paykeeper.png" class="avatar avatar-ex-sm" title="American Express" alt=""></a></li>
+                                <li class="list-inline-item"><a href="javascript:void(0)"><img src="../public/images/payments-logos/paykeeper.png" class="avatar avatar-ex-sm" title="Paykeeper" alt=""></a></li>
                                 <li class="list-inline-item"><a href="javascript:void(0)"><img src="../public/images/payments-logos/mastercard.png" class="avatar avatar-ex-sm" title="Master Card" alt=""></a></li>
-                                <li class="list-inline-item"><a href="javascript:void(0)"><img src="../public/images/payments-logos/visa.png" class="avatar avatar-ex-sm" title="Paypal" alt=""></a></li>
-                                <li class="list-inline-item"><a href="javascript:void(0)"><img src="../public/images/payments-logos/sbp.png" class="avatar avatar-ex-sm" title="Visa" alt=""></a></li>
+                                <li class="list-inline-item"><a href="javascript:void(0)"><img src="../public/images/payments-logos/visa.png" class="avatar avatar-ex-sm" title="Visa" alt=""></a></li>
+                                <li class="list-inline-item"><a href="javascript:void(0)"><img src="../public/images/payments-logos/sbp.png" class="avatar avatar-ex-sm" title="Sbp" alt=""></a></li>
                             </ul>
                         </div>
                     </div>
