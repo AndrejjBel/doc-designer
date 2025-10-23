@@ -9,6 +9,7 @@ use App\Middlewares\{
 use App\Controllers\{
     AdminFetchController,
     FrontFetchController,
+    PayCallbackController,
     Admin\UsersController,
     Admin\UserAddController,
     Admin\UserEditController,
@@ -29,4 +30,6 @@ Route::toGroup()->protect();
     Route::post('/admin/fetch')->controller(AdminFetchController::class);
 
     Route::post('/front/fetch')->controller(FrontFetchController::class);
+
+    Route::post('/paycallback')->controller(PayCallbackController::class, 'payCallback');
 Route::endGroup();

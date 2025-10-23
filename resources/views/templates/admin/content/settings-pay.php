@@ -2,7 +2,6 @@
 $site_settings = json_decode(site_settings('site_settings_pay'));
 $pay_pass = '';
 if ($site_settings->pay_pass) {
-    // $pay_pass = '........';
     $pay_pass = hex2bin($site_settings->pay_pass);
 }
 ?>
@@ -30,6 +29,14 @@ if ($site_settings->pay_pass) {
 
                 <div class="row mb-3">
                     <div class="col-md-4">
+                        <label for="pay_user" class="form-label">Сервер PayKeeper</label>
+                        <input type="text" id="server_paykeeper" name="server_paykeeper" class="form-control" autocomplete="new-password" value="<?php echo ($site_settings)? $site_settings->server_paykeeper : '';?>">
+                        <span class="help-block"><small>Сервер Api PayKeeper</small></span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
                         <label for="pay_user" class="form-label">Пользователь</label>
                         <input type="text" id="pay_user" name="pay_user" class="form-control" autocomplete="new-password" value="<?php echo ($site_settings)? $site_settings->pay_user : '';?>">
                         <span class="help-block"><small>Пользователь Api</small></span>
@@ -46,6 +53,19 @@ if ($site_settings->pay_pass) {
                             </div>
                         </div>
                         <span class="help-block"><small>Пароль авторизации Api</small></span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="pay_pass" class="form-label">Секретное слово</label>
+                        <div class="input-group input-group-merge">
+                            <input type="password" id="secret_seed" name="secret_seed" class="form-control" autocomplete="new-password" value="<?php echo ($site_settings)? $site_settings->secret_seed : '';?>">
+                            <div class="input-group-text" data-password="false">
+                                <span class="password-eye"></span>
+                            </div>
+                        </div>
+                        <span class="help-block"><small>Секретное слово Api</small></span>
                     </div>
                 </div>
 
