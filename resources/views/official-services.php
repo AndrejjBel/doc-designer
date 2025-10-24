@@ -27,7 +27,7 @@ $services = services_arr();
         </div>
     </div>
 
-    <button id="test" class="btn btn-primary w-50 mb-4" type="button" name="button">Test</button>
+    <!-- <button id="test" class="btn btn-primary w-50 mb-4" type="button" name="button">Test</button> -->
 </div>
 
 <?php echo csrf_field();?>
