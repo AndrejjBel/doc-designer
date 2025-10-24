@@ -691,7 +691,7 @@ const testPay = () => {
             if (!response.ok) {
                 throw new Error('Ошибка запроса');
             }
-            return response; //.json();
+            return response.json();
         })
         .then(data => {
             console.dir(data);
