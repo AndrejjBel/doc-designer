@@ -677,6 +677,8 @@ function inputIsvalid(input) {
 const testPay = () => {
     const btn = document.querySelector('#test');
 
+    if (!btn) return;
+
     btn.addEventListener('click', (e) => {
         console.dir(btn);
         let url = '/paylink';
