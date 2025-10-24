@@ -673,3 +673,34 @@ window.addEventListener('resize', () => {
 function inputIsvalid(input) {
     input.classList.remove('is-invalid');
 }
+
+const testPay = () => {
+    const btn = document.querySelector('#test');
+
+    btn.addEventListener('click', (e) => {
+        console.dir(btn);
+        let url = '/paylink';
+        let formData = new FormData();
+        formData.append('_token', document.querySelector('input[name="_token"]'));
+
+        fetch(url, {
+            method: "POST",
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Ошибка запроса');
+            }
+            return response; //.json();
+        })
+        .then(data => {
+            console.dir(data);
+            // let jsonData = JSON.parse(data.response);
+            // console.dir(jsonData);
+        })
+        .catch(error => {
+            console.dir(error);
+        });
+    });
+}
+testPay();

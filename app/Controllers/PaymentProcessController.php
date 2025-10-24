@@ -6,22 +6,22 @@ use Hleb\Base\Controller;
 use Hleb\Constructor\Data\View;
 use Hleb\Static\Request;
 
-class PayCallbackController extends Controller
+class PaymentProcessController extends Controller
 {
-    public function index()
-    {
-        $allPost = Request::allPost();
-
-        if ($allPost['action'] == 'place_order') {
-            $this->place_order($allPost);
-        }
-        if ($allPost['action'] == 'promt') {
-            $this->promt($allPost);
-        }
-        if ($allPost['action'] == 'buyDocument') {
-            $this->buyDocument($allPost);
-        }
-    }
+    // public function index()
+    // {
+    //     $allPost = Request::allPost();
+    //
+    //     if ($allPost['action'] == 'place_order') {
+    //         $this->place_order($allPost);
+    //     }
+    //     if ($allPost['action'] == 'promt') {
+    //         $this->promt($allPost);
+    //     }
+    //     if ($allPost['action'] == 'buyDocument') {
+    //         $this->buyDocument($allPost);
+    //     }
+    // }
 
     public function payCallback()
     {
@@ -124,6 +124,8 @@ class PayCallbackController extends Controller
         $link = "$server_paykeeper/bill/$invoice_id/";
 
         # Теперь её можно использовать как угодно, например, выводим ссылку на оплату
-        echo $link;
+        // echo $link;
+
+        echo json_encode(['link' => $link], true);
     }
 }

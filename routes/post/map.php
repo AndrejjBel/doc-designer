@@ -9,7 +9,7 @@ use App\Middlewares\{
 use App\Controllers\{
     AdminFetchController,
     FrontFetchController,
-    PayCallbackController,
+    PaymentProcessController,
     Admin\UsersController,
     Admin\UserAddController,
     Admin\UserEditController,
@@ -31,5 +31,8 @@ Route::toGroup()->protect();
 
     Route::post('/front/fetch')->controller(FrontFetchController::class);
 
-    Route::post('/paycallback')->controller(PayCallbackController::class, 'payCallback');
+    // Route::post('/paylink')->controller(PaymentProcessController::class, 'getPayLink');
+    Route::post('/paycallback')->controller(PaymentProcessController::class, 'payCallback');
 Route::endGroup();
+
+Route::post('/paylink')->controller(PaymentProcessController::class, 'getPayLink');

@@ -26,7 +26,11 @@ $services = services_arr();
             <?php } ?>
         </div>
     </div>
+
+    <button id="test" class="btn btn-primary w-50 mb-4" type="button" name="button">Test</button>
 </div>
+
+<?php echo csrf_field();?>
 
 <?php
 insertTemplate('/templates/footer-new', ['data' => $data]);
