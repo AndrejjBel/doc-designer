@@ -31,6 +31,7 @@
     <script src="../public/assets/js/app.js" defer></script>
     <script src="../public/js/main.js?ver=<?php echo filemtime( HLEB_GLOBAL_DIR . '/public/js/main.js' );?>" defer></script>
     <?php echo custom_styles();?>
+    
     <?php if (request_host() == 'yurist-dok.online') { ?>
     <meta name="yandex-verification" content="7b6f7d1a5a989856" />
     <!-- Yandex.Metrika counter -->
