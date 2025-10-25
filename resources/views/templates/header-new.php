@@ -31,6 +31,7 @@
     <script src="../public/assets/js/app.js" defer></script>
     <script src="../public/js/main.js?ver=<?php echo filemtime( HLEB_GLOBAL_DIR . '/public/js/main.js' );?>" defer></script>
     <?php echo custom_styles();?>
+    <!-- <?php echo request_host();?> -->
 
     <?php if (request_host() == 'yurist-dok.online') { ?>
 
