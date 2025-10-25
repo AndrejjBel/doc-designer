@@ -140,7 +140,7 @@ function fieldFillingForm(elem) {
     let ih = document.querySelectorAll('span[data-key="'+elem.name+'"]');
     let inv = document.querySelectorAll('input[name="'+elem.name+'"]');
     let tanv = document.querySelectorAll('textarea[name="'+elem.name+'"]');
-    console.dir(inv);
+    // console.dir(inv);
     if (inv.length) {
         for (var variable of inv) {
             if (variable != elem) {
@@ -167,7 +167,7 @@ function fieldFillingForm(elem) {
         for (var variable of tanv) {
             if (variable != elem) {
                 variable.value = elem.value;
-                console.dir(variable);
+                // console.dir(variable);
             }
             variable.classList.remove('is-invalid');
         }
@@ -310,8 +310,8 @@ function calculator(calc) {
     if (ih.length) {
         ih.forEach((item) => {
             item.innerHTML = result;
-            console.dir(item);
-            console.dir(result);
+            // console.dir(item);
+            // console.dir(result);
         });
     }
 }
@@ -538,7 +538,7 @@ function partyYur(idName) {
         token: "69cff3e74a71d5ece8579d27a89e9532c70bcbf5",
         type: "PARTY",
         onSelect: function(suggestion) {
-            console.log(suggestion);
+            // console.log(suggestion);
             // $("#yur-magazin").val(suggestion.value);
             // $("#yur-inn").val(suggestion.data.inn);
             // $("#yur-ogrn").val(suggestion.data.ogrn);
@@ -548,8 +548,8 @@ function partyYur(idName) {
                 item.value = suggestion.value; //.replace(/"/g, '&quot;'); //.replace("\\\"", "&quot;");
                 item.classList.remove('is-invalid');
 
-                console.dir(suggestion.value.replaceAll('"', '\\"'));//.replace(/"/g, '&quot;'));
-                console.dir(item);
+                // console.dir(suggestion.value.replaceAll('"', '\\"'));//.replace(/"/g, '&quot;'));
+                // console.dir(item);
             });
             document.querySelectorAll('input[name="yur-inn"]').forEach((item, i) => {
                 item.value = suggestion.data.inn;
@@ -683,7 +683,7 @@ const testPay = () => {
         console.dir(btn);
         let url = '/paylink';
         let formData = new FormData();
-        formData.append('_token', document.querySelector('input[name="_token"]'));
+        formData.append('_token', document.querySelector('input[name="_token"]').value);
 
         fetch(url, {
             method: "POST",

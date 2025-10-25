@@ -150,7 +150,7 @@ if (is_login()) {
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="user_cbaccept" name="user_cbaccept" required>
                                 <label class="form-check-label" for="user_cbaccept">
-                                    Соглашаюсь с <a id="lnk_cbaccept" href="#">политикой конфиденциальности и обработкой
+                                    Соглашаюсь с <a id="lnk_cbaccept" href="/privacy-policy">политикой конфиденциальности и обработкой
                                     персональных данных</a>
                                 </label>
                             </div>
@@ -159,12 +159,12 @@ if (is_login()) {
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="user_cbaccept_ret" name="user_cbaccept_ret" required>
                                 <label class="form-check-label" for="user_cbaccept_ret">
-                                    Соглашаюсь с <a id="lnk_cbaccept" href="#">условиями возврата</a>
+                                    Соглашаюсь с <a id="lnk_cbaccept" href="/payment-return-terms">условиями возврата</a>
                                 </label>
                             </div>
                         </div>
                         <div class="mb-3">
-                            <a id="lnk_cbaccept" href="#">Условия оплаты</a>
+                            <a id="lnk_cbaccept" href="/payment-return-terms">Условия оплаты</a>
                         </div>
                     </div>
 

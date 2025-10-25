@@ -82,7 +82,7 @@ class ProductsFrontController extends Controller
         $page_slug = Request::param('slug')->asString();
         $product = ProductsModel::getProductForSlug($page_slug);
         Breadcrumb::add('/documents/', 'Документы');
-        Breadcrumb::add('/neustojka-brak/', $product['title'], 0);
+        Breadcrumb::add('/neustojka-brak/', mb_substr( $product['title'], 0, 100 ), 0);
         $breadcrumbs = Breadcrumb::out();
         if ($product) {
             $user = UsersModel::getUser();

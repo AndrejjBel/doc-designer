@@ -126,6 +126,8 @@ class PaymentProcessController extends Controller
         # Теперь её можно использовать как угодно, например, выводим ссылку на оплату
         // echo $link;
 
-        echo json_encode(['link' => $link], true);
+        $ret = ['link' => $link];
+
+        echo json_encode($ret, true);
     }
 }

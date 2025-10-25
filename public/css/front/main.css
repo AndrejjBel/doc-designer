@@ -61,8 +61,8 @@ footer.footer {
 }
 
 .breadcrumb {
-    display: flex;
-    align-items: center;
+    /* display: flex;
+    align-items: center; */
     padding: 8px 0;
     background: transparent;
 }
@@ -72,7 +72,7 @@ footer.footer {
     font-size: 14px;
     font-weight: 400;
     padding-left: 0;
-    display: inline-block;
+    display: inline;
 }
 
 .breadcrumb .breadcrumb-item:after {
