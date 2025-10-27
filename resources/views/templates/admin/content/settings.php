@@ -101,12 +101,67 @@ if ($site_settings) {
                     <span class="help-block"><small>Стили для сайта</small></span>
                 </div>
 
+                <div class="mb-3">
+                    <label for="contact_email" class="form-label">Email для сообщений контактной формы</label>
+                    <input type="text" id="contact_email" name="contact_email" class="form-control" value="<?php echo ($site_settings)? $site_settings->contact_email : '';?>">
+                    <span class="help-block"><small>Email для сообщений контактной формы</small></span>
+                </div>
+
                 <div class="row">
+                    <label class="form-label">Настройки SMTP</label>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="smtp_host" class="form-label">Host</label>
+                            <input type="text"
+                                id="smtp_host"
+                                name="smtp_host"
+                                class="form-control"
+                                value="<?php echo ($site_settings)? $site_settings->smtp_host : '';?>">
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="smtp_port" class="form-label">Port</label>
+                            <input type="text"
+                                id="smtp_port"
+                                name="smtp_port"
+                                class="form-control"
+                                value="<?php echo ($site_settings)? $site_settings->smtp_port : '';?>">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="smtp_username" class="form-label">Username</label>
+                            <input type="text"
+                                id="smtp_username"
+                                name="smtp_username"
+                                class="form-control"
+                                value="<?php echo ($site_settings)? $site_settings->smtp_username : '';?>">
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="smtp_password" class="form-label">Password</label>
+                            <input type="text"
+                                id="smtp_password"
+                                name="smtp_password"
+                                class="form-control"
+                                value="<?php echo ($site_settings)? $site_settings->smtp_password : '';?>">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <div class="row">
                     <div class="col-md-4">
                         <div class="mb-3">
                             <label class="form-label">Сайт на обслуживании</label>
                             <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="maintenance" name="maintenance" <?php echo (isset($site_settings->maintenance))? checked($site_settings->maintenance) : '';?>>
+                                <input type="checkbox" class="form-check-input" id="maintenance" name="maintenance" <?php //echo (isset($site_settings->maintenance))? checked($site_settings->maintenance) : '';?>>
                                 <label class="form-check-label" for="maintenance">Закрыть сайт на обслуживание</label>
                             </div>
                         </div>
@@ -115,17 +170,17 @@ if ($site_settings) {
                     <div class="col-md-4">
                         <div class="mb-3">
                             <label for="maintenance-date" class="form-label">Дата обслуживания "до"</label>
-                            <input class="form-control" id="maintenance-date" type="date" name="maintenance_date" value="<?php echo (isset($site_settings->maintenance_date))? $site_settings->maintenance_date : '';?>">
+                            <input class="form-control" id="maintenance-date" type="date" name="maintenance_date" value="<?php //echo (isset($site_settings->maintenance_date))? $site_settings->maintenance_date : '';?>">
                         </div>
                     </div>
 
                     <div class="col-md-4">
                         <div class="mb-3">
                             <label for="maintenance-time" class="form-label">Время обслуживания "до"</label>
-                            <input class="form-control" id="maintenance-time" type="time" name="maintenance_time" value="<?php echo (isset($site_settings->maintenance_time))? $site_settings->maintenance_time : '08:00';?>">
+                            <input class="form-control" id="maintenance-time" type="time" name="maintenance_time" value="<?php //echo (isset($site_settings->maintenance_time))? $site_settings->maintenance_time : '08:00';?>">
                         </div>
                     </div>
-                </div>
+                </div> -->
 
 
                 <?php echo csrf_field();?>

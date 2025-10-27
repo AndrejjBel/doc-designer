@@ -581,6 +581,6 @@ function num_word($value, $words, $show = true) {
 		case 3:
 		case 4:  $out .= $words[1]; break;
 		default: $out .= $words[2]; break;
-	}	
+	}
 	return $out;
 }

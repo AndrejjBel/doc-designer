@@ -12,6 +12,13 @@ use App\Models\{
     User\UsersModel
 };
 
+use App\Content\{
+    MailSmtpNew
+};
+
+// use PHPMailer\PHPMailer\PHPMailer;
+// use PHPMailer\PHPMailer\Exception;
+
 class FrontFetchController extends Controller
 {
     public function index()
@@ -26,6 +33,9 @@ class FrontFetchController extends Controller
         }
         if ($allPost['action'] == 'buyDocument') {
             $this->buyDocument($allPost);
+        }
+        if ($allPost['action'] == 'contactForm') {
+            $this->contactForm($allPost);
         }
     }
 
@@ -221,5 +231,58 @@ class FrontFetchController extends Controller
         $message['user'] = $user;
         $message['doc_url'] = $doc_url;
         echo json_encode($message, true);
+    }
+
+    public function contactForm($allPost)
+    {
+        $message = [];
+        if ($allPost['email']) {
+            $message['type'] = 'succes';
+            echo json_encode($message, true);
+            die();
+        } else {
+            if (!$allPost['name']) {
+                $message['name'] = 'no';
+            }
+            if (!$allPost['phone']) {
+                $message['phone'] = 'no';
+            }
+            if (!$allPost['message']) {
+                $message['message'] = 'no';
+            }
+            if (isset($allPost['privacy'])) {
+                if (!$allPost['privacy']) {
+                    $message['privacy'] = 'no';
+                }
+            } else {
+                $message['privacy'] = 'no';
+            }
+            if (count($message)) {
+                $message['type'] = 'error';
+                $message['post'] = $allPost;
+                echo json_encode($message, true);
+                die();
+            } else {
+                $message['type'] = 'succes';
+                $message['post'] = $allPost;
+
+                $site_name = 'Конструктор документов';
+                $subject = 'Контакная форма';
+
+                $body = '';
+                $body .= '<p>Имя: <strong>' . $allPost['name'] . '</strong></p>';
+                $body .= '<p>Телефон: <strong>' . $allPost['phone'] . '</strong></p>';
+                $body .= '<p>Сообщение:</p>';
+                $body .= '<p><strong>' . $allPost['message'] . '</strong></p><br>';
+                $body .= '<p><strong>Отправлено с сайта ' . $site_name . '</strong></p>';
+
+                $result = MailSmtpNew::send($site_name, $subject, $body, $attach=false);
+
+                $message['result'] = $result;
+
+                echo json_encode($message, true);
+                die();
+            }
+        }
     }
 }

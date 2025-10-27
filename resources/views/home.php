@@ -59,47 +59,55 @@ insertTemplate('/templates/header-home', ['data' => $data]);
         <div class="row align-items-center">
             <div class="col-lg-7 col-md-6 col-12 mt-4 pt-2">
                 <div class="card rounded shadow">
-                    <div class="card-body">
-                        <form name="myForm" id="myForm">
+                    <div class="card-body card-body-form">
+                        <form id="contactForm">
                             <p class="mb-0" id="error-msg"></p>
                             <div id="simple-msg"></div>
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label class="form-label">Ваше имя <span class="text-danger">*</span></label>
-                                        <input name="name" id="name" type="text" class="form-control" placeholder="Имя :">
+                                        <input id="name" name="name" type="text" class="form-control" placeholder="Имя :" required oninput="inputIsvalid(this)">
                                     </div>
+                                </div>
+
+                                <div class="col-md-6 screen-reader-text">
+                                    <input id="email" name="email" type="text" class="form-control" placeholder="Email :" required oninput="inputIsvalid(this)">
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label class="form-label">Ваш телефон <span class="text-danger">*</span></label>
-                                        <input name="phone" id="phone" type="text" class="form-control" placeholder="Телефон :">
+                                        <input id="phone" name="phone" type="text" class="form-control" placeholder="Телефон :" required oninput="inputIsvalid(this)">
                                     </div>
                                 </div>
-
-                                <!-- <div class="col-12">
-                                    <div class="mb-3">
-                                        <label class="form-label">Сообщение</label>
-                                        <input name="subject" id="subject" class="form-control" placeholder="Subject :">
-                                    </div>
-                                </div> -->
 
                                 <div class="col-12">
                                     <div class="mb-3">
                                         <label class="form-label">Сообщение <span class="text-danger">*</span></label>
-                                        <textarea name="comments" id="comments" rows="4" class="form-control" placeholder="Сообщение :"></textarea>
+                                        <textarea id="message" name="message" rows="4" class="form-control" placeholder="Сообщение :" required oninput="inputIsvalid(this)"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <input id="privacy" name="privacy" class="form-check-input" type="checkbox" required onchange="inputIsvalid(this)">
+                                        <label class="form-check-label fw-normal" for="privacy">Я принимаю условия <a href="/privacy-policy">Политики конфиденциальности</a> и даю согласие на обработку персональных данных</label>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-12">
                                     <div class="d-grid">
-                                        <button type="submit" id="submit" name="send" class="btn btn-primary">Отправить сообщение</button>
+                                        <button name="send" class="btn btn-primary">Отправить сообщение</button>
                                     </div>
                                 </div>
                             </div>
+                            <?php echo csrf_field();?>
                         </form>
+                        <div class="form-info-wrap d-flex align-items-center justify-content-center p-4 rounded bg-muted bg-gradient">
+                            <div class="form-info-text fw-bolder text-white">Отправляем сообщение<span class="dots"></span></div>
+                        </div>
                     </div>
                 </div>
             </div>

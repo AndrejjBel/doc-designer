@@ -706,3 +706,84 @@ const testPay = () => {
     });
 }
 testPay();
+
+function contactForm() {
+    const form = document.querySelector('#contactForm');
+    if (!form) return;
+
+    form.elements.send.addEventListener('click', (e) => {
+        e.preventDefault();
+        // console.dir(form);
+        // console.dir(form.elements.email);
+        // const elements = [form.elements.name, form.elements.phone, form.elements.message, form.elements.privacy];
+        // console.dir(validateContactForm(elements));
+
+        // validateForm([form]);
+
+        const elements = [form.elements.name, form.elements.phone, form.elements.message, form.elements.privacy];
+
+        if (validateContactForm(elements)) {
+            form.nextElementSibling.classList.add('vision');
+
+            let url = '/front/fetch';
+            let formData = new FormData(form);
+            formData.append('action', 'contactForm');
+
+            fetch(url, {
+                method: "POST",
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Ошибка запроса');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.dir(data);
+                if (data.type == 'succes') {
+                    form.nextElementSibling.children[0].innerText = 'Ваше сообщение отправлено!'
+                } else {
+                    form.nextElementSibling.children[0].innerText = 'Что-то пошло не так, попробуйте позже...'
+
+                    // delete data.type;
+                    // delete data.post;
+                    // let inp = Object.keys(data);
+                    // console.dir(inp);
+                    // for (var variable of inp) {
+                    //     document.querySelector('input[name="'+variable+'"]').classList.add('is-invalid');
+                    // }
+                }
+                // form.nextElementSibling.classList.remove('vision');
+            })
+            .catch(error => {
+                console.dir(error);
+            });
+        }
+    });
+}
+contactForm();
+
+function validateContactForm(elements) {
+    let i = 0;
+    for (var variable of elements) {
+        if (variable.type == 'checkbox') {
+            if (variable.required == true) {
+                if (variable.checked == false) {
+                    variable.classList.add('is-invalid');
+                    i++;
+                }
+            }
+        } else {
+            if (!variable.value) {
+                variable.classList.add('is-invalid');
+                i++;
+            }
+        }
+    }
+    if (i == 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
