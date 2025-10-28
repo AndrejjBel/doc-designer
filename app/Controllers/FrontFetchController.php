@@ -9,7 +9,8 @@ use App\Models\{
     PostModel,
     ProductsModel,
     OrdersModel,
-    User\UsersModel
+    User\UsersModel,
+    Myorm\MyormModel
 };
 
 use App\Content\{
@@ -34,6 +35,65 @@ class FrontFetchController extends Controller
         if ($allPost['action'] == 'contactForm') {
             $this->contactForm($allPost);
         }
+    }
+
+    public function buyDocumentTest($allPost)
+    {
+        $message = [];
+        $message['post'] = $allPost;
+
+        $user = UsersModel::getUser();
+        $message['user'] = $user;
+
+        if ($user) {
+            $user_id = $user['id'];
+        } else {
+            $userForEmail = UsersModel::getUserForEmail($allPost['user_email']);
+            $message['userForEmail'] = $userForEmail;
+            if ($userForEmail) {
+                $user_id = $userForEmail['id'];
+                $message['user_id'] = $user_id;
+            } else {
+                // $loginsEmails = UsersModel::getLoginsEmails();
+
+                $password = gen_password(8);
+
+                $email_str = strstr($allPost['user_email'], '@', true);
+
+                $is_post_slug = unicValue('users', 'username', $email_str);
+                if (count($is_post_slug) == 0) {
+                    $username = $email_str;
+                } elseif (count($email_str) == 1) {
+                    $username = $email_str . '-2';
+                } elseif (count($email_str) > 1) {
+                    $arr = [];
+                    foreach ($email_str as $key => $value) {
+                        if ($value != $email_str) {
+                            $arr[] = (int)str_replace($email_str . '-', '', $value);
+                        }
+                    }
+                    $username = $email_str . '-' . max($arr)+1;
+                }
+
+                // $user_id = $auth->admin()->createUser($allPost['user_email'], $password, $username);
+                $user_meta = [];
+                $user_meta['phone'] = $allPost['user_phone'];
+                $user_meta['description'] = '';
+                // UsersModel::updateUserMeta(
+                //     [
+                //         'id' => $user_id,
+                //         'fio' => $allPost['user_fio'],
+                //         'meta' =>json_encode($user_meta, JSON_UNESCAPED_UNICODE)
+                //     ]
+                // );
+
+                $message['password'] = $password;
+                $message['username'] = $username;
+                $message['is_post_slug'] = $is_post_slug;
+            }
+        }
+
+        echo json_encode($message, true);
     }
 
     public function place_order($allPost)
@@ -97,18 +157,18 @@ class FrontFetchController extends Controller
         if ($user) {
             $user_id = $user['id'];
         } else {
-            $userForEmail = getUserForEmail($allPost['user_email']);
+            $userForEmail = UsersModel::getUserForEmail($allPost['user_email']);
             if ($userForEmail) {
                 $user_id = $userForEmail['id'];
             } else {
-                $loginsEmails = UsersModel::getLoginsEmails();
+                // $loginsEmails = UsersModel::getLoginsEmails();
 
                 $password = gen_password(8);
 
                 $email_str = strstr($allPost['user_email'], '@', true);
 
                 $is_post_slug = unicValue('users', 'username', $email_str);
-                if (count($email_str) == 0) {
+                if (count($is_post_slug) == 0) {
                     $username = $email_str;
                 } elseif (count($email_str) == 1) {
                     $username = $email_str . '-2';
@@ -121,6 +181,9 @@ class FrontFetchController extends Controller
                     }
                     $username = $email_str . '-' . max($arr)+1;
                 }
+
+                $db = MyormModel::dbc();
+                $auth = new \Delight\Auth\Auth($db);
 
                 $user_id = $auth->admin()->createUser($allPost['user_email'], $password, $username);
                 $user_meta = [];
@@ -141,7 +204,7 @@ class FrontFetchController extends Controller
                 $subject = 'Регистрация на сайте';
 
                 $body = '';
-                $body .= '<p>Вы зарегистрированы на сайте: ' . $site_name . '</p>';
+                $body .= '<p><strong>Вы зарегистрированы на сайте: ' . $site_name . '</strong></p>';
                 $body .= '<p>Для авторизации используйте: </p>';
                 $body .= '<p>Логин: </p>';
                 $body .= $username . ' или ' . $allPost['user_email'];

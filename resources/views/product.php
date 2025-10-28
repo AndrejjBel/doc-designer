@@ -171,6 +171,7 @@ if (is_login()) {
                             <p>После оплаты документ будет полностью сформирован, файл с текстом документа отправлен на указанный Вами e-mail, также будет доступен для скачивания в <a href="<?php echo $link_lk;?>" target="_blank">Личном кабинете</a>.</p>
                         </div>
                     </div>
+                    <?php echo csrf_field();?>
 
                     <div class="col-12 mt-3 text-center">
                         <button

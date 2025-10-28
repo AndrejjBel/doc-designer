@@ -421,7 +421,7 @@ function buyDocument(elem) {
         for (var pair of formDataFl.entries()) {
             formData.append(pair[0], pair[1]);
         }
-        url = '/front/fetch';
+        let url = '/front/fetch';
 
         fetch(url, {
             method: "POST",
@@ -793,3 +793,31 @@ function validateContactForm(elements) {
         return false;
     }
 }
+
+function clbTest() {
+    let formData = new FormData();
+
+    formData.append('action', 'paycallbacktt');
+    formData.append('rr', 'rrrrrrrrr');
+    formData.append('gg', 'gggggggg');
+
+    let url = '/paycallbacktt';
+
+    fetch(url, {
+        method: "POST",
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Ошибка запроса');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.dir(data);
+    })
+    .catch(error => {
+        console.dir(error);
+    });
+}
+clbTest();

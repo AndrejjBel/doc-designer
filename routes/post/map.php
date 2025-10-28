@@ -36,3 +36,5 @@ Route::toGroup()->protect();
 Route::endGroup();
 
 Route::post('/paycallback')->controller(PaymentProcessController::class, 'payCallback');
+
+Route::post('/paycallbacktt')->controller(PaymentProcessController::class, 'payCallbackTest');

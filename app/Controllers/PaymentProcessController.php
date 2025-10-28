@@ -62,12 +62,34 @@ class PaymentProcessController extends Controller
         $body = '';
         $body .= '<p>Здравствуйте ' . $allPost['clientid'] . '!</p>';
         $body .= '<p>Высылаем заказаный Вами документ по закзазу №' . $orderid . '.</p>';
-        $body .= '<p><a href="'$home_url . $order['doc_url'] . '">Документ</a></p>';
+        $body .= '<p><a href="' . $home_url . $order['doc_url'] . '">Документ</a></p>';
         $body .= '<p>Благодарим за заказ!</p>';
         $body .= '<p><strong>Отправлено с сайта <a href="' . $home_url . '">' . $site_name . '</a></strong></p>';
 
         $resultMail = MailSmtpNew::send($site_name, $subject, $body, $to);
 
         echo "OK " . md5($id.$secret_seed);
+    }
+
+    public function payCallbackTest()
+    {
+        $allPost = Request::allPost();
+        $message = [];
+        $message['post'] = $allPost;
+
+        $home_url = config('main', 'home_url');
+        $to  = 'belandr.sites@gmail.com';
+        $site_name = 'Конструктор документов';
+        $subject = 'Заказ №1';
+        $body = '';
+        $body .= '<p>Здравствуйте</p>';
+        $body .= '<p>Высылаем документ по закзазу №1.</p>';
+        $body .= '<p><a href="#">Документ</a></p>';
+        $body .= '<p>Благодарим за заказ!</p>';
+        $body .= '<p><strong>Отправлено с сайта <a href="#">Конструктор документов</a></strong></p>';
+
+        $resultMail = MailSmtpNew::send($site_name, $subject, $body, $to);
+
+        echo json_encode($message, true);
     }
 }
