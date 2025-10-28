@@ -10,7 +10,7 @@ use App\Models\{
     OrdersModel,
     User\UsersModel
 };
-use App\Content\MailSmtpnew;
+use App\Content\MailSmtpNew;
 
 class PaymentProcessController extends Controller
 {
