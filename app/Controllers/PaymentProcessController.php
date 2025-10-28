@@ -32,7 +32,7 @@ class PaymentProcessController extends Controller
         }
 
         $order = OrdersModel::getOrder($orderid);
-        // $clientmeta = json_decode($order['clientmeta']);
+        $clientmeta = json_decode($order['clientmeta']);
 
         // if (number_format($order['summ'], 2, ".", "") == number_format($sum, 2, ".", "")) {
         //     OrdersModel::orderPayEdit($orderid, 2, $sum, json_encode($allPost, JSON_UNESCAPED_UNICODE));
