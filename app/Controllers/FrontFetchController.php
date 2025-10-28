@@ -199,7 +199,7 @@ class FrontFetchController extends Controller
 
                 // отправляем письмо о регистрации и необходимости подтверждения Email
                 $home_url = config('main', 'home_url');
-                $to  = $allPost['user_email'];
+                $to = $allPost['user_email'];
                 $site_name = 'Конструктор документов';
                 $subject = 'Регистрация на сайте';
 
