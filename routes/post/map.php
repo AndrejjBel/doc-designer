@@ -32,5 +32,7 @@ Route::toGroup()->protect();
     Route::post('/front/fetch')->controller(FrontFetchController::class);
 
     Route::post('/paylink')->controller(PaymentProcessController::class, 'getPayLink');
-    Route::post('/paycallback')->controller(PaymentProcessController::class, 'payCallback');
+    // Route::post('/paycallback')->controller(PaymentProcessController::class, 'payCallback');
 Route::endGroup();
+
+Route::post('/paycallback')->controller(PaymentProcessController::class, 'payCallback');
