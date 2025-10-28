@@ -7,7 +7,7 @@ use PHPMailer\PHPMailer\Exception;
 
 class MailSmtpNew
 {
-    public static function send($site_name, $subject, $body, $email=false, $attach=false)
+    public function send($site_name, $subject, $body, $email=false, $attach=false)
     {
         $result = [];
         $site_settings = json_decode(site_settings('site_settings'));
