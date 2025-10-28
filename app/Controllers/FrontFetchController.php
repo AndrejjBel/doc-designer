@@ -184,6 +184,7 @@ class FrontFetchController extends Controller
                 $auth = new \Delight\Auth\Auth($db);
 
                 $user_id = $auth->admin()->createUser($allPost['user_email'], $password, $username);
+                $auth->admin()->addRoleForUserById($user_id, \Delight\Auth\Role::SUBSCRIBER);
                 $user_meta = [];
                 $user_meta['phone'] = $allPost['user_phone'];
                 $user_meta['description'] = '';
