@@ -14,7 +14,7 @@ class DashboardMiddleware extends Middleware
     public function index()
     {
         if (! AdminModel::is_logged()) { // is_logged is_admin_allowed
-            Redirect::to('/');
+            Redirect::to('/login');
         }
     }
 }
