@@ -13,7 +13,7 @@ use App\Models\{
     Myorm\MyormModel
 };
 
-use App\Content\MailSmtpNew;
+use App\Controllers\MailSmtpNew;
 
 class FrontFetchController extends Controller
 {
