@@ -53,6 +53,12 @@ class OrdersModel extends Model
         return DB::run($sql, ['id' => $id, 'status' => $status]);
     }
 
+    public static function orderPayEdit($id, $status, $sumpay, $bankresp)
+    {
+        $sql = "UPDATE orders SET status = :status, sumpay = :sumpay, bankresp = :bankresp WHERE id = :id";
+        return DB::run($sql, ['id' => $id, 'status' => $status, 'sumpay' => $sumpay, 'bankresp' => $bankresp]);
+    }
+
     public static function orderDocUrlEdit($id, $doc_url)
     {
         $sql = "UPDATE orders SET doc_url = :doc_url WHERE id = :id";

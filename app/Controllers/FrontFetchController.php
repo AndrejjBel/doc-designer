@@ -16,9 +16,6 @@ use App\Content\{
     MailSmtpNew
 };
 
-// use PHPMailer\PHPMailer\PHPMailer;
-// use PHPMailer\PHPMailer\Exception;
-
 class FrontFetchController extends Controller
 {
     public function index()
@@ -138,22 +135,20 @@ class FrontFetchController extends Controller
                 );
 
                 // отправляем письмо о регистрации и необходимости подтверждения Email
-                // $home_url = config('main', 'home_url');
-                // $to  = $allPost['user_email'];
-                // $subject = "Регистрация на сайте";
-                // $message = '<p>Вы зарегистрированы на сайте: </p>' . "\r\n";
-                // $message .= '<p>Для авторизации используйте: </p>' . "\r\n";
-                // $message .= '<p>Логин: </p>' . "\r\n";
-                // $message .= $username . ' или ' . $allPost['user_email'] . "\r\n";
-                // $message .= '<p>Пароль: </p>' . "\r\n";
-                // $message .= $password . "\r\n";
-                // $headers  = 'MIME-Version: 1.0' . "\r\n";
-                // $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-                // $headers .= 'To: <' . $to . '>' . "\r\n";
-                // $headers .= 'From: administrator@urist-master.ru <administrator@urist-master.ru>' . "\r\n";
-                // $headers .= 'Cc: administrator@urist-master.ru' . "\r\n";
-                // $headers .= 'Bcc: administrator@urist-master.ru' . "\r\n";
-                // mail($to, $subject, $message, $headers);
+                $home_url = config('main', 'home_url');
+                $to  = $allPost['user_email'];
+                $site_name = 'Конструктор документов';
+                $subject = 'Регистрация на сайте';
+
+                $body = '';
+                $body .= '<p>Вы зарегистрированы на сайте: ' . $site_name . '</p>';
+                $body .= '<p>Для авторизации используйте: </p>';
+                $body .= '<p>Логин: </p>';
+                $body .= $username . ' или ' . $allPost['user_email'];
+                $body .= '<p>Пароль: ' . $password . '</p>';
+                $body .= '<p><strong>Отправлено с сайта <a href="' . $home_url . '">' . $site_name . '</a></strong></p>';
+
+                $resultMail = MailSmtpNew::send($site_name, $subject, $body, $to);
             }
         }
 
@@ -227,10 +222,71 @@ class FrontFetchController extends Controller
 
         OrdersModel::orderDocUrlEdit($order_id, $doc_url);
 
+        $payment_data = [
+            "pay_amount" => number_format($allPost['summ'], 2, '.', ''),
+            "clientid" => $allPost['user_fio'], // $allPost['clientid'];
+            "orderid" => $order_id, // $allPost['orderid'];
+            "client_email" => $allPost['user_email'], // $allPost['client_email'];
+            "service_name" => $product['title'] . ' (' . $allPost['productid'] . ')', // $allPost['service_name'];
+            "client_phone" => $allPost['user_phone'] // $allPost['client_phone'];
+        ];
+        $pay_link = $this->getPayLink($payment_data);
+
         $message['post'] = $allPost;
         $message['user'] = $user;
         $message['doc_url'] = $doc_url;
+        $message['pay_link'] = $pay_link;
+        $message['payment_data'] = $payment_data;
         echo json_encode($message, true);
+    }
+
+    public function getPayLink($payment_data)
+    {
+        $allPost = Request::allPost();
+        $site_settings = json_decode(site_settings('site_settings_pay'));
+        $user = $site_settings->pay_user;
+        $password = hex2bin($site_settings->pay_pass);
+        $base64 = base64_encode("$user:$password");
+        $headers = Array();
+        array_push($headers,'Content-Type: application/x-www-form-urlencoded');
+        array_push($headers,'Authorization: Basic '.$base64);
+        $server_paykeeper = $site_settings->server_paykeeper;
+        // $payment_data = array (
+        //     "pay_amount" => 42.50, // $allPost['pay_amount'];
+        //     "clientid" => "Иванов Иван Иванович", // $allPost['clientid'];
+        //     "orderid" => "Заказ № 10", // $allPost['orderid'];
+        //     "client_email" => "test@example.com", // $allPost['client_email'];
+        //     "service_name" => "Услуга", // $allPost['service_name'];
+        //     "client_phone" => "8 (910) 123-45-67" // $allPost['client_phone'];
+        // );
+
+        $uri = "/info/settings/token/";
+        $curl = curl_init();
+        curl_setopt($curl,CURLOPT_RETURNTRANSFER,true);
+        curl_setopt($curl,CURLOPT_URL,$server_paykeeper.$uri);
+        curl_setopt($curl,CURLOPT_CUSTOMREQUEST,'GET');
+        curl_setopt($curl,CURLOPT_HTTPHEADER,$headers);
+        curl_setopt($curl,CURLOPT_HEADER,false);
+        $response = curl_exec($curl);
+        $php_array = json_decode($response,true);
+        if (isset($php_array['token'])) $token = $php_array['token']; else die();
+        $uri = "/change/invoice/preview/";
+        $request = http_build_query(array_merge($payment_data, array ('token'=>$token)));
+
+        curl_setopt($curl,CURLOPT_RETURNTRANSFER,true);
+        curl_setopt($curl,CURLOPT_URL,$server_paykeeper.$uri);
+        curl_setopt($curl,CURLOPT_CUSTOMREQUEST,'POST');
+        curl_setopt($curl,CURLOPT_HTTPHEADER,$headers);
+        curl_setopt($curl,CURLOPT_HEADER,false);
+        curl_setopt($curl,CURLOPT_POSTFIELDS,$request);
+
+        $response = json_decode(curl_exec($curl),true);
+        if (isset($response['invoice_id'])) $invoice_id = $response['invoice_id']; else die();
+        $link = "$server_paykeeper/bill/$invoice_id/";
+        // $ret = ['link' => $link];
+        // echo json_encode($ret, true);
+
+        return $link;
     }
 
     public function contactForm($allPost)
@@ -276,7 +332,7 @@ class FrontFetchController extends Controller
                 $body .= '<p><strong>' . $allPost['message'] . '</strong></p><br>';
                 $body .= '<p><strong>Отправлено с сайта ' . $site_name . '</strong></p>';
 
-                $result = MailSmtpNew::send($site_name, $subject, $body, $attach=false);
+                $result = MailSmtpNew::send($site_name, $subject, $body);
 
                 $message['result'] = $result;
 

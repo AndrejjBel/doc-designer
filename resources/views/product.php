@@ -166,6 +166,10 @@ if (is_login()) {
                         <div class="mb-3">
                             <a id="lnk_cbaccept" href="/payment-return-terms">Условия оплаты</a>
                         </div>
+
+                        <div class="mb-3">
+                            <p>После оплаты документ будет полностью сформирован, файл с текстом документа отправлен на указанный Вами e-mail, также будет доступен для скачивания в <a href="<?php echo $link_lk;?>" target="_blank">Личном кабинете</a>.</p>
+                        </div>
                     </div>
 
                     <div class="col-12 mt-3 text-center">

@@ -435,14 +435,20 @@ function buyDocument(elem) {
         })
         .then(data => {
             console.dir(data);
-            if (data.doc_url) {
+            if (data.pay_link) {
                 closeBtn.click();
-                successModal.show();
+
+                let newTab = window.open(data.pay_link, '_blank');
+                newTab.focus();
+
+                // successModal.show();
             }
         })
         .catch(error => {
             console.dir(error);
         });
+    } else {
+        elem.style.pointerEvents = '';
     }
 }
 

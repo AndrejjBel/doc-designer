@@ -120,8 +120,10 @@ if ($data['mod'] == 'dashboard') {
     echo csrf_field();
 
     // echo '<pre>';
-    // echo var_dump($data['loginsEmails']['logins']);
+    // echo var_dump(json_decode($data['orders'][0]['clientmeta'])->name);
     // echo '</pre>';
+    //
+    // echo number_format($data['orders'][0]['summ'], 2, ".", "");
 
     insertTemplate('/templates/admin/content/footer', ['data' => $data]);
     ?>
