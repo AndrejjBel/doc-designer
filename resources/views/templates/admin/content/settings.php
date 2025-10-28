@@ -147,11 +147,17 @@ if ($site_settings) {
                     <div class="col-md-3">
                         <div class="mb-3">
                             <label for="smtp_password" class="form-label">Password</label>
-                            <input type="text"
-                                id="smtp_password"
-                                name="smtp_password"
-                                class="form-control"
-                                value="<?php echo ($site_settings)? $site_settings->smtp_password : '';?>">
+                            <div class="input-group input-group-merge">
+                                <input type="password"
+                                    id="smtp_password"
+                                    name="smtp_password"
+                                    class="form-control"
+                                    autocomplete="new-password"
+                                    value="<?php echo ($site_settings)? $site_settings->smtp_password : '';?>">
+                                <div class="input-group-text" data-password="false">
+                                    <span class="password-eye"></span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
