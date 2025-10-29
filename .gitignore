@@ -5,6 +5,7 @@
 /app/blocks-arr.php
 /app/seo-arr.php
 /public/uploads/*
+/robots.txt
 # phpstorm project files
 /.idea
 /.idea/*
