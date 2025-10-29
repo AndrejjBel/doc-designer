@@ -12,6 +12,7 @@ use App\Models\{
     VarsModel
 };
 use App\Controllers\{
+    Sitemap,
     Admin\AdminController,
     Auth\SigninController,
     Auth\ForgotPassController,
@@ -54,6 +55,9 @@ class PagesFrontController extends Controller
     {
         $page_slug = Request::param('slug')->asString();
 
+        // if ($page_slug == 'sitemap.xml') {
+        //     return (new Sitemap())->index();
+        // }
         if ($page_slug == 'signin') {
             return (new SigninController())->index();
         }
