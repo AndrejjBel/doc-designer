@@ -69,7 +69,9 @@ if (array_key_exists('page_data', $data)) {
                                 </form>
                             <?php } else { ?>
                                 <a href="/login/" class="dropdown-item">Авторизация</a>
-                                <a href="/signin/" class="dropdown-item">Регистрация</a>
+                                <?php if (isset($site_settings->signin_vision)) { ?>
+                                    <a href="/signin/" class="dropdown-item">Регистрация</a>
+                                <?php } ?>
                             <?php } ?>
                         </div>
                     </div>
