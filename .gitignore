@@ -6,6 +6,7 @@
 /app/seo-arr.php
 /public/uploads/*
 /robots.txt
+/sitemap.xml
 # phpstorm project files
 /.idea
 /.idea/*
