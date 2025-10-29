@@ -43,6 +43,7 @@ Route::toGroup()->prefix('admin')->middleware(AdminMiddleware::class);
     Route::get('/user-settings')->controller(AdminController::class, 'user_settings')->name('admin.user-settings');
     Route::get('/user-orders')->controller(AdminController::class, 'user_orders_admin')->name('admin.user-orders');
     Route::get('/users')->controller(UsersController::class)->name('admin.users');
+    Route::get('/users-admins')->controller(UsersController::class, 'users_admins')->name('admin.users-admins');
     Route::get('/user-add')->controller(UserAddController::class)->name('admin.user-add');
 
     Route::post('/settings-post')

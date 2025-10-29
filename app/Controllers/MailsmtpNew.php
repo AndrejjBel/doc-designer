@@ -21,6 +21,7 @@ class MailSmtpNew
         $mail->isSMTP();
         $mail->SMTPAuth = true;
         $mail->SMTPDebug = 0;
+        $mail->SMTPSecure = "ssl";
         $mail->Host = $site_settings->smtp_host;
         $mail->Port = $site_settings->smtp_port;
         $mail->Username = $site_settings->smtp_username;

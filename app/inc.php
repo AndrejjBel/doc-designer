@@ -355,10 +355,10 @@ function order_vars_html($name, $value) {
     return '<span class="badge bg-' . $res[1] . '" data-name="' . $name . '">' . $res[0] . '</span>';
 }
 
-function order_upload($order_status, $link) {
+function order_upload($order) {
     $res = '<i class="bi bi-download text-danger mx-1"></i>';
-    if ($order_status == 2) {
-        $res = '<a href="' . $link . '" class="text-reset fs-16 mx-1" title="Скачать" download>
+    if ($order['status'] == 2) { //  && $order['summ'] == $order['sumpay']
+        $res = '<a href="' . $order['doc_url'] . '" class="text-reset fs-16 mx-1" title="Скачать" download>
             <i class="bi bi-download text-success"></i>
         </a>';
     }

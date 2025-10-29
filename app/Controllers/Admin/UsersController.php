@@ -27,4 +27,23 @@ class UsersController extends Controller
             ]
         );
     }
+
+    public function users_admins(): View
+    {
+        $user_all = AdminUsersModel::getUsersAdmins(1, 20);
+        $current_user = AdminUsersModel::getUser();
+
+        return view('/admin/index',
+            [
+                'data'  => [
+                    'temp' => 'users',
+                    'title' => 'Admin users',
+                    'description' => 'Admin users description',
+                    'mod' => 'admin',
+                    'user_all' => $user_all,
+                    'current_user' => $current_user
+                ]
+            ]
+        );
+    }
 }

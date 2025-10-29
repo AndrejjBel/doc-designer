@@ -120,6 +120,12 @@ function nav_obj($mod, $vars_obj, $userRole=0) {
                         'children' => []
                     ],
                     [
+                        'name' => 'Админы',
+                        'link' => '/admin/users-admins',
+                        'class_li' => '',
+                        'children' => []
+                    ],
+                    [
                         'name' => 'Добавить пользователя',
                         'link' => '/admin/user-add',
                         'class_li' => '',

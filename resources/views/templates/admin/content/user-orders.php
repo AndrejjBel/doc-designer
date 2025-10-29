@@ -76,10 +76,8 @@ if ($data['mod'] == 'dashboard') {
                                             <?php echo order_vars_html('status', $order['status']);?>
                                         </td>
                                         <td class="text-center actions-product">
-                                            <?php echo order_upload($order['status'], $order['doc_url']);?>
-                                            <!-- <a href="<?php //echo ($order['doc_url'])? $order['doc_url'] : '#';?>" class="text-reset fs-16 mx-1" title="Скачать" download>
-                                                <i class="ri-eye-line"></i>
-                                            </a> -->
+                                            <?php //echo order_upload($order['status'], $order['doc_url']);?>
+                                            <?php echo order_upload($order);?>
                                         </td>
                                     </tr>
                                 <?php } ?>

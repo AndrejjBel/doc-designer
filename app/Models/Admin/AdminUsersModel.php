@@ -17,6 +17,14 @@ class AdminUsersModel extends Model
         return DB::run($sql, ['start' => $start, 'limit' => $limit])->fetchAll();
     }
 
+    public static function getUsersAdmins(int $page, int $limit, $sheet = ''): array|false
+    {
+        $string = "ORDER BY id ASC LIMIT";
+        $start  = ($page - 1) * $limit;
+        $sql = "SELECT * FROM users WHERE roles_mask IN (1,1024,262144) $string :start, :limit";
+        return DB::run($sql, ['start' => $start, 'limit' => $limit])->fetchAll();
+    }
+
     public static function getUser()
     {
         $db = MyormModel::dbc();
