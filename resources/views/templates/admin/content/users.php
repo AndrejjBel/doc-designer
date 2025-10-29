@@ -71,6 +71,14 @@
                                             <td><?php //echo round($user_balance, 2);?>0 ₽</td>
                                             <td><?php echo ($user['verified'])? '<span class="text-success">Yes</span>' : '<span class="text-danger">No</span>';?></td>
                                             <td>
+                                                <a href="javascript: void(0);"
+                                                    class="text-reset fs-16 px-1 js-user-edit"
+                                                    data-state="def"
+                                                    data-id="user<?php echo $user['id'];?>"
+                                                    title="Редактировать">
+                                                    <i class="ri-edit-2-line"></i>
+                                                </a>
+                                                
                                                 <div class="dropdown d-inline-block">
                                                     <button type="button"
                                                         class="btn btn-light btn-sm dropdown-toggle arrow-none"
@@ -92,12 +100,27 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <!-- <a href="javascript: void(0);" class="text-reset fs-16 px-1 js-user-settings" data-bs-toggle="dropdown" data-id="user<?php echo $user['id'];?>">
-                                                    <i class="ri-settings-3-line"></i>
-                                                </a> -->
-                                                <a href="javascript: void(0);" class="text-reset fs-16 px-1 js-user-edit" data-state="def" data-id="user<?php echo $user['id'];?>" title="Редактировать">
-                                                    <i class="ri-edit-2-line"></i>
-                                                </a>
+
+                                                <div class="dropdown d-inline-block">
+                                                    <button type="button"
+                                                        class="btn btn-light btn-sm dropdown-toggle arrow-none"
+                                                        data-bs-toggle="dropdown"
+                                                        aria-haspopup="true"
+                                                        aria-expanded="false"
+                                                        title="Удалить пользователя">
+                                                        <i class="ri-delete-bin-line text-danger"></i>
+                                                    </button>
+                                                    <div class="dropdown-menu adm-user-settings">
+                                                        <div class="px-2 py-2">
+                                                            <div class="mb-3">
+                                                                <div class="form-label">Вы действительно хотите удалить пользователя: <span class="fw-bolder"><?php echo $user['username'];?></span>?</div>
+                                                            </div>
+                                                            <button class="btn btn-danger btn-sm"
+                                                                data-id="user<?php echo $user['id'];?>"
+                                                                onclick="userDelete(this)">Удалить пользователя</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </td>
                                         </tr>
                                     <?php } ?>

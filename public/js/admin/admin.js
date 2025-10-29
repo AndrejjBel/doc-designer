@@ -55,6 +55,46 @@ function userAdd() {
 }
 userAdd();
 
+function userDelete(btn) {
+    const warningWrap = document.querySelector('#warning-wrap');
+    btn.style.pointerEvents = 'none';
+    let formData = new FormData();
+    formData.append('action', 'user_delete');
+    formData.append('user_id', btn.dataset.id);
+    formData.append('_token', document.querySelector('input[name="_token"]').value);
+
+    fetch("/user-admin-delete", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Ошибка запроса');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.dir(data);
+        if (data.result.class == 'succes') {
+            document.querySelector('tr#'+btn.dataset.id).remove();
+            warningWrap.innerHTML = '';
+            alertAction(warningWrap, data.result.info, 'success');
+            setTimeout(function(){
+                warningWrap.innerHTML = '';
+            }, 5000);
+        } else {
+            warningWrap.innerHTML = '';
+            alertAction(warningWrap, data.result.info, 'danger');
+            setTimeout(function(){
+                warningWrap.innerHTML = '';
+            }, 5000);
+        }
+    })
+    .catch(error => {
+        console.dir(error);
+    });
+}
+
 function toastViews(wrap, title) {
     wrap.insertAdjacentHTML(
         'beforeend',

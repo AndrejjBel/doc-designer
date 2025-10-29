@@ -122,4 +122,18 @@ class UserEditController extends Controller
         $error = UsersModel::updateUserPassAdmin($allPost['user_id'], $allPost['password_new']);
         echo json_encode($error, true);
     }
+
+    public function deleteUser()
+    {
+        $allPost = Request::allPost();
+        $error = [];
+        if (isset($allPost['action'])) {
+            if ($allPost['action'] == 'user_delete') {
+                $user_id = str_replace('user', '', $allPost['user_id']);
+                $result = UsersModel::deleteUser($user_id);
+                $error['result'] = $result;
+            }
+        }
+        echo json_encode($error, true);
+    }
 }

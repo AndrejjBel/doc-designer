@@ -23,6 +23,7 @@ Route::toGroup()->protect();
     Route::post('/user-meta-edit')->controller(UserEditController::class, 'editUserMeta');
     Route::post('/user-pass-edit')->controller(UserEditController::class, 'editUserPass');
     Route::post('/user-pass-edit-admin')->controller(UserEditController::class, 'adminEditUserPass');
+    Route::post('/user-admin-delete')->controller(UserEditController::class, 'deleteUser');
 
     Route::post('/admin/upload')->controller(UploadController::class, 'uploadFiles');
     Route::post('/admin/delete')->controller(UploadController::class, 'deleteFiles');

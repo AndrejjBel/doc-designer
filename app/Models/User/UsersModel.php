@@ -167,4 +167,21 @@ class UsersModel extends Model
         $array = $sth->fetch(PDO::FETCH_ASSOC);
         return $array;
     }
+
+    public static function deleteUser($user_id)
+    {
+        $db = MyormModel::dbc();
+        $auth = new \Delight\Auth\Auth($db);
+        $result = [];
+        try {
+            $auth->admin()->deleteUserById($user_id);
+            $result['class'] = 'succes';
+            $result['info'] = 'Пользователь удален';
+        }
+        catch (\Delight\Auth\UnknownIdException $e) {
+            $result['class'] = 'error';
+            $result['info'] = 'Нет такого пользователя...';
+        }
+        return $result;
+    }
 }
