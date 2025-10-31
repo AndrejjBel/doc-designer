@@ -53,24 +53,8 @@ $home_url = home_url();
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated profile-dropdown">
                     <div class=" dropdown-header noti-title">
-                        <h6 class="text-overflow m-0">Welcome !</h6>
+                        <h6 class="text-overflow m-0">Привет, <?php echo ($currUser['first_name'])? $currUser['first_name'] : $currUser['username'];?>!</h6>
                     </div>
-                    <a href="#" class="dropdown-item">
-                        <i class="ri-account-circle-line fs-18 align-middle me-1"></i>
-                        <span>My Account</span>
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="ri-settings-4-line fs-18 align-middle me-1"></i>
-                        <span>Settings</span>
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="ri-customer-service-2-line fs-18 align-middle me-1"></i>
-                        <span>Support</span>
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="ri-lock-password-line fs-18 align-middle me-1"></i>
-                        <span>Lock Screen</span>
-                    </a>
 
                     <form action="/logout" method="post" accept-charset="utf-8" class="dropdown-item">
                         <input type="hidden" name="actions" value="logOut">
