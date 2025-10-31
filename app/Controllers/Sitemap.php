@@ -7,19 +7,19 @@ use Hleb\Constructor\Data\View;
 
 class Sitemap extends Controller
 {
-    public function index(): View
+    public function index()
     {
-        // header('Content-Type: application/xml;');
-        //
-        // insertCacheTemplate(
-        //     '/sitemap',
-        //     [
-        //         'data' => [
-        //             'title' => 'Home',
-        //             'description' => 'Home description'
-        //         ]
-        //     ]
-        // );
-        return view('/sitemap', ['title' => 'Home', 'description' => 'Home description']);
+        header('Content-Type: application/xml;');
+
+        insertCacheTemplate(
+            '/sitemap',
+            [
+                'data' => [
+                    'title' => 'Home',
+                    'description' => 'Home description'
+                ]
+            ]
+        );
+        // return view('/sitemap', ['title' => 'Home', 'description' => 'Home description']);
     }
 }
