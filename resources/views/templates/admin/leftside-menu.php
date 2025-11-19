@@ -9,7 +9,7 @@ if ($site_settings) {
 $home_url = home_url();
 ?>
 <div class="leftside-menu">
-    <a href="/" class="logo logo-light">
+    <a href="/" class="logo logo-light" target="_blank">
         <span class="logo-lg">
             <span class="logo-lg d-flex gap-2 align-items-center">
                 <img src="<?php echo $home_url;?>/public/images/favicon/android-chrome-512x512.png" alt="logo">
@@ -21,7 +21,7 @@ $home_url = home_url();
         </span>
     </a>
 
-    <a href="/" class="logo logo-dark">
+    <a href="/" class="logo logo-dark" target="_blank">
         <span class="logo-lg d-flex gap-2 align-items-center">
             <img src="<?php echo $home_url;?>/public/images/favicon/android-chrome-512x512.png" alt="dark logo">
         </span>

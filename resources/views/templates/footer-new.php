@@ -64,5 +64,12 @@ if (is_admin_allowed()) {
                 </div>
             </div>
         </footer>
+
+        <!-- <div class="card cookie-popup shadow rounded py-3 px-4 cookie-popup-not-accepted">
+            <p class="text-muted mb-0">Этот сайт использует файлы cookie для вашего удобства. Используя его, вы соглашаетесь на использование нами файлов cookie. Используя его, вы принимаете наши <a href="#" target="_blank" class="text-success h6">использование файлов cookie</a></p>
+            <div class="cookie-popup-actions text-end">
+                <button><i class="uil uil-times text-dark fs-4"></i></button>
+            </div>
+        </div> -->
     </body>
 </html>
