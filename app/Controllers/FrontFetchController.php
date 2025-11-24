@@ -296,6 +296,7 @@ class FrontFetchController extends Controller
             $message['user'] = $user;
             $message['product'] = $product;
             $message['document_drafting'] = $document_drafting;
+            $message['pay_link'] = $pay_link;
 
             $message['nsrtl'] = $nsrtl;
             $message['strjson'] = $strjson;
