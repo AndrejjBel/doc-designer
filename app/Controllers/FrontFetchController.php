@@ -349,7 +349,7 @@ class FrontFetchController extends Controller
             $message['post'] = $allPost;
             $message['user'] = $user;
             // $message['doc_url'] = $doc_url;
-            // $message['pay_link'] = $pay_link;
+            $message['pay_link'] = $pay_link;
             // $message['payment_data'] = $payment_data;
             echo json_encode($message, true);
         }
