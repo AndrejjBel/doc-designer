@@ -27,7 +27,7 @@ if (is_login()) {
                 type="button"
                 data-bs-toggle="offcanvas"
                 data-bs-target="#offcanvasFields"
-                aria-controls="offcanvasVars">Поля</button>
+                aria-controls="offcanvasVars">Редактировать шаблон</button>
 
                 <button
                     class="btn btn-primary mt-2 mt-md-0 pay-action"

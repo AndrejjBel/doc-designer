@@ -84,7 +84,7 @@ if ($data['mod'] == 'dashboard') {
                                         <th>ID</th>
                                         <th>Наименование переменной</th>
                                         <th>Описание</th>
-                                        <th>Группа</th>
+                                        <th>Тип поля</th>
                                         <th>Действия</th>
                                     </tr>
                                 </thead>

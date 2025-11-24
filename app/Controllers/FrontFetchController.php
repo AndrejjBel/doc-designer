@@ -9,6 +9,7 @@ use App\Models\{
     PostModel,
     ProductsModel,
     OrdersModel,
+    VarsModel,
     User\UsersModel,
     Myorm\MyormModel
 };
@@ -151,6 +152,8 @@ class FrontFetchController extends Controller
         $message = [];
 
         $user = UsersModel::getUser();
+        $product = ProductsModel::getProductForId($allPost['productid']);
+        $vars = VarsModel::getVarsAll();
 
         if ($user) {
             $user_id = $user['id'];
@@ -247,59 +250,109 @@ class FrontFetchController extends Controller
             ]
         );
 
-        $product = ProductsModel::getProductForId($allPost['productid']);
+        $document_drafting = config('main', 'document_drafting');
 
-        $html = '<style type="text/css">
-        body {
-            font-family: DejaVu Serif;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            position: relative;
-            line-height: 1.2;
-        }
-        .ql-editor .ql-align-justify {
-            text-align: justify;
-        }
-        .ql-editor p {
-            margin: 0;
-            padding-top: 0;
-            padding-bottom: 0;
-        }
-        .ql-editor .ql-align-center {
-            text-align: center;
-        }
-        .ql-indent-8 {
-            padding-left: 25em;
-        }
-        .ql-align-justify {
-            text-indent: 30px;
-        }
-        .ql-editor .ql-align-right {
-            text-align: right;
-        }
-        </style>
-        <div class="product-block ql-editor">' . replace_vars_order_content($strjson, $product['descr']) . '</div>';
+        if (in_array($allPost['productid'], $document_drafting)) {
+            $payment_data = [
+                "pay_amount" => number_format($allPost['summ'], 2, '.', ''),
+                "clientid" => $allPost['user_fio'], // $allPost['clientid'];
+                "orderid" => $order_id, // $allPost['orderid'];
+                "client_email" => $allPost['user_email'], // $allPost['client_email'];
+                "service_name" => $product['title'] . ' (' . $allPost['productid'] . ')', // $allPost['service_name'];
+                "client_phone" => $allPost['user_phone'] // $allPost['client_phone'];
+            ];
+            $pay_link = $this->getPayLink($payment_data);
 
-        $doc_url = html_to_pdf($html, $order_id);
 
-        OrdersModel::orderDocUrlEdit($order_id, $doc_url);
+            // unset($strjson['summ']);
+            // $nsrtl = '';
+            // foreach ($strjson as $key => $value) {
+            //     if (is_array($value)) {
+            //         $nsrtl .= '<p>' . varDescr($vars, $key) . ': <strong>' . implode(', ', $value) . '</strong></p>';
+            //     } else {
+            //         $nsrtl .= '<p>' . varDescr($vars, $key) . ': <strong>' . $value . '</strong></p>';
+            //     }
+            // }
+            //
+            // $site_name = 'Конструктор документов';
+            // $subject = 'Заявка на составление документа';
+            //
+            // $body = '';
+            // $body .= '<p>Имя: <strong>' . $allPost['user_fio'] . '</strong></p>';
+            // $body .= '<p>Телефон: <strong>' . $allPost['user_phone'] . '</strong></p>';
+            // $body .= '<p>E-mail: <strong>' . $allPost['user_email'] . '</strong></p>';
+            // $body .= '<p>Документ:</p>';
+            // $body .= $nsrtl;
+            // $body .= '<p><strong>Отправлено с сайта ' . $site_name . '</strong></p>';
+            //
+            // $result = MailSmtpNew::send($site_name, $subject, $body);
 
-        $payment_data = [
-            "pay_amount" => number_format($allPost['summ'], 2, '.', ''),
-            "clientid" => $allPost['user_fio'], // $allPost['clientid'];
-            "orderid" => $order_id, // $allPost['orderid'];
-            "client_email" => $allPost['user_email'], // $allPost['client_email'];
-            "service_name" => $product['title'] . ' (' . $allPost['productid'] . ')', // $allPost['service_name'];
-            "client_phone" => $allPost['user_phone'] // $allPost['client_phone'];
-        ];
-        $pay_link = $this->getPayLink($payment_data);
 
-        $message['post'] = $allPost;
-        $message['user'] = $user;
-        $message['doc_url'] = $doc_url;
-        $message['pay_link'] = $pay_link;
-        $message['payment_data'] = $payment_data;
-        echo json_encode($message, true);
+
+            // $nsrtl = varDescr($vars, 'sos_trebovanie');
+
+            $message['type'] = 'document_drafting';
+            $message['post'] = $allPost;
+            $message['user'] = $user;
+            $message['product'] = $product;
+            $message['document_drafting'] = $document_drafting;
+
+            $message['nsrtl'] = $nsrtl;
+            $message['strjson'] = $strjson;
+            echo json_encode($message, true);
+        } else {
+            $html = '<style type="text/css">
+            body {
+                font-family: DejaVu Serif;
+                margin-top: 10px;
+                margin-bottom: 10px;
+                position: relative;
+                line-height: 1.2;
+            }
+            .ql-editor .ql-align-justify {
+                text-align: justify;
+            }
+            .ql-editor p {
+                margin: 0;
+                padding-top: 0;
+                padding-bottom: 0;
+            }
+            .ql-editor .ql-align-center {
+                text-align: center;
+            }
+            .ql-indent-8 {
+                padding-left: 25em;
+            }
+            .ql-align-justify {
+                text-indent: 30px;
+            }
+            .ql-editor .ql-align-right {
+                text-align: right;
+            }
+            </style>
+            <div class="product-block ql-editor">' . replace_vars_order_content($strjson, $product['descr']) . '</div>';
+
+            $doc_url = html_to_pdf($html, $order_id);
+
+            OrdersModel::orderDocUrlEdit($order_id, $doc_url);
+
+            $payment_data = [
+                "pay_amount" => number_format($allPost['summ'], 2, '.', ''),
+                "clientid" => $allPost['user_fio'], // $allPost['clientid'];
+                "orderid" => $order_id, // $allPost['orderid'];
+                "client_email" => $allPost['user_email'], // $allPost['client_email'];
+                "service_name" => $product['title'] . ' (' . $allPost['productid'] . ')', // $allPost['service_name'];
+                "client_phone" => $allPost['user_phone'] // $allPost['client_phone'];
+            ];
+            $pay_link = $this->getPayLink($payment_data);
+
+            $message['post'] = $allPost;
+            $message['user'] = $user;
+            // $message['doc_url'] = $doc_url;
+            // $message['pay_link'] = $pay_link;
+            // $message['payment_data'] = $payment_data;
+            echo json_encode($message, true);
+        }
     }
 
     public function getPayLink($payment_data)

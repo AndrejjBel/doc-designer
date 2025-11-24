@@ -7,11 +7,15 @@ function replace_vars_content($vars, $content) {
     $vars_captholder[] = '<div class="text-blure">';
     $vars_captholder[] = '</div>';
     foreach ($vars as $var) {
+        $var_key = $var['title'];
+        if ($var['typedata'] == 8) {
+            $var_key = $var['title'].'[]';
+        }
         if (!$var['isgr']) {
             $vars_title[] = '#' . $var['title'] . '#';
             $vars_captholder[] = '<span class="fielddok"
             data-id="' . $var['id'] . '"
-            data-key="' . $var['title'] . '"
+            data-key="' . $var_key . '"
             data-descr="' . $var['descr'] . '"
             data-bs-toggle="modal"
             data-bs-target="#edit-var-text-modal">' . $var['captholder'] . '</span>';
@@ -62,6 +66,23 @@ function fields_html($var, $name) {
     if ($options_data[$var['typedata']][0] == 'label') {
         $content .= '<div class="col-12 var-label">';
         $content .= '<h6 class="product-title">' . $label . '</h6>';
+        $content .= '</div>';
+    }
+    if ($options_data[$var['typedata']][0] == 'select') {
+        $multiple = '';
+        if ($options_data[$var['typedata']][1] == 'multiple') {
+            $multiple = ' multiple';
+            $name = $name.'[]';
+        }
+        $options = '';
+        foreach (explode(';', $var['extdata']) as $key => $option) {
+            $options .= '<option value="' . $option . '">' . $option . '</option>';
+        }
+        $content .= '<div class="col-12 mb-2">';
+        $content .= '<label for="' . $name . '" class="form-label">' . $label . '</label>';
+        $content .= '<select class="form-select form-control field-item" name="' . $name . '"' . $multiple . ' onblur="fieldFillingForm(this)">';
+        $content .= $options;
+        $content .= '</select>';
         $content .= '</div>';
     }
     // $content .= '</div>';

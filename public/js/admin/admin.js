@@ -1063,7 +1063,7 @@ function varsTableChange(vars, userRoles=0) {
                 <td>${item.id}</td>
                 <td>${item.title}</td>
                 <td style="width: 40%;">${item.descr}</td>
-                <td>...</td>
+                <td>${varsOptionsAdm('typedata')[item.typedata]}</td>
                 <td><a href="javascript: void(0);"
                 class="text-reset fs-16 px-1 js-var-edit"
                 data-id="${item.id}"
@@ -2129,4 +2129,46 @@ function translit(word) {
 	answer = answer.replace(/[-]+/g, '-');
 	answer = answer.replace(/^\-|-$/g, '');
 	return answer;
+}
+
+function varsOptionsAdm(name='') {
+    const type = {
+        1: 'Вводится клиентом',
+        2: 'API Запрос в ФССП',
+        3: 'Заголовок'
+    };
+    const typedata = {
+        1: 'Текстовое поле',
+        2: 'Цифровое поле',
+        3: 'Выбор даты',
+        4: 'Ввод телефона',
+        5: 'Поле с выбором',
+        6: 'Описание',
+        7: 'Ссылки на документы',
+        8: 'Поле с мультивыбором',
+        9: 'Текстовая надпись'
+    };
+
+    const typedata_field = {
+        1: ['input', 'text', ''],
+        2: ['input', 'number', ''],
+        3: ['input', 'date', ''],
+        4: ['input', 'text', 'phone'],
+        5: ['select', '', ''],
+        6: ['textarea', '', ''],
+        7: ['input', 'text', 'url'],
+        8: ['select', 'multiple', ''],
+        9: ['label', '', '']
+    };
+    let result = {};
+    if (name == 'type') {
+        result = type;
+    }
+    if (name == 'typedata') {
+        result = typedata;
+    }
+    if (name == 'typedata_field') {
+        result = typedata_field;
+    }
+    return result;
 }

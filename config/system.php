@@ -462,7 +462,8 @@ return [
         '/app/content.php',
         '/app/faq-arr.php',
         '/app/blocks-arr.php',
-        '/app/seo-arr.php'
+        '/app/seo-arr.php',
+        '/app/inc-tests.php'
     ],
 
     /*

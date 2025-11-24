@@ -140,7 +140,7 @@ function table_vars($array, $var_id, $userRoles=0) {
         $content .= '<td>' . $item['id'] . '</td>';
         $content .= '<td id="title' . $item['id'] . '">' . $item['title'] . '</td>';
         $content .= '<td style="width: 40%;">' . $item['descr'] . '</td>';
-        $content .= '<td>...</td>';
+        $content .= '<td>' . vars_options('typedata')[$item['typedata']] . '</td>';
         $content .= '<td>';
         $content .= '<a href="javascript: void(0);"
             class="text-reset fs-16 px-1 js-var-edit"

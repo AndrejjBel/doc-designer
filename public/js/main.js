@@ -88,7 +88,25 @@ const fielddokClick = () => {
             })[0];
             let td = Number(newVar.typedata);
             let typedata = varsOptions('typedata_field')[td];
-            let value = document.querySelector('.field-item[name="'+item.dataset.key+'"]').value.replace(/"/g, '&quot;');
+
+            let fName = item.dataset.key;
+
+            let field = document.querySelector('.field-item[name="'+fName+'"]');
+            let value = '';
+
+            if (typedata[1] == 'multiple') {
+                value = Array.from(field.selectedOptions).map(option => option.value);
+            } else {
+                value = (field.value)? field.value.replace(/"/g, '&quot;') : '';
+            }
+
+            console.dir(typedata);
+            console.dir(item.dataset.key);
+            console.dir(value);
+            console.dir(newVar.extdata);
+
+            // let value = document.querySelector('.field-item[name="'+item.dataset.key+'"]').value.replace(/"/g, '&quot;');
+            // console.dir(document.querySelector('.field-item[name="'+item.dataset.key+'"]'));
 
             modalTitle.innerText = (newVar.descr)? newVar.descr : newVar.captholder;
             modalBody.innerHTML = fieldTd(typedata, item.dataset.key, value, newVar.extdata);
@@ -111,27 +129,36 @@ fielddokClick();
 function fieldFilling(elem) {
     let key = elem.dataset.title;
     let cont = document.querySelectorAll('.fielddok[data-key="'+key+'"]'); //.innerHTML = elem.value;
+    console.dir(cont);
     cont.forEach((item) => {
         if (elem.type == 'date') {
             item.innerHTML = dateFormaterYearNew(elem.value, ' ')
         } else {
             item.innerHTML = elem.value;
-            document.querySelector('input[name="'+key+'"]').value = elem.value.replace(/"/g, '&quot;');
+            document.querySelector('[name="'+key+'"]').value = elem.value.replace(/"/g, '&quot;');
         }
     });
 }
 
 function fieldFillingFd(elem) {
     let key = elem.dataset.title;
-    console.dir(elem.dataset.title);
     let cont = document.querySelectorAll('.fielddok[data-key="'+key+'"]'); //.innerHTML = elem.value;
     cont.forEach((item) => {
         if (elem.type == 'date') {
             item.innerHTML = dateFormaterYearNew(elem.value, ' ');
             document.querySelector('input[name="'+key+'"]').value = elem.value;
+        } else if (elem.type == 'select-multiple') {
+            let valueSm = Array.from(elem.selectedOptions).map(option => option.value);
+            item.innerHTML = valueSm.join(', ');
+            let fSel = document.querySelector('[name="'+key+'"]');
+            for (var variable of fSel.children) {
+                if (valueSm.includes(variable.value)) {
+                    variable.selected = true;
+                }
+            }
         } else {
             item.innerHTML = elem.value;
-            document.querySelector('input[name="'+key+'"]').value = elem.value.normalize(); //replace(/"/g, '&quot;');
+            document.querySelector('[name="'+key+'"]').value = elem.value.normalize(); //replace(/"/g, '&quot;');
         }
     });
 }
@@ -140,13 +167,13 @@ function fieldFillingForm(elem) {
     let ih = document.querySelectorAll('span[data-key="'+elem.name+'"]');
     let inv = document.querySelectorAll('input[name="'+elem.name+'"]');
     let tanv = document.querySelectorAll('textarea[name="'+elem.name+'"]');
-    // console.dir(inv);
+    let selnv = document.querySelectorAll('select[name="'+elem.name+'"]');
     if (inv.length) {
         for (var variable of inv) {
             if (variable != elem) {
                 if (elem.type == 'date') {
                     variable.value = elem.value;
-                } else if (true) {
+                } else {
                     variable.value = elem.value.replace(/"/g, '&quot;');
                 }
             }
@@ -158,7 +185,13 @@ function fieldFillingForm(elem) {
             if (elem.type == 'date') {
                 item.innerHTML = dateFormaterYearNew(elem.value, ' ');
             } else {
-                item.innerHTML = elem.value.replace(/"/g, '&quot;');
+                if (elem.type == 'select-multiple') {
+                    let valueSm = Array.from(elem.selectedOptions).map(option => option.value);
+                    item.innerHTML = valueSm.join(', ');
+                    console.dir(elem);
+                } else {
+                    item.innerHTML = elem.value.replace(/"/g, '&quot;');
+                }
             }
             item.classList.remove('is-invalid');
         });
@@ -167,7 +200,14 @@ function fieldFillingForm(elem) {
         for (var variable of tanv) {
             if (variable != elem) {
                 variable.value = elem.value;
-                // console.dir(variable);
+            }
+            variable.classList.remove('is-invalid');
+        }
+    }
+    if (selnv.length) {
+        for (var variable of selnv) {
+            if (variable != elem) {
+                variable.value = elem.value;
             }
             variable.classList.remove('is-invalid');
         }
@@ -175,6 +215,7 @@ function fieldFillingForm(elem) {
 }
 
 function fieldTd(typedata, name, value, optionsStr) {
+    console.dir(typedata);
     let phone = '';
     if (typedata[2] == 'phone') {
         phone = ' phone_mask';
@@ -184,17 +225,36 @@ function fieldTd(typedata, name, value, optionsStr) {
     } else if (typedata[0] == 'textarea') {
         return `<textarea class="form-control" data-title="${name}" rows="2" onblur="fieldFillingFd(this)">${value}</textarea>`;
     } else if (typedata[0] == 'select') {
+        let multiple = '';
+        if (typedata[1] == 'multiple') {
+            multiple = ' multiple';
+            // name = name+'[]';
+        }
         let optionsArr = optionsStr.split(';');
+        let seld = '';
         let options = ``;
         optionsArr.forEach((item) => {
+            if (typedata[1] == 'multiple') {
+                if (value.includes(item)) {
+                    seld = ' selected';
+                } else {
+                    seld = '';
+                }
+            } else {
+                if (value == item) {
+                    seld = ' selected';
+                } else {
+                    seld = '';
+                }
+            }
             let optionsData = item.split(',');
             if (optionsData.length == 2) {
-                options += `<option value="${optionsData[0]}">${optionsData[1]}</option>`;
+                options += `<option value="${optionsData[0]}"${seld}>${optionsData[1]}</option>`;
             } else {
-                options += `<option value="${optionsData[0]}">${optionsData[0]}</option>`;
+                options += `<option value="${optionsData[0]}"${seld}>${optionsData[0]}</option>`;
             }
         });
-        return `<select class="form-select" name="${name}" ${typedata[2]}>${options}</select>`;
+        return `<select class="form-select" data-title="${name}" name="${name}" ${typedata[2]} onblur="fieldFillingFd(this)"${multiple}>${options}</select>`;
     }
 }
 
@@ -367,7 +427,7 @@ noselectAction();
 function payAction(elem) {
     const modalBuyDoc = new bootstrap.Modal('#modal-buy-doc');
     const modalWarning = new bootstrap.Modal('#warning-form-modal');
-    const offcanvasFields = new bootstrap.Offcanvas('#offcanvasFields');
+    // const offcanvasFields = new bootstrap.Offcanvas('#offcanvasFields');
 
     const forms = document.querySelectorAll('form.fields-list');
     const btnFields = document.querySelector('#btn-fields');
@@ -387,7 +447,7 @@ function payAction(elem) {
             });
         }
         if (btnFields.checkVisibility()) {
-            offcanvasFields.show();
+            // offcanvasFields.show();
         }
     });
 }
@@ -443,6 +503,9 @@ function buyDocument(elem) {
 
                 // successModal.show();
             }
+            // if (data.type == 'document_drafting') {
+            //     // successModal.show();
+            // }
         })
         .catch(error => {
             console.dir(error);
@@ -821,3 +884,48 @@ function clbTest() {
     });
 }
 // clbTest();
+
+function btnFields(btn) {
+    const fieldsLis = document.querySelector('.fields-list-col');
+    if (!fieldsLis) return;
+    const overlay = document.querySelector('.overlay-fields');
+    const body = document.querySelector('body');
+    fieldsLis.classList.add('show');
+    overlay.classList.add('show');
+    body.style.overflow = 'hidden';
+}
+
+function btnFieldsClose(btn) {
+    const fieldsLis = document.querySelector('.fields-list-col');
+    if (!fieldsLis) return;
+    const overlay = document.querySelector('.overlay-fields');
+    const body = document.querySelector('body');
+    fieldsLis.classList.remove('show');
+    overlay.classList.remove('show');
+    body.style.overflow = '';
+}
+
+function btnFieldsOverlay() {
+    const overlay = document.querySelector('.overlay-fields');
+    if (!overlay) return;
+    const fieldsLis = document.querySelector('.fields-list-col');
+    const body = document.querySelector('body');
+    overlay.addEventListener('click', (e) => {
+        fieldsLis.classList.remove('show');
+        overlay.classList.remove('show');
+        body.style.overflow = '';
+    });
+}
+btnFieldsOverlay();
+
+function fillFields() {
+    const fieldsLis = document.querySelector('.fields-list-col');
+    if (!fieldsLis) return;
+    if (getComputedStyle(fieldsLis).position == 'fixed') {
+        const overlay = document.querySelector('.overlay-fields');
+        const body = document.querySelector('body');
+        fieldsLis.classList.add('show');
+        overlay.classList.add('show');
+        body.style.overflow = 'hidden';
+    }
+}

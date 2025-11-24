@@ -239,31 +239,12 @@ if ($data['mod'] == 'dashboard') {
     <?php echo csrf_field();?>
 
     <?php insertTemplate('/templates/admin/content/footer', ['data' => $data]);
-    // prodVarsAdd();
 
-    // $search = [14491];
-    // $newArray = array_filter($data['products_gr'], function($_array) use ($search){
-    //     return in_array($_array['id'], $search);
-    // });
+    $order = get_order_test(25);
 
-    // $new = array_values($newArray);
-    // $new = array_combine(range(1, count($newArray)), $newArray);
-
-    // reset($newArray);
-    // $new = current($newArray);
-
-    // $out = [];
-    // array_walk_recursive($newArray, function($newArray) use (&$out) { $out[] = $newArray; });
-
-    // $cooc = json_decode($_COOKIE['docDesProd']);
-
-    // $res = unicValueNotId('products', 'allsit', 14465, 'bytovaya-tekhnika');
-
-    // $is_post_slug = unicValue('products', 'allsit', 'salony-krasoty');
-    //
-    // echo '<pre>';
-    // var_dump($is_post_slug);
-    // echo '</pre>';
+    echo '<pre>';
+    var_dump($order['product']['parentid']);
+    echo '</pre>';
     ?>
 
 </div>

@@ -88,11 +88,15 @@ class ProductsFrontController extends Controller
             $user = UsersModel::getUser();
             $vars = VarsModel::getVarsAll();
             $varsJson = VarsModel::getVarsAllJsonFront();
+            $no_indent = '';
+            if (in_array($product['parentid'], PROD_NO_INDENT)) {
+                $no_indent = ' no-indent';
+            }
             if ($product['active']) {
-                return view('product',
+                return view('product-def',
                     [
                         'data'  => [
-                            'body_classes' => 'page page-templates product-page doc-page',
+                            'body_classes' => 'page page-templates product-page doc-page' . $no_indent,
                             'temp_header' => 'header-cont-page',
                             'title' => 'Page',
                             'description' => 'Page description',

@@ -138,4 +138,5 @@ return [
      */
 
     'home_url' => 'https://yurist-dok.online',
+    'document_drafting' => [14557]
 ];

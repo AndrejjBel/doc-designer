@@ -20,6 +20,8 @@ define('SITE_NCRSD', 150); // Recommended number of characters Seo description
 define('SITE_KEYCODE', 'B6c8k6t958a5');
 define('SITE_KEYRATE', ($site_settings->keyRate)? (int)$site_settings->keyRate : 20);
 
+define('PROD_NO_INDENT', [14556]);
+
 /**
  * Gets the URL of the site's main page
  *
@@ -898,6 +900,16 @@ function varPageGroupTitile($vars, $var_id) {
     reset($newArray);
     $new = current($newArray);
     return $new['title'];
+}
+
+function varDescr($vars, $var_title) {
+    $search = [$var_title];
+    $newArray = array_filter($vars, function($_array) use ($search){
+        return in_array($_array['title'], $search);
+    });
+    reset($newArray);
+    $new = current($newArray);
+    return $new['descr'];
 }
 
 function varsForProduct($varsProduct, $varsArr) {

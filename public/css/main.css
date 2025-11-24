@@ -1,3 +1,7 @@
+#topnav {
+    z-index: 99;
+}
+
 .my-mode-toggle {
     top: 0;
 }
@@ -97,4 +101,69 @@
 
 .return-cost {
     font-weight: 600;
+}
+
+.fields-list-row {
+    display: flex;
+    gap: 12px;
+}
+
+.fields-list-col {
+    position: relative;
+    height: fit-content;
+    transition: all 0.3s;
+}
+
+.fields-list-col-wrap {
+    -webkit-box-shadow: 0 .125rem .25rem rgba(60, 72, 88, .15);
+    box-shadow: 0 .125rem .25rem rgba(60, 72, 88, .15);
+}
+
+.overlay-fields {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000;
+}
+
+.overlay-fields.show {
+    opacity: .5;
+    z-index: 100;
+}
+
+.fade-of:not(.show) {
+    opacity: 0;
+}
+
+.btn-close-custom {
+    display: none;
+}
+
+@media (max-width: 991px) {
+    .fields-list-col {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        height: 100vh;
+        z-index: 999;
+        background: #fff;
+        max-width: 350px;
+        width: 100%;
+    }
+
+    .fields-list-col.show {
+        left: 0;
+    }
+
+    .fields-list-col-wrap {
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+
+    .btn-close-custom {
+        display: inline-block;
+    }
 }

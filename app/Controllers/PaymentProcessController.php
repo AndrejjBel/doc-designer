@@ -8,6 +8,7 @@ use Hleb\Static\Request;
 use App\Models\{
     ProductsModel,
     OrdersModel,
+    VarsModel,
     User\UsersModel
 };
 use App\Controllers\MailSmtpNew;
@@ -32,7 +33,10 @@ class PaymentProcessController extends Controller
         }
 
         $order = OrdersModel::getOrder($orderid);
+        $product = ProductsModel::getProductForId($order['productid']);
         $clientmeta = json_decode($order['clientmeta']);
+
+        // if ($product['parentid'] == 14556) {}
 
         // if (number_format($order['summ'], 2, ".", "") == number_format($sum, 2, ".", "")) {
         //     OrdersModel::orderPayEdit($orderid, 2, $sum, json_encode($allPost, JSON_UNESCAPED_UNICODE));
@@ -51,22 +55,66 @@ class PaymentProcessController extends Controller
         //     $resultMail = MailSmtpNew::send($site_name, $subject, $body, $to);
         // }
 
-        OrdersModel::orderPayEdit($orderid, 2, $sum, json_encode($allPost, JSON_UNESCAPED_UNICODE));
+        if ($product['parentid'] == 14556) {
+            OrdersModel::orderPayEdit($orderid, 2, $sum, json_encode($allPost, JSON_UNESCAPED_UNICODE));
+            $vars = VarsModel::getVarsAll();
+            $strjson = json_decode($order['strjson']);
 
-        $home_url = config('main', 'home_url');
-        $to  = $clientmeta->email;
-        $site_name = 'Конструктор документов';
-        $subject = 'Заказ №' . $orderid . '. ' . $site_name;
-        $body = '';
-        $body .= '<p>Здравствуйте ' . $allPost['clientid'] . '!</p>';
-        $body .= '<p>Высылаем заказаный Вами документ по закзазу №' . $orderid . '.</p>';
-        $body .= '<p><a href="' . $home_url . $order['doc_url'] . '">Документ</a></p>';
-        $body .= '<p>Благодарим за заказ!</p>';
-        $body .= '<p><strong>Отправлено с сайта <a href="' . $home_url . '">' . $site_name . '</a></strong></p>';
+            unset($strjson['summ']);
+            $nsrtl = '';
+            foreach ($strjson as $key => $value) {
+                if (is_array($value)) {
+                    $nsrtl .= '<p>' . varDescr($vars, $key) . ': <strong>' . implode(', ', $value) . '</strong></p>';
+                } else {
+                    $nsrtl .= '<p>' . varDescr($vars, $key) . ': <strong>' . $value . '</strong></p>';
+                }
+            }
 
-        $resultMail = MailSmtpNew::send($site_name, $subject, $body, $to);
+            $site_name = 'Конструктор документов';
+            $subject = 'Заявка на составление документа';
 
-        echo "OK " . md5($id.$secret_seed);
+            $body = '';
+            $body .= '<p>Имя: <strong>' . $allPost['user_fio'] . '</strong></p>';
+            $body .= '<p>Телефон: <strong>' . $allPost['user_phone'] . '</strong></p>';
+            $body .= '<p>E-mail: <strong>' . $allPost['user_email'] . '</strong></p>';
+            $body .= '<p>Документ:</p>';
+            $body .= $nsrtl;
+            $body .= '<p><strong>Отправлено с сайта ' . $site_name . '</strong></p>';
+
+            $result = MailSmtpNew::send($site_name, $subject, $body);
+
+            $home_url = config('main', 'home_url');
+            $to  = $clientmeta->email;
+            $subject = 'Заказ №' . $orderid . '. ' . $site_name;
+            $body = '';
+            $body .= '<p>Здравствуйте ' . $allPost['clientid'] . '!</p>';
+            $body .= '<p>Оплата по закзазу №' . $orderid . ' прошла успешно.</p>';
+            $body .= '<p>Юрист перезвонит вам в течении рабочего дня для уточнения данных по документу.</p>';
+            $body .= '<p>Благодарим за заказ!</p>';
+            $body .= '<p><strong>Отправлено с сайта <a href="' . $home_url . '">' . $site_name . '</a></strong></p>';
+
+            $resultMail = MailSmtpNew::send($site_name, $subject, $body, $to);
+
+            echo "OK " . md5($id.$secret_seed);
+
+        } else {
+            OrdersModel::orderPayEdit($orderid, 2, $sum, json_encode($allPost, JSON_UNESCAPED_UNICODE));
+
+            $home_url = config('main', 'home_url');
+            $to  = $clientmeta->email;
+            $site_name = 'Конструктор документов';
+            $subject = 'Заказ №' . $orderid . '. ' . $site_name;
+            $body = '';
+            $body .= '<p>Здравствуйте ' . $allPost['clientid'] . '!</p>';
+            $body .= '<p>Высылаем заказаный Вами документ по закзазу №' . $orderid . '.</p>';
+            $body .= '<p><a href="' . $home_url . $order['doc_url'] . '">Документ</a></p>';
+            $body .= '<p>Благодарим за заказ!</p>';
+            $body .= '<p><strong>Отправлено с сайта <a href="' . $home_url . '">' . $site_name . '</a></strong></p>';
+
+            $resultMail = MailSmtpNew::send($site_name, $subject, $body, $to);
+
+            echo "OK " . md5($id.$secret_seed);
+        }
     }
 
     public function payCallbackTest()

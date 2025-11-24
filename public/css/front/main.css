@@ -154,6 +154,10 @@ button::-moz-focus-inner {
     text-indent: 30px;
 }
 
+.ql-editor p.ql-indent-1 {
+    text-indent: 8px;
+}
+
 .fielddok {
     cursor: pointer;
     color: #dba7a7;
@@ -287,9 +291,7 @@ button::-moz-focus-inner {
     line-height: 1.2;
 }
 
-.fields-list-col {
-    height: fit-content;
-}
+.product-btn {}
 
 .pay-action {
     margin-left: auto;
@@ -782,6 +784,18 @@ button::-moz-focus-inner {
     .form-info-text {
         font-size: 18px;
     }
+
+    .product-btn {
+        flex-direction: column;
+    }
+
+    .pay-action {
+        margin-left: 0;
+    }
+
+    .ql-editor p:not(.ql-indent-8) {
+        text-indent: 10px;
+    }
 }
 
 @media (max-width: 440px) {
@@ -801,4 +815,8 @@ button::-moz-focus-inner {
     .text-logo-top {
         font-size: 18px;
     }
+}
+
+.no-indent .ql-editor p {
+    text-indent: 0;
 }
