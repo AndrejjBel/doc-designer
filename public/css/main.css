@@ -168,4 +168,15 @@
     .btn-close-custom {
         display: inline-block;
     }
+
+    .btn-fin {
+        position: sticky;
+        bottom: -1.5rem;
+        padding: 10px 0;
+        background: #fff;
+    }
+
+    .btn-fin button {
+        width: 100%;
+    }
 }

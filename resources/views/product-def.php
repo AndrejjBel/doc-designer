@@ -50,6 +50,9 @@ if (in_array($data['product']['id'], $document_drafting)) {
                     <input type="hidden" name="summ" value="<?php echo $data['product']['price'];?>">
                     <?php echo csrf_field();?>
                 </form>
+                <div class="btn-fin  mt-2 mt-md-0 d-block d-lg-none">
+                    <button type="button" class="btn btn-success" onclick="btnFieldsClose(this)">Готово</button>
+                </div>
             </div>
         </div>
 
