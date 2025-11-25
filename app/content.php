@@ -29,15 +29,10 @@ function fields_list_content($descr, $prod_vars, $vars) {
     $content = '';
     foreach ($vars_pr as $prod_var) {
         $search = [(int)$prod_var];
-
         $arf = array_filter($vars, function($_array) use ($search){
             return in_array($_array['id'], $search);
         });
-
         $var = array_shift($arf);
-
-
-
         // $var = array_shift(array_filter($vars, function($_array) use ($search){
         //     return in_array($_array['id'], $search);
         // }));
@@ -117,10 +112,20 @@ function var_ft($vars, $field_name) {
 
 function order_prod_title($products, $product_id) {
     $search = [$product_id];
-    $product = array_shift(array_filter($products, function($_array) use ($search){
+    $arf = array_filter($products, function($_array) use ($search){
         return in_array($_array['id'], $search);
-    }));
+    });
+    $product = array_shift($arf);
     return $product['title'];
+}
+
+function prod_meta_fid($products, $product_id, $meta) {
+    $search = [$product_id];
+    $arf = array_filter($products, function($_array) use ($search){
+        return in_array($_array['id'], $search);
+    });
+    $product = array_shift($arf);
+    return $product[$meta];
 }
 
 function vars_options($name='') {

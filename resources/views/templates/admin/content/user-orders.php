@@ -1,5 +1,6 @@
 <?php
 $user = $data['user'];
+$document_drafting = config('main', 'document_drafting');
 $br_gen = 'Консоль';
 $pag_url = '/admin/user-orders';
 if ($data['mod'] == 'dashboard') {
@@ -104,14 +105,18 @@ if ($data['mod'] == 'dashboard') {
 
     <?php
 
-    // $search = [14465];
+    $search = [14465];
     // $product = array_shift(array_filter($data['products'], function($_array) use ($search){
     //     return in_array($_array['id'], $search);
     // }));
-    //
-    // echo '<pre>';
-    // var_dump($product['title']);
-    // echo '</pre>';
+
+    $search = 14465;
+
+    $pr = prod_meta_fid($data['products'], $search, 'parentid');
+
+    echo '<pre>';
+    var_dump($pr);
+    echo '</pre>';
 
     insertTemplate('/templates/admin/content/footer', ['data' => $data]);?>
 
