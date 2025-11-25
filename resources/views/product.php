@@ -215,7 +215,7 @@ if (is_login()) {
 <?php
 
 // echo '<pre>';
-// var_dump($data);
+// var_dump($data['order']);
 // echo '</pre>';
 
 insertTemplate('/templates/footer-new', ['data' => $data]);

@@ -59,7 +59,7 @@ class PaymentProcessController extends Controller
         if ($product['parentid'] == 14556) { //in_array($allPost['productid'], $document_drafting)
             OrdersModel::orderPayEdit($orderid, 2, $sum, json_encode($allPost, JSON_UNESCAPED_UNICODE));
             $vars = VarsModel::getVarsAll();
-            $strjson = json_decode($order['strjson']);
+            $strjson = json_decode($order['strjson'], true);
             $userMeta = json_decode($order['clientmeta']);
 
             unset($strjson['summ']);
@@ -76,9 +76,9 @@ class PaymentProcessController extends Controller
             $subject = 'Заявка на составление документа';
 
             $body = '';
-            $body .= '<p>Имя: <strong>' . $userMeta['name'] . '</strong></p>';
-            $body .= '<p>Телефон: <strong>' . $userMeta['phone'] . '</strong></p>';
-            $body .= '<p>E-mail: <strong>' . $userMeta['email'] . '</strong></p>';
+            $body .= '<p>Имя: <strong>' . $userMeta->name . '</strong></p>';
+            $body .= '<p>Телефон: <strong>' . $userMeta->phone . '</strong></p>';
+            $body .= '<p>E-mail: <strong>' . $userMeta->email . '</strong></p>';
             $body .= '<p>Документ:</p>';
             $body .= $nsrtl;
             $body .= '<p><strong>Отправлено с сайта ' . $site_name . '</strong></p>';

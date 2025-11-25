@@ -29,9 +29,18 @@ function fields_list_content($descr, $prod_vars, $vars) {
     $content = '';
     foreach ($vars_pr as $prod_var) {
         $search = [(int)$prod_var];
-        $var = array_shift(array_filter($vars, function($_array) use ($search){
+
+        $arf = array_filter($vars, function($_array) use ($search){
             return in_array($_array['id'], $search);
-        }));
+        });
+
+        $var = array_shift($arf);
+
+
+
+        // $var = array_shift(array_filter($vars, function($_array) use ($search){
+        //     return in_array($_array['id'], $search);
+        // }));
         $content .= fields_html($var, $var['title']);
     }
     return $content;

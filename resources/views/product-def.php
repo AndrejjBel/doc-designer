@@ -201,9 +201,10 @@ if (in_array($data['product']['id'], $document_drafting)) {
 <?php
 // $varsN = $data['vars'];
 // $varN_title = varDescr($varsN, 'sos_trebovanie');
-//
+// $strjson = json_decode($data['order']['strjson'],true);
+
 // echo '<pre>';
-// var_dump($varN_title);
+// var_dump(json_decode($data['order']['strjson']));
 // echo '</pre>';
 
 insertTemplate('/templates/footer-new', ['data' => $data]);

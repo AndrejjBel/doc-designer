@@ -9,6 +9,7 @@ use App\Models\{
     PagesModel,
     ProductsModel,
     VarsModel,
+    OrdersModel,
     User\UsersModel
 };
 use App\Controllers\Admin\AdminController;
@@ -81,6 +82,7 @@ class ProductsFrontController extends Controller
     {
         $page_slug = Request::param('slug')->asString();
         $product = ProductsModel::getProductForSlug($page_slug);
+        $order = OrdersModel::getOrder(61);
         Breadcrumb::add('/documents/', 'Документы');
         Breadcrumb::add('/neustojka-brak/', mb_substr( $product['title'], 0, 100 ), 0);
         $breadcrumbs = Breadcrumb::out();
@@ -109,7 +111,8 @@ class ProductsFrontController extends Controller
                             'vars' => $vars,
                             'varsJson' => $varsJson,
                             'user' => $user,
-                            'breadcrumbs' => $breadcrumbs
+                            'breadcrumbs' => $breadcrumbs,
+                            'order' => $order
                         ]
                     ]
                 );
