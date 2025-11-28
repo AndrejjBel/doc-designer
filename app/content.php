@@ -119,6 +119,15 @@ function order_prod_title($products, $product_id) {
     return $product['title'];
 }
 
+function order_prod_meta($products, $product_id, $meta) {
+    $search = [$product_id];
+    $arf = array_filter($products, function($_array) use ($search){
+        return in_array($_array['id'], $search);
+    });
+    $product = array_shift($arf);
+    return $product[$meta];
+}
+
 function prod_meta_fid($products, $product_id, $meta) {
     $search = [$product_id];
     $arf = array_filter($products, function($_array) use ($search){

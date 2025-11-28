@@ -3,6 +3,7 @@ $br_gen = 'Консоль';
 if ($data['mod'] == 'dashboard') {
     $br_gen = 'Личный кабинет';
 }
+$document_drafting = config('main', 'document_drafting');
 ?>
 <div class="content-page user-settings">
     <div class="content">
@@ -46,6 +47,14 @@ if ($data['mod'] == 'dashboard') {
                             <tbody>
                                 <?php foreach ($data['orders'] as $key => $order) {
                                     $user = json_decode($order['clientmeta'], true);
+                                    $parentid = order_prod_meta($data['products'], $order['productid'], 'parentid');
+                                    if (in_array($parentid, $document_drafting)) {
+                                        $order_url = '<i class="bi bi-envelope" title="Документ будет отправлен на почту"></i>';
+                                    } else {
+                                        $order_url = '<a href="' . $order['doc_url'] . '" class="text-reset fs-16 mx-1" title="Скачать" download>
+                                            <i class="bi bi-download text-success"></i>
+                                        </a>';
+                                    }
                                     ?>
                                     <tr id="order<?php echo $order['id'];?>">
                                         <td><?php echo $order['id'];?></td>
@@ -88,9 +97,10 @@ if ($data['mod'] == 'dashboard') {
                                             </div>
                                         </td>
                                         <td id="order_url" class="text-center actions-product">
-                                            <a href="<?php echo $order['doc_url'];?>" class="text-reset fs-16 mx-1" title="Скачать" download>
+                                            <?php echo $order_url;?>
+                                            <!-- <a href="<?php //echo $order['doc_url'];?>" class="text-reset fs-16 mx-1" title="Скачать" download>
                                                 <i class="bi bi-download text-success"></i>
-                                            </a>
+                                            </a> -->
                                             <?php //echo order_upload($order['status'], $order['doc_url']);?>
                                         </td>
                                     </tr>

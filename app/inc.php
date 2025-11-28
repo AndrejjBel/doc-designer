@@ -355,13 +355,21 @@ function order_vars_html($name, $value) {
     return '<span class="badge bg-' . $res[1] . '" data-name="' . $name . '">' . $res[0] . '</span>';
 }
 
-function order_upload($order) {
-    $res = '<i class="bi bi-download text-danger mx-1"></i>';
-    if ($order['status'] == 2) { //  && $order['summ'] == $order['sumpay']
-        $res = '<a href="' . $order['doc_url'] . '" class="text-reset fs-16 mx-1" title="Скачать" download>
-            <i class="bi bi-download text-success"></i>
-        </a>';
+function order_upload($order, $products) {
+    $document_drafting = config('main', 'document_drafting');
+    $parentid = order_prod_meta($products, $order['productid'], 'parentid');
+    $res = '<i class="bi bi-envelope"></i>';
+    if (in_array($parentid, $document_drafting)) {
+        $res = '<i class="bi bi-envelope" title="Документ будет отправлен на почту"></i>';
+    } else {
+        $res = '<i class="bi bi-download text-danger mx-1"></i>';
+        if ($order['status'] == 2) { //  && $order['summ'] == $order['sumpay']
+            $res = '<a href="' . $order['doc_url'] . '" class="text-reset fs-16 mx-1" title="Скачать" download>
+                <i class="bi bi-download text-success"></i>
+            </a>';
+        }
     }
+
     return $res;
 }
 
