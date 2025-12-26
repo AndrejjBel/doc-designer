@@ -52,6 +52,7 @@ $meta_robots = '';
     <script src="<?php echo $home_url;?>/public/js/cookie/cookie.min.js" defer></script>
     <script src="<?php echo $home_url;?>/public/js/admin/admin.js?ver=<?php echo filemtime( HLEB_GLOBAL_DIR . '/public/js/admin/admin.js' );?>" defer></script>
     <script src="<?php echo $home_url;?>/public/js/admin/admin-page.js?ver=<?php echo filemtime( HLEB_GLOBAL_DIR . '/public/js/admin/admin-page.js' );?>" defer></script>
+    <script src="<?php echo $home_url;?>/public/js/admin/doc-orders.js?ver=<?php echo filemtime( HLEB_GLOBAL_DIR . '/public/js/admin/doc-orders.js' );?>" defer></script>
 </head>
 
 <body>

@@ -48,6 +48,15 @@ class UsersModel extends Model
         return $array;
     }
 
+    public static function getUserForId($id)
+    {
+        $db = MyormModel::dbc();
+        $sth = $db->prepare("SELECT * FROM `users` WHERE `id` = ?");
+        $sth->execute(array($id));
+        $array = $sth->fetch(PDO::FETCH_ASSOC);
+        return $array;
+    }
+
     public static function userId()
     {
         $db = MyormModel::dbc();
@@ -183,5 +192,11 @@ class UsersModel extends Model
             $result['info'] = 'Нет такого пользователя...';
         }
         return $result;
+    }
+
+    public static function getUsersLawyers()
+    {
+        $sql = "SELECT * FROM users WHERE roles_mask IN (4194304,262144,1) ";
+        return DB::run($sql)->fetchAll();
     }
 }

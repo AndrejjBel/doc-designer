@@ -24,7 +24,8 @@ class AdminModel extends Model
             \Delight\Auth\Role::ADMIN,
             \Delight\Auth\Role::SUPER_ADMIN,
             \Delight\Auth\Role::EDITOR,
-            \Delight\Auth\Role::SUPER_EDITOR
+            \Delight\Auth\Role::SUPER_EDITOR,
+            \Delight\Auth\Role::LAWYER
         );
     }
 

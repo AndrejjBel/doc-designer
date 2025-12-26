@@ -105,8 +105,11 @@
     //     return in_array($_array['id'], $search);
     // }));
 
+    // $doc_order_group = config('main', 'doc_order_group');
+    // echo $doc_order_group;
+    //
     // echo '<pre>';
-    // var_dump($data['prodSlugNotId']);
+    // var_dump($doc_order_group);
     // echo '</pre>';
     ?>
 

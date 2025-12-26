@@ -41,6 +41,10 @@ html[data-sidenav-size=condensed] .wrapper .leftside-menu .side-nav .side-nav-it
     height: 500px;
 }
 
+.w-fit-cont {
+    width: fit-content;
+}
+
 .vars-wrap {
     gap: 20px;
 }
@@ -127,6 +131,26 @@ input.tagsinput {
     height: 100%;
     object-fit: cover;
 }
+
+.label-upload-doc {
+    cursor: pointer;
+}
+
+input.input-upload {
+    display: none;
+}
+
+.user-info p {
+    margin-bottom: .4rem;
+}
+
+/* .user-info {
+    max-width: 200px;
+}
+
+.prod-title {
+    max-width: 300px;
+} */
 
 .post-thumbnail-img {
     position: relative;
@@ -216,6 +240,15 @@ input.input-upload {
     right: 20px;
     z-index: 9;
     padding: 2px 6px;
+}
+
+.btn-adm {
+    padding: .3rem .4rem;
+    line-height: 1;
+}
+
+.in-progress {
+    pointer-events: none;
 }
 
 .add-post-info {
@@ -450,6 +483,11 @@ select.form-select option:disabled {
     top: 8px;
     right: 12px;
     cursor: pointer;
+}
+
+.count-mess {
+    min-width: 36px;
+    height: 36px;
 }
 
 @media (max-width: 867px) {

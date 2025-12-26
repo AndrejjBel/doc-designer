@@ -36,6 +36,8 @@ Route::toGroup()->prefix('admin')->middleware(AdminMiddleware::class);
     Route::get('/vars-add')->controller(VarsController::class, 'vars_add')->name('admin.vars-add');
 
     Route::get('/orders')->controller(AdminController::class, 'orders')->name('admin.orders');
+    Route::get('/orders-documents')->controller(AdminController::class, 'orders_documents')->name('admin.orders-documents');
+    Route::get('/doc-order')->controller(AdminController::class, 'doc_order')->name('admin.doc-order');
 
     Route::get('/settings')->controller(AdminController::class, 'admin_settings')->name('admin.settings');
     Route::get('/settings-pay')->controller(AdminController::class, 'admin_settings_pay')->name('admin.settings-pay');
@@ -44,6 +46,7 @@ Route::toGroup()->prefix('admin')->middleware(AdminMiddleware::class);
     Route::get('/user-orders')->controller(AdminController::class, 'user_orders_admin')->name('admin.user-orders');
     Route::get('/users')->controller(UsersController::class)->name('admin.users');
     Route::get('/users-admins')->controller(UsersController::class, 'users_admins')->name('admin.users-admins');
+    Route::get('/users-lawyers')->controller(UsersController::class, 'users_lawyers')->name('admin.users-lawyers');
     Route::get('/user-add')->controller(UserAddController::class)->name('admin.user-add');
 
     Route::post('/settings-post')
@@ -53,4 +56,6 @@ Route::toGroup()->prefix('admin')->middleware(AdminMiddleware::class);
     Route::post('/settings-post-pay')
         ->protect()
         ->controller(AdminController::class, 'site_settings_pay');
+
+    Route::post('/upload-doc')->controller(UploadController::class, 'uploadDocs');
 Route::endGroup();

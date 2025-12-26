@@ -1,5 +1,11 @@
 <?php
 $user = $data['user'];
+$label_fio = 'ФИО';
+$fio_help_block = 'ФИО для подписи выполненных заказов и прочих документов';
+if ($user['roles_mask'] == 131072) {
+    $label_fio = 'ФИО для платежей';
+    $fio_help_block = 'ФИО для платежей';
+}
 $br_gen = 'Консоль';
 if ($data['mod'] == 'dashboard') {
     $br_gen = 'Личный кабинет';
@@ -70,7 +76,7 @@ if ($data['mod'] == 'dashboard') {
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
-                                                    <label class="col-md-3 col-form-label" for="fio">ФИО для платежей</label>
+                                                    <label class="col-md-3 col-form-label" for="fio"><?php echo $label_fio;?></label>
                                                     <div class="col-md-9">
                                                         <input type="text"
                                                             id="fio"
@@ -78,6 +84,7 @@ if ($data['mod'] == 'dashboard') {
                                                             class="form-control"
                                                             placeholder="Иванов Иван Иванович"
                                                             value="<?php echo ($user['fio'])? $user['fio'] : '';?>">
+                                                        <span class="help-block"><small><?php echo $fio_help_block;?></small></span>
                                                     </div>
                                                 </div>
 
@@ -184,6 +191,13 @@ if ($data['mod'] == 'dashboard') {
         </div>
     </div>
 
-    <?php insertTemplate('/templates/admin/content/footer', ['data' => $data]);?>
+    <?php
+
+    // echo '<pre>';
+    // echo var_dump($user["roles_mask"]);
+    // echo '</pre>';
+
+    insertTemplate('/templates/admin/content/footer', ['data' => $data]);
+    ?>
 
 </div>

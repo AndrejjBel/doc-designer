@@ -56,7 +56,7 @@ function table_vars_group($items, $userRoles=0, $type='') {
             }
             $content .= '<tr id="var' . $item['id'] . '">';
             $content .= '<td>' . $item['id'] . '</td>';
-            $content .= '<td id="title' . $item['id'] . '"><a href="/admin/vars/' . $item['id'] . '" class="parent-var-table" title="Перейти">' . $item['title'] . ' (корневая)</a></td>';
+            $content .= '<td id="title' . $item['id'] . '"><a href="javascript: void(0);" class="parent-var-table" title="Перейти">' . $item['title'] . ' (корневая)</a></td>'; // /admin/vars/' . $item['id'] . '
             $content .= '<td>' . count_var_root($items_new, $item['id']) . '</td>';
             $content .= '<td>';
             $content .= '<a href="javascript: void(0);"
@@ -332,24 +332,6 @@ function vars_for_product_create($varsProduct, $varsArr, $product_id, $vars_prod
 }
 
 // Orders
-function orders_vars($name) {
-    $arr = [
-        'status' => [
-            1 => ['Ожидание оплаты', 'warning'],
-            2 => ['Оплачено', 'success'],
-            3 => ['Отменен', 'danger']
-        ],
-        'type' => [
-            1 => ['Наличные', 'success'],
-            2 => ['Безнал', 'info'],
-            3 => ['На карту', 'info'],
-            4 => ['Онлайн оплата', 'warning'],
-            5 => ['Без оплаты', 'secondary']
-        ],
-    ];
-    return $arr[$name];
-}
-
 function order_vars_html($name, $value) {
     $res = orders_vars($name)[$value];
     return '<span class="badge bg-' . $res[1] . '" data-name="' . $name . '">' . $res[0] . '</span>';
@@ -360,11 +342,19 @@ function order_upload($order, $products) {
     $parentid = order_prod_meta($products, $order['productid'], 'parentid');
     $res = '<i class="bi bi-envelope"></i>';
     if (in_array($parentid, $document_drafting)) {
-        $res = '<i class="bi bi-envelope" title="Документ будет отправлен на почту"></i>';
+        // $res = '<i class="bi bi-download text-danger" title="Документ еще не загружен"></i>';
+        $res = '<a href="javascript: void(0);" class="text-reset fs-16 mx-1" title="Документ еще не загружен" download>
+            <i class="bi bi-download text-danger"></i>
+        </a>';
+        if ($order['doc_url']) {
+            $res = '<a href="' . $order['doc_url'] . '" class="text-reset fs-16 mx-1" title="Скачать документ" download>
+                <i class="bi bi-download text-success"></i>
+            </a>';
+        }
     } else {
-        $res = '<i class="bi bi-download text-danger mx-1"></i>';
-        if ($order['status'] == 2) { //  && $order['summ'] == $order['sumpay']
-            $res = '<a href="' . $order['doc_url'] . '" class="text-reset fs-16 mx-1" title="Скачать" download>
+        $res = '<i class="bi bi-download text-danger mx-1" title="Документ будет доступен после оплаты"></i>';
+        if ($order['status'] == 2) {
+            $res = '<a href="' . $order['doc_url'] . '" class="text-reset fs-16 mx-1" title="Скачать документ" download>
                 <i class="bi bi-download text-success"></i>
             </a>';
         }
@@ -384,6 +374,11 @@ function ext_user_meta($user, $meta) {
     } else {
         return '';
     }
+}
+
+function viewsMess($vw, $user_id) {
+    $views_ids = explode(',', $vw);
+    return in_array($user_id, $views_ids);
 }
 
 function GetPaykLink($payment_data) {
@@ -507,4 +502,9 @@ function decryptIt($encryption, $encryption_key=SITE_KEYCODE) {
     $encryption_iv = '0123456789abcdef';
     $encryption = openssl_decrypt($encryption, $ciphering, $encryption_key, $options, $encryption_iv);
     return $encryption;
+}
+
+function validateDate($date, $format = 'Y-m-d H:i:s') {
+    $d = DateTime::createFromFormat($format, $date);
+    return $d && $d->format($format) == $date;
 }

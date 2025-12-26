@@ -10,6 +10,7 @@ use App\Controllers\{
     AdminFetchController,
     FrontFetchController,
     PaymentProcessController,
+    DocCommentsController,
     Admin\UsersController,
     Admin\UserAddController,
     Admin\UserEditController,
@@ -29,6 +30,7 @@ Route::toGroup()->protect();
     Route::post('/admin/delete')->controller(UploadController::class, 'deleteFiles');
 
     Route::post('/admin/fetch')->controller(AdminFetchController::class);
+    Route::post('/admin/doc-comments')->controller(DocCommentsController::class);
 
     Route::post('/front/fetch')->controller(FrontFetchController::class);
 

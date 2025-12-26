@@ -32,7 +32,7 @@ final class Role {
 	const SUPER_EDITOR = 524288;
 	const SUPER_MODERATOR = 1048576;
 	const TRANSLATOR = 2097152;
-	// const XYZ = 4194304;
+	const LAWYER = 4194304;
 	// const XYZ = 8388608;
 	// const XYZ = 16777216;
 	// const XYZ = 33554432;

@@ -137,48 +137,6 @@ function prod_meta_fid($products, $product_id, $meta) {
     return $product[$meta];
 }
 
-function vars_options($name='') {
-    $type = [
-        1 => 'Вводится клиентом',
-        2 => 'API Запрос в ФССП',
-        3 =>'Заголовок'
-    ];
-    $typedata = [
-        1 => 'Текстовое поле',
-        2 => 'Цифровое поле',
-        3 => 'Выбор даты',
-        4 => 'Ввод телефона',
-        5 => 'Поле с выбором',
-        6 => 'Описание',
-        7 => 'Ссылки на документы',
-        8 => 'Поле с мультивыбором',
-        9 => 'Текстовая надпись'
-    ];
-
-    $typedata_field = [
-        1 => ['input', 'text', ''],
-        2 => ['input', 'number', ''],
-        3 => ['input', 'date', ''],
-        4 => ['input', 'text', 'phone'],
-        5 => ['select', '', ''],
-        6 => ['textarea', '', ''],
-        7 => ['input', 'text', 'url'],
-        8 => ['select', 'multiple', ''],
-        9 => ['label', '', '']
-    ];
-    $result = [];
-    if ($name == 'type') {
-        $result = $type;
-    }
-    if ($name == 'typedata') {
-        $result = $typedata;
-    }
-    if ($name == 'typedata_field') {
-        $result = $typedata_field;
-    }
-    return $result;
-}
-
 function replace_vars_order_content($vars, $content) {
     $vars_title = [];
     $vars_captholder = [];
@@ -188,7 +146,11 @@ function replace_vars_order_content($vars, $content) {
     $vars_captholder[] = '</div>';
     foreach ($vars as $key => $val) {
         $vars_title[] = '#' . $key . '#';
-        $vars_captholder[] = $val;
+        if (validateDate($val, 'Y-m-d')) {
+            $vars_captholder[] = date('d-m-Y', strtotime($val));
+        } else {
+            $vars_captholder[] = $val;
+        }
     }
     return str_replace($vars_title, $vars_captholder, $content);
 }
@@ -433,16 +395,6 @@ function documents_list_filtr($docs, $groups) {
     return $content;
 }
 
-function bloks_names($name) {
-    $bn = [
-        'ssi' => 'Этапы решения вопроса',
-        'faq' => 'Faq',
-        'product' => 'Шаблон',
-        'situations' => 'Ситуации'
-    ];
-    return $bn[$name];
-}
-
 function html_to_pdf($html, $fname) {
     require_once HLEB_GLOBAL_DIR . '/app/Content/dompdf/autoload.inc.php';
     $dompdf = new Dompdf\Dompdf();
@@ -472,61 +424,34 @@ function html_to_pdf($html, $fname) {
     return $file_url;
 }
 
-function rolesTranslate($name) {
-    $roles = [
-        'ADMIN' => 'АДМИН',
-        'AUTHOR' => 'АВТОР',
-        'COLLABORATOR' => 'СОТРУДНИК',
-        'CONSULTANT' => 'КОНСУЛЬТАНТ',
-        'CONSUMER' => 'ПОТРЕБИТЕЛЬ',
-        'CONTRIBUTOR' => 'УЧАСТНИК',
-        'COORDINATOR' => 'КООРДИНАТОР',
-        'CREATOR' => 'СОЗДАТЕЛЬ',
-        'DEVELOPER' => 'РАЗРАБОТЧИК',
-        'DIRECTOR' => 'ДИРЕКТОР',
-        'EDITOR' => 'РЕДАКТОР',
-        'EMPLOYEE' => 'СОТРУДНИК',
-        'MAINTAINER' => 'ОБСЛУЖИВАЮЩИЙ',
-        'MANAGER' => 'МЕНЕДЖЕР',
-        'MODERATOR' => 'МОДЕРАТОР',
-        'PUBLISHER' => 'ИЗДАТЕЛЬ',
-        'REVIEWER' => 'РЕЦЕНЗЕНТ',
-        'SUBSCRIBER' => 'ПОДПИСЧИК',
-        'SUPER_ADMIN' => 'СУПЕРАДМИН',
-        'SUPER_EDITOR' => 'СУПЕРРЕДАКТОР',
-        'SUPER_MODERATOR' => 'СУПЕРМОДЕРАТОР',
-        'TRANSLATOR' => 'ПЕРЕВОДЧИК'
-    ];
-    return $roles[$name];
-}
-
-function rolesMaskTranslate($mask) {
-    $roles = [
-        1 => 'Админ',
-        2 => 'Автор',
-        4 => 'Сотрудник',
-        8 => 'Консультант',
-        16 => 'Потребитель',
-        32 => 'Участник',
-        64 => 'Координатор',
-        128 => 'Создатель',
-        256 => 'Разработчик',
-        512 => 'Директор',
-        1024 => 'Редактор',
-        2048 => 'Сотрудник',
-        4096 => 'Обслуживающий',
-        8192 => 'Менеджер',
-        16384 => 'Модератор',
-        32768 => 'Издатель',
-        65536 => 'Рецензент',
-        131072 => 'Подписчик',
-        262144 => 'Суперадмин',
-        524288 => 'Суперредактор',
-        1048576 => 'Супермодератор',
-        2097152 => 'Переводчик'
-    ];
-
-    return $roles[$mask];
+function all_roles_select() {
+    $select_roles = '<select class="form-select" name="role" id="role">
+        <option value="0">Выберите роль</option>
+        <option value="1">АДМИН</option>
+        <option value="2">АВТОР</option>
+        <option value="4">СОТРУДНИК</option>
+        <option value="8">КОНСУЛЬТАНТ</option>
+        <option value="16">ПОТРЕБИТЕЛЬ</option>
+        <option value="32">УЧАСТНИК</option>
+        <option value="64">КООРДИНАТОР</option>
+        <option value="128">СОЗДАТЕЛЬ</option>
+        <option value="256">РАЗРАБОТЧИК</option>
+        <option value="512">ДИРЕКТОР</option>
+        <option value="1024">РЕДАКТОР</option>
+        <option value="2048">СОТРУДНИК</option>
+        <option value="4096">ОБСЛУЖИВАЮЩИЙ</option>
+        <option value="8192">МЕНЕДЖЕР</option>
+        <option value="16384">МОДЕРАТОР</option>
+        <option value="32768">ИЗДАТЕЛЬ</option>
+        <option value="65536">РЕЦЕНЗЕНТ</option>
+        <option value="131072" selected>ПОДПИСЧИК</option>
+        <option value="262144">СУПЕРАДМИН</option>
+        <option value="524288">СУПЕРРЕДАКТОР</option>
+        <option value="1048576">СУПЕРМОДЕРАТОР</option>
+        <option value="2097152">ПЕРЕВОДЧИК</option>
+        <option value="4194304">ЮРИСТ</option>
+    </select>';
+    return $select_roles;
 }
 
 function scripts_styles_render($script_rend) {
@@ -553,6 +478,16 @@ function scripts_styles_render($script_rend) {
     } else {
         return;
     }
+}
+
+function lawyers_select() {
+    $lawyers = get_lawyers();
+    $content = '';
+    foreach ($lawyers as $key => $lawyer) {
+        $name = ($lawyer['fio'])? $lawyer['fio'] : $lawyer['username'];
+        $content .= '<option value="' . $lawyer['id'] . '">' . $name . '</option>';
+    }
+    return $content;
 }
 
 function custom_styles() {
@@ -627,4 +562,22 @@ function num_word($value, $words, $show = true) {
 		default: $out .= $words[2]; break;
 	}
 	return $out;
+}
+
+function commentsDocUp($comments, $type) {
+    $search = [$type];
+    $arf = array_filter($comments, function($_array) use ($search){
+        return in_array($_array['type'], $search);
+    });
+    $comment = $arf;
+    return $comment;
+}
+
+function lawyersForId($lawyers, $id) {
+    $search = [$id];
+    $arf = array_filter($lawyers, function($_array) use ($search){
+        return in_array($_array['id'], $search);
+    });
+    $lawyer = array_shift($arf);
+    return $lawyer;
 }

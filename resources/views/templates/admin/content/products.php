@@ -240,11 +240,11 @@ if ($data['mod'] == 'dashboard') {
 
     <?php insertTemplate('/templates/admin/content/footer', ['data' => $data]);
 
-    $order = get_order_test(25);
-
-    echo '<pre>';
-    var_dump($order['product']['parentid']);
-    echo '</pre>';
+    // $order = get_order_test(25);
+    //
+    // echo '<pre>';
+    // var_dump($order['product']['parentid']);
+    // echo '</pre>';
     ?>
 
 </div>

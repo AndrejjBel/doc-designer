@@ -7,10 +7,10 @@
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="/admin">Консоль</a></li>
-                                <li class="breadcrumb-item active">Пользователи</li>
+                                <li class="breadcrumb-item active"><?php echo $data['title']?></li>
                             </ol>
                         </div>
-                        <h4 class="page-title">Пользователи</h4>
+                        <h4 class="page-title"><?php echo $data['title']?></h4>
                     </div>
                 </div>
             </div>
@@ -78,7 +78,7 @@
                                                     title="Редактировать">
                                                     <i class="ri-edit-2-line"></i>
                                                 </a>
-                                                
+
                                                 <div class="dropdown d-inline-block">
                                                     <button type="button"
                                                         class="btn btn-light btn-sm dropdown-toggle arrow-none"

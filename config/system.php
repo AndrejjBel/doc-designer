@@ -463,7 +463,7 @@ return [
         '/app/faq-arr.php',
         '/app/blocks-arr.php',
         '/app/seo-arr.php',
-        // '/app/inc-tests.php'
+        '/app/entities-arr.php'
     ],
 
     /*

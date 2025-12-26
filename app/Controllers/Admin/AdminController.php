@@ -10,6 +10,9 @@ use App\Models\{
     Admin\AdminModel,
     OrdersModel,
     ProductsModel,
+    VarsModel,
+    DocOrdersModel,
+    DocCommentsModel,
     User\UsersModel
 };
 
@@ -95,12 +98,13 @@ class AdminController extends Controller
         $orders = OrdersModel::getOrders($cur_page, $post_limit, 'id', 'DESC');
         $products = ProductsModel::getProductsAll();
         $loginsEmails = UsersModel::getLoginsEmails();
+        $vars = VarsModel::getVarsAll();
 
         return view('/admin/index',
             [
                 'data'  => [
                     'temp' => 'orders',
-                    'title' => 'Orders',
+                    'title' => 'Продажи',
                     'description' => 'Orders description',
                     'mod' => 'admin',
                     'user' => $user,
@@ -110,7 +114,69 @@ class AdminController extends Controller
                     'postCount' => $postCount,
                     'pagesCount' => $pagesCount,
                     'cur_page' => $cur_page,
-                    'loginsEmails' => $loginsEmails
+                    'loginsEmails' => $loginsEmails,
+                    'vars' => $vars
+                ]
+            ]
+        );
+    }
+
+    public function orders_documents(): View
+    {
+        $post_limit = LIMIT_POSTS_ADMIN;
+        $postCount = DocOrdersModel::getOrdersDocCount();
+        $pagesCount = ceil($postCount/$post_limit);
+        $cur_page = Request::get('page')->asInt();
+        if (!$cur_page) {
+            $cur_page = 1;
+        }
+        $user = userAllDataMeta();
+        $orders = DocOrdersModel::getOrdersDoc($cur_page, $post_limit, 'id', 'DESC');
+        $products = ProductsModel::getProductsAll();
+        $loginsEmails = UsersModel::getLoginsEmails();
+        $vars = VarsModel::getVarsAll();
+
+        return view('/admin/index',
+            [
+                'data'  => [
+                    'temp' => 'doc-orders',
+                    'title' => 'Заказы документов',
+                    'description' => 'Orders description',
+                    'mod' => 'admin',
+                    'user' => $user,
+                    'orders' => $orders,
+                    'products' => $products,
+                    'post_limit' => $post_limit,
+                    'postCount' => $postCount,
+                    'pagesCount' => $pagesCount,
+                    'cur_page' => $cur_page,
+                    'loginsEmails' => $loginsEmails,
+                    'vars' => $vars
+                ]
+            ]
+        );
+    }
+
+    public function doc_order(): View
+    {
+        $id = Request::get('id')->asInt();
+        if (!$id) {
+            Redirect::to('/admin/orders-documents');
+        }
+        $order = DocOrdersModel::getOrder($id);
+        $comments = DocCommentsModel::getCommentsOrder($id);
+        $user = userAllDataMeta();
+        return view('/admin/index',
+            [
+                'data'  => [
+                    'temp' => 'doc-order',
+                    'title' => 'Doc order',
+                    'description' => 'Doc order description',
+                    'mod' => 'admin',
+                    'user' => $user,
+                    'order_id' => $id,
+                    'order' => $order,
+                    'comments' => $comments
                 ]
             ]
         );
@@ -118,14 +184,14 @@ class AdminController extends Controller
 
     public function user_orders_admin(): View
     {
+        $user = userAllDataMeta();
         $post_limit = LIMIT_POSTS_ADMIN;
-        $postCount = OrdersModel::getOrdersCount();
+        $postCount = OrdersModel::getOrdersUserCount($user['id']);
         $pagesCount = ceil($postCount/$post_limit);
         $cur_page = Request::get('page')->asInt();
         if (!$cur_page) {
             $cur_page = 1;
         }
-        $user = userAllDataMeta();
         $orders = OrdersModel::getOrdersUserPagin($cur_page, $post_limit, 'id', 'DESC', $user['id']);
         $products = ProductsModel::getProductsAll();
 
@@ -219,14 +285,14 @@ class AdminController extends Controller
 
     public function user_orders_dashboard(): View
     {
+        $user = userAllDataMeta();
         $post_limit = LIMIT_POSTS_ADMIN;
-        $postCount = OrdersModel::getOrdersCount();
+        $postCount = OrdersModel::getOrdersUserCount($user['id']);
         $pagesCount = ceil($postCount/$post_limit);
         $cur_page = Request::get('page')->asInt();
         if (!$cur_page) {
             $cur_page = 1;
         }
-        $user = userAllDataMeta();
         $orders = OrdersModel::getOrdersUserPagin($cur_page, $post_limit, 'id', 'DESC', $user['id']);
         $products = ProductsModel::getProductsAll();
 
@@ -244,6 +310,70 @@ class AdminController extends Controller
                     'postCount' => $postCount,
                     'pagesCount' => $pagesCount,
                     'cur_page' => $cur_page
+                ]
+            ]
+        );
+    }
+
+    public function user_orders_documents(): View
+    {
+        $post_limit = LIMIT_POSTS_ADMIN;
+        $postCount = DocOrdersModel::getOrdersDocCount();
+        $pagesCount = ceil($postCount/$post_limit);
+        $cur_page = Request::get('page')->asInt();
+        if (!$cur_page) {
+            $cur_page = 1;
+        }
+        $user = userAllDataMeta();
+        $orders = DocOrdersModel::getOrdersUserPagin($cur_page, $post_limit, 'id', 'DESC', $user['id']);
+        $products = ProductsModel::getProductsAll();
+        $loginsEmails = UsersModel::getLoginsEmails();
+        $vars = VarsModel::getVarsAll();
+
+        return view('/admin/index',
+            [
+                'data'  => [
+                    'temp' => 'doc-orders',
+                    'title' => 'Заказы документов',
+                    'description' => 'Orders description',
+                    'mod' => 'dashboard',
+                    'user' => $user,
+                    'orders' => $orders,
+                    'products' => $products,
+                    'post_limit' => $post_limit,
+                    'postCount' => $postCount,
+                    'pagesCount' => $pagesCount,
+                    'cur_page' => $cur_page,
+                    'loginsEmails' => $loginsEmails,
+                    'vars' => $vars
+                ]
+            ]
+        );
+    }
+
+    public function user_doc_order(): View
+    {
+        $id = Request::get('id')->asInt();
+        if (!$id) {
+            Redirect::to('/dashboard/orders-documents');
+        }
+        $order = DocOrdersModel::getOrder($id);
+        $comments = DocCommentsModel::getCommentsOrder($id);
+        $user = userAllDataMeta();
+        if ($user['id'] != $order['clientid']) {
+            Redirect::to('/dashboard/orders-documents');
+        }
+        return view('/admin/index',
+            [
+                'data'  => [
+                    'temp' => 'doc-order',
+                    'title' => 'User doc order',
+                    'description' => 'User doc order description',
+                    'mod' => 'dashboard',
+                    'user' => $user,
+                    'order_id' => $id,
+                    'order' => $order,
+                    'comments' => $comments
                 ]
             ]
         );

@@ -67,12 +67,7 @@ function nav_obj($mod, $vars_obj, $userRole=0) {
             'children' => []
         ]
     ];
-    // $vars[] = [
-    //     'name' => 'Добавить группу',
-    //     'link' => '/admin/vars-add',
-    //     'class_li' => '',
-    //     'children' => []
-    // ];
+
     $nav_admin = [
         'container'       => 'ul',
         'container_class' => 'side-nav',
@@ -81,31 +76,37 @@ function nav_obj($mod, $vars_obj, $userRole=0) {
             [
                 'name' => 'Консоль',
                 'link' => '/admin',
-                'icon' => 'bi bi-speedometer2', // ri-dashboard-3-fill
+                'icon' => 'bi bi-speedometer2',
                 'children' => []
             ],
             [
                 'name' => 'Страницы',
                 'link' => 'sidebarPages',
-                'icon' => 'ri-pages-line', // ri-dashboard-3-fill
+                'icon' => 'ri-pages-line',
                 'children' => $pages
             ],
             [
                 'name' => 'Шаблоны',
                 'link' => 'sidebarProducts',
-                'icon' => 'ri-store-2-line', // ri-dashboard-3-fill
+                'icon' => 'ri-store-2-line',
                 'children' => $products
             ],
             [
                 'name' => 'Переменные',
                 'link' => 'sidebarVars',
-                'icon' => 'bi bi-hash', // ri-dashboard-3-fill
+                'icon' => 'bi bi-hash',
                 'children' => $vars
             ],
             [
                 'name' => 'Продажи',
                 'link' => '/admin/orders',
-                'icon' => 'bi bi-credit-card-2-back-fill', // ri-dashboard-3-fill
+                'icon' => 'bi bi-credit-card-2-back-fill',
+                'children' => []
+            ],
+            [
+                'name' => 'Заказы документов',
+                'link' => '/admin/orders-documents',
+                'icon' => 'bi bi-credit-card-2-back-fill',
                 'children' => []
             ],
             [
@@ -122,6 +123,12 @@ function nav_obj($mod, $vars_obj, $userRole=0) {
                     [
                         'name' => 'Админы',
                         'link' => '/admin/users-admins',
+                        'class_li' => '',
+                        'children' => []
+                    ],
+                    [
+                        'name' => 'Юристы',
+                        'link' => '/admin/users-lawyers',
                         'class_li' => '',
                         'children' => []
                     ],
@@ -182,26 +189,65 @@ function nav_obj($mod, $vars_obj, $userRole=0) {
             [
                 'name' => 'Консоль',
                 'link' => '/admin',
-                'icon' => 'bi bi-speedometer2', // ri-dashboard-3-fill
+                'icon' => 'bi bi-speedometer2',
                 'children' => []
             ],
             [
                 'name' => 'Страницы',
                 'link' => 'sidebarPages',
-                'icon' => 'ri-pages-line', // ri-dashboard-3-fill
+                'icon' => 'ri-pages-line',
                 'children' => $pages
             ],
             [
                 'name' => 'Шаблоны',
                 'link' => 'sidebarProducts',
-                'icon' => 'ri-store-2-line', // ri-dashboard-3-fill
+                'icon' => 'ri-store-2-line',
                 'children' => $products
             ],
             [
                 'name' => 'Переменные',
                 'link' => 'sidebarVars',
-                'icon' => 'bi bi-hash', // ri-dashboard-3-fill
+                'icon' => 'bi bi-hash',
                 'children' => $vars
+            ],
+            [
+                'name' => 'Профиль',
+                'link' => 'sidebarUserSettings',
+                'icon' => 'ri-user-6-fill',
+                'children' => [
+                    [
+                        'name' => 'Профиль',
+                        'link' => '/admin/user-settings',
+                        'class_li' => '',
+                        'children' => []
+                    ],
+                    [
+                        'name' => 'Покупки',
+                        'link' => '/admin/user-orders',
+                        'class_li' => '',
+                        'children' => []
+                    ]
+                ]
+            ]
+        ]
+    ];
+
+    $nav_admin_lawyers = [
+        'container'       => 'ul',
+        'container_class' => 'side-nav',
+        'container_id'    => '',
+        'structure' => [
+            [
+                'name' => 'Консоль',
+                'link' => '/admin',
+                'icon' => 'bi bi-speedometer2',
+                'children' => []
+            ],
+            [
+                'name' => 'Заказы документов',
+                'link' => '/admin/orders-documents',
+                'icon' => 'bi bi-credit-card-2-back-fill',
+                'children' => []
             ],
             [
                 'name' => 'Профиль',
@@ -233,7 +279,7 @@ function nav_obj($mod, $vars_obj, $userRole=0) {
             [
                 'name' => 'Личный кабинет',
                 'link' => '/dashboard',
-                'icon' => 'bi bi-speedometer2', // ri-dashboard-3-fill
+                'icon' => 'bi bi-speedometer2',
                 'children' => []
             ],
             [
@@ -252,6 +298,18 @@ function nav_obj($mod, $vars_obj, $userRole=0) {
                         'link' => '/dashboard/user-orders',
                         'class_li' => '',
                         'children' => []
+                    ],
+                    [
+                        'name' => 'Заказы документов',
+                        'link' => '/dashboard/orders-documents',
+                        'class_li' => '',
+                        'children' => []
+                    ],
+                    [
+                        'name' => 'Заказ документа',
+                        'link' => '/dashboard/doc-order',
+                        'class_li' => 'd-none',
+                        'children' => []
                     ]
                 ]
             ]
@@ -264,6 +322,8 @@ function nav_obj($mod, $vars_obj, $userRole=0) {
                 return $nav_admin;
             } elseif ($userRole == 'EDITOR') {
                 return $nav_admin_editors;
+            } elseif ($userRole == 'LAWYER') {
+                return $nav_admin_lawyers;
             }
         }
     }

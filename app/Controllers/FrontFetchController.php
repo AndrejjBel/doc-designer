@@ -153,6 +153,7 @@ class FrontFetchController extends Controller
 
         $user = UsersModel::getUser();
         $product = ProductsModel::getProductForId($allPost['productid']);
+        $group = ProductsModel::getProductGroup($product['parentid']);
         $vars = VarsModel::getVarsAll();
 
         if ($user) {
@@ -166,7 +167,7 @@ class FrontFetchController extends Controller
 
                 $password = gen_password(8);
 
-                $email_str = strstr($allPost['user_email'], '@', true);
+                $email_str = strstr(strtolower($allPost['user_email']), '@', true);
 
                 $is_post_slug = unicValue('users', 'username', $email_str);
                 if (count($is_post_slug) == 0) {
@@ -186,7 +187,7 @@ class FrontFetchController extends Controller
                 $db = MyormModel::dbc();
                 $auth = new \Delight\Auth\Auth($db);
 
-                $user_id = $auth->admin()->createUser($allPost['user_email'], $password, $username);
+                $user_id = $auth->admin()->createUser(strtolower($allPost['user_email']), $password, $username);
                 // $auth->admin()->addRoleForUserById($user_id, \Delight\Auth\Role::SUBSCRIBER);
                 $user_meta = [];
                 $user_meta['phone'] = $allPost['user_phone'];
@@ -201,7 +202,7 @@ class FrontFetchController extends Controller
 
                 // отправляем письмо о регистрации и необходимости подтверждения Email
                 $home_url = config('main', 'home_url');
-                $to = $allPost['user_email'];
+                $to = strtolower($allPost['user_email']);
                 $site_name = 'Конструктор документов';
                 $subject = 'Регистрация на сайте';
 
@@ -233,10 +234,16 @@ class FrontFetchController extends Controller
         unset($strjson['user_cbaccept_ret']);
         unset($strjson['_token']);
 
+        $nomer = 0;
+        $doc_order_group = config('main', 'doc_order_group');
+        if (in_array($group, $doc_order_group)) {
+            $nomer = 1; // Заявки на составление документов
+        }
+
         $order_id = OrdersModel::create(
             [
                 'productid'  => $allPost['productid'],
-                'nomer'      => 0,
+                'nomer'      => $nomer,
                 'status'     => 1,
                 'summ'       => $allPost['summ'],
                 'sumpay'     => '',
@@ -250,9 +257,9 @@ class FrontFetchController extends Controller
             ]
         );
 
-        $document_drafting = config('main', 'document_drafting');
+        // $document_drafting = config('main', 'document_drafting');
 
-        if (in_array($allPost['productid'], $document_drafting)) {
+        if (in_array($group, $doc_order_group)) {
             $payment_data = [
                 "pay_amount" => number_format($allPost['summ'], 2, '.', ''),
                 "clientid" => $allPost['user_fio'], // $allPost['clientid'];
@@ -341,7 +348,7 @@ class FrontFetchController extends Controller
                 "pay_amount" => number_format($allPost['summ'], 2, '.', ''),
                 "clientid" => $allPost['user_fio'], // $allPost['clientid'];
                 "orderid" => $order_id, // $allPost['orderid'];
-                "client_email" => $allPost['user_email'], // $allPost['client_email'];
+                "client_email" => strtolower($allPost['user_email']), // $allPost['client_email'];
                 "service_name" => $product['title'] . ' (' . $allPost['productid'] . ')', // $allPost['service_name'];
                 "client_phone" => $allPost['user_phone'] // $allPost['client_phone'];
             ];

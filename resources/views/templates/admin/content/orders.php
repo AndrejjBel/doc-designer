@@ -14,10 +14,10 @@ $document_drafting = config('main', 'document_drafting');
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="/<?php echo $data['mod']?>"><?php echo $br_gen;?></a></li>
-                                <li class="breadcrumb-item active">Продажи</li>
+                                <li class="breadcrumb-item active"><?php echo $data['title']?></li>
                             </ol>
                         </div>
-                        <h4 class="page-title">Продажи</h4>
+                        <h4 class="page-title"><?php echo $data['title']?></h4>
                     </div>
                 </div>
             </div>
@@ -41,7 +41,7 @@ $document_drafting = config('main', 'document_drafting');
                                     <th>Сумма</th>
                                     <th>Оплачено</th>
                                     <th>Тип оплаты</th>
-                                    <th>Скачать</th>
+                                    <th>Действия</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -49,9 +49,17 @@ $document_drafting = config('main', 'document_drafting');
                                     $user = json_decode($order['clientmeta'], true);
                                     $parentid = order_prod_meta($data['products'], $order['productid'], 'parentid');
                                     if (in_array($parentid, $document_drafting)) {
-                                        $order_url = '<i class="bi bi-envelope" title="Документ будет отправлен на почту"></i>';
+                                        $order_url = '<button class="btn btn-link"
+                                            type="button"
+                                            name="button"
+                                            data-order="' . $order['id'] . '"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modalOrderInfo"
+                                            title="Информация о заказе">
+                                            <i class="bi bi-info-circle"></i>
+                                        </button>' . order_upload($order, $data['products']);
                                     } else {
-                                        $order_url = '<a href="' . $order['doc_url'] . '" class="text-reset fs-16 mx-1" title="Скачать" download>
+                                        $order_url = '<a href="' . $order['doc_url'] . '" class="text-reset fs-16 mx-1" title="Скачать документ" download>
                                             <i class="bi bi-download text-success"></i>
                                         </a>';
                                     }
@@ -98,10 +106,6 @@ $document_drafting = config('main', 'document_drafting');
                                         </td>
                                         <td id="order_url" class="text-center actions-product">
                                             <?php echo $order_url;?>
-                                            <!-- <a href="<?php //echo $order['doc_url'];?>" class="text-reset fs-16 mx-1" title="Скачать" download>
-                                                <i class="bi bi-download text-success"></i>
-                                            </a> -->
-                                            <?php //echo order_upload($order['status'], $order['doc_url']);?>
                                         </td>
                                     </tr>
                                 <?php } ?>
@@ -125,6 +129,23 @@ $document_drafting = config('main', 'document_drafting');
 
         </div>
     </div>
+
+    <div class="modal fade" id="modalOrderInfo" tabindex="-1" aria-labelledby="modalOrderInfoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="modalOrderInfoLabel">Информация о заказе</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        const ordersArr = '<?php echo addslashes(json_encode($data['orders'], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE));?>';
+        varsAll = '<?php echo addslashes(json_encode($data['vars'], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE));?>';
+    </script>
 
     <?php
     echo csrf_field();

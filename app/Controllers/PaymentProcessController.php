@@ -9,6 +9,7 @@ use App\Models\{
     ProductsModel,
     OrdersModel,
     VarsModel,
+    DocOrdersModel,
     User\UsersModel
 };
 use App\Controllers\MailSmtpNew;
@@ -37,27 +38,19 @@ class PaymentProcessController extends Controller
         $clientmeta = json_decode($order['clientmeta']);
         $document_drafting = config('main', 'document_drafting');
 
-        // if ($product['parentid'] == 14556) {}
-
-        // if (number_format($order['summ'], 2, ".", "") == number_format($sum, 2, ".", "")) {
-        //     OrdersModel::orderPayEdit($orderid, 2, $sum, json_encode($allPost, JSON_UNESCAPED_UNICODE));
-        //
-        //     $home_url = config('main', 'home_url');
-        //     $to  = $clientmeta->email;
-        //     $site_name = 'Конструктор документов';
-        //     $subject = 'Заказ №' . $orderid . '. ' . $site_name;
-        //     $body = '';
-        //     $body .= '<p>Здравствуйте ' . $allPost['clientid'] . '!</p>';
-        //     $body .= '<p>Высылаем заказаный Вами документ по закзазу №' . $orderid . '.</p>';
-        //     $body .= '<p><a href="'$home_url . $order['doc_url'] . '">Документ</a></p>';
-        //     $body .= '<p>Благодарим за заказ!</p>';
-        //     $body .= '<p><strong>Отправлено с сайта <a href="' . $home_url . '">' . $site_name . '</a></strong></p>';
-        //
-        //     $resultMail = MailSmtpNew::send($site_name, $subject, $body, $to);
-        // }
-
-        if ($product['parentid'] == 14556) { //in_array($allPost['productid'], $document_drafting)
+        if ($product['typeid'] == 1) {
             OrdersModel::orderPayEdit($orderid, 2, $sum, json_encode($allPost, JSON_UNESCAPED_UNICODE));
+            DocOrdersModel::create([
+                'order_id'   => $order['id'],
+                'productid'  => $order['productid'],
+                'status'     => 1,
+                'summ'       => $order['summ'],
+                'descr'      => $order['descr'],
+                'clientid'   => $order['clientid'],
+                'clientmeta' => $order['clientmeta'],
+                'strjson'    => $order['strjson'],
+                'doc_url'    => ''
+            ]);
             $vars = VarsModel::getVarsAll();
             $strjson = json_decode($order['strjson'], true);
             $userMeta = json_decode($order['clientmeta']);

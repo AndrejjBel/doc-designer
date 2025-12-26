@@ -1,5 +1,6 @@
 <?php
 insertTemplate('/templates/header-home', ['data' => $data]);
+$site_settings = json_decode(site_settings('site_settings'));
 ?>
 
 <div class="container mb-5">
@@ -79,7 +80,7 @@ insertTemplate('/templates/header-home', ['data' => $data]);
                             </div>
                             <div class="flex-1 content">
                                 <h6 class="title fw-bold mb-0">Email</h6>
-                                <a href="mailto:info@vernyj-metod.ru" class="text-primary">info@vernyj-metod.ru</a>
+                                <a href="mailto:<?php echo $site_settings->contact_front_email;?>" class="text-primary"><?php echo $site_settings->contact_front_email;?></a>
                             </div>
                         </div>
 
@@ -89,7 +90,7 @@ insertTemplate('/templates/header-home', ['data' => $data]);
                             </div>
                             <div class="flex-1 content">
                                 <h6 class="title fw-bold mb-0">Телефон</h6>
-                                <a href="tel:+791834468854" class="text-primary">+7 (918) 53-468-854</a>
+                                <a href="tel:<?php echo preg_replace('/[^0-9+]/', '', $site_settings->contact_phone);?>" class="text-primary"><?php echo $site_settings->contact_phone;?></a>
                             </div>
                         </div>
 
@@ -99,7 +100,7 @@ insertTemplate('/templates/header-home', ['data' => $data]);
                             </div>
                             <div class="flex-1 content">
                                 <h6 class="title fw-bold mb-0">Адрес</h6>
-                                <p>Россия, Краснодарский край г. Краснодар, ул.Красная, д.149, оф.№1</p>
+                                <p><?php echo $site_settings->contact_adress;?></p>
                             </div>
                         </div>
                     </div>

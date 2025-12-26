@@ -39,3 +39,9 @@ $home_url = home_url();
         <div class="clearfix"></div>
     </div>
 </div>
+
+<?php
+
+// echo '<pre>';
+// echo var_dump($data['mod']);
+// echo '</pre>';

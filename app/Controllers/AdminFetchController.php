@@ -9,7 +9,9 @@ use App\Models\{
     VarsModel,
     ProductsModel,
     PagesModel,
-    OrdersModel
+    OrdersModel,
+    DocOrdersModel,
+    User\UsersModel
 };
 
 class AdminFetchController extends Controller
@@ -80,6 +82,15 @@ class AdminFetchController extends Controller
         }
         if ($allPost['action'] == 'ssi_save') {
             $this->ssi_save($allPost);
+        }
+        if ($allPost['action'] == 'getOrder') {
+            $this->getOrder($allPost);
+        }
+        if ($allPost['action'] == 'doc_order_status_change') {
+            $this->doc_order_status_change($allPost);
+        }
+        if ($allPost['action'] == 'doc_order_lawyer_change') {
+            $this->doc_order_lawyer_change($allPost);
         }
     }
 
@@ -400,6 +411,13 @@ class AdminFetchController extends Controller
 
             // $is_post_slug = unicValueNotId('products', 'allsit', 14465, 'bytovaya-tekhnika');
 
+            $group = ProductsModel::getProductGroup($allPost['parentid']);
+            $typeid = 0;
+            $doc_order_group = config('main', 'doc_order_group');
+            if (in_array($group, $doc_order_group)) {
+                $typeid = 1; // Заявки на составление документов
+            }
+
             $res = ProductsModel::edit([
                 'id'          => $allPost['product_id'],
                 'isgr'        => 0,
@@ -410,6 +428,7 @@ class AdminFetchController extends Controller
                 'favor'       => $favor,
                 'descr'       => $post_content,
                 'price'       => $allPost['price'] ?? 0,
+                'typeid'      => $typeid,
                 'active'      => $active,
                 'calc'        => json_encode($calc, JSON_UNESCAPED_UNICODE),
                 'allsit'      => $allsit,
@@ -427,6 +446,7 @@ class AdminFetchController extends Controller
 
         $message['post'] = $allPost;
         $message['allsit'] = $allsit;
+        $message['group'] = $group;
 
         // $message['calc'] = $calc;
         $result = ['error' => $error, 'message' => $message];
@@ -520,6 +540,13 @@ class AdminFetchController extends Controller
                 }
             }
 
+            $group = ProductsModel::getProductGroup($allPost['parentid']);
+            $typeid = 0;
+            $doc_order_group = config('main', 'doc_order_group');
+            if (in_array($group, $doc_order_group)) {
+                $typeid = 1; // Заявки на составление документов
+            }
+
             $res = ProductsModel::create([
                 'isgr'        => 0,
                 'parentid'    => $allPost['parentid'],
@@ -529,6 +556,7 @@ class AdminFetchController extends Controller
                 'favor'       => $favor,
                 'descr'       => $post_content,
                 'price'       => $allPost['price'],
+                'typeid'      => $typeid,
                 'active'      => $active,
                 'calc'        => json_encode($calc, JSON_UNESCAPED_UNICODE),
                 'allsit'      => $allsit,
@@ -545,6 +573,7 @@ class AdminFetchController extends Controller
         }
 
         $message['post'] = $allPost;
+        $message['group'] = $group;
         $result = ['error' => $error,'message' => $message];
 
         echo json_encode($result, JSON_UNESCAPED_UNICODE);
@@ -1033,5 +1062,82 @@ class AdminFetchController extends Controller
             $result = 'error';
         }
         echo json_encode(['allPost' => $allPost], JSON_UNESCAPED_UNICODE);
+    }
+
+    public function getOrder($allPost)
+    {
+        $message = [];
+        $order = OrdersModel::getOrder($allPost['order_id']);
+        if ($order) {
+            $message['type'] = 'success';
+            $message['order'] = $order;
+        } else {
+            $message['type'] = 'error';
+            $message['order'] = $order;
+        }
+        echo json_encode($message, JSON_UNESCAPED_UNICODE);
+    }
+
+    public function doc_order_status_change($allPost)
+    {
+        $order_status = [];
+        $user = UsersModel::getUser();
+        if ($user) {
+            $user_f = $user;
+            unset($user_f['force_logout']);
+            unset($user_f['last_login']);
+            unset($user_f['registered']);
+            unset($user_f['resettable']);
+            unset($user_f['verified']);
+            unset($user_f['status']);
+            unset($user_f['password']);
+
+            $order_status[] = DocOrdersModel::orderStatusEdit([
+                'id' => $allPost['id'],
+                'status' => $allPost['status'],
+                'lawyer' => json_encode($user_f, JSON_UNESCAPED_UNICODE)
+            ]);
+            $user_fio = ($user['fio'])? $user['fio'] : $user['username'];
+            $order_status['type'] = 'success';
+            $order_status['user_fio'] = $user_fio;
+            $order_status['allPost'] = $allPost;
+            echo json_encode($order_status, JSON_UNESCAPED_UNICODE);
+        } else {
+            $order_status['user'] = 'error';
+            $order_status['type'] = 'error';
+            echo json_encode($order_status, JSON_UNESCAPED_UNICODE);
+        }
+    }
+
+    public function doc_order_lawyer_change($allPost)
+    {
+        $message = [];
+        $message['allPost'] = $allPost;
+        $user = UsersModel::getUserForId($allPost['lawyer']);
+        if ($user) {
+            $user_f = $user;
+            unset($user_f['force_logout']);
+            unset($user_f['last_login']);
+            unset($user_f['registered']);
+            unset($user_f['resettable']);
+            unset($user_f['verified']);
+            unset($user_f['status']);
+            unset($user_f['password']);
+
+            $order_status[] = DocOrdersModel::orderStatusEdit([
+                'id' => $allPost['id'],
+                'status' => 2,
+                'lawyer' => json_encode($user_f, JSON_UNESCAPED_UNICODE)
+            ]);
+            $user_fio = ($user['fio'])? $user['fio'] : $user['username'];
+            $message['type'] = 'success';
+            $message['user_fio'] = $user_fio;
+            $message['allPost'] = $allPost;
+            echo json_encode($message, JSON_UNESCAPED_UNICODE);
+        } else {
+            $message['user'] = 'error';
+            $message['type'] = 'error';
+            echo json_encode($message, JSON_UNESCAPED_UNICODE);
+        }
     }
 }

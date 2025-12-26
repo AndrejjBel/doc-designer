@@ -1,6 +1,6 @@
 <?php
 insertTemplate('/templates/header-home', ['data' => $data]);
-// $user = $data['user'];
+$site_settings = json_decode(site_settings('site_settings'));
 ?>
 
 <section class="bg-half-100 pb-0 d-table w-100 mb-5 lawyer-wrapper" style="background: url('/public/assets/images/lawyer/bg.jpg') center center;">
@@ -121,7 +121,7 @@ insertTemplate('/templates/header-home', ['data' => $data]);
 
                         <div class="flex-1 ms-3">
                             <h5 class="mb-2">Телефон</h5>
-                            <a href="tel:+79288808629" class="link">+7 (928) 880-86-29</a>
+                            <a href="tel:<?php echo preg_replace('/[^0-9+]/', '', $site_settings->contact_phone);?>" class="link"><?php echo $site_settings->contact_phone;?></a>
                         </div>
                     </div>
 
@@ -132,7 +132,7 @@ insertTemplate('/templates/header-home', ['data' => $data]);
 
                         <div class="flex-1 ms-3">
                             <h5 class="mb-2">Email</h5>
-                            <a href="mailto:info@vernyj-metod.ru" class="link">info@vernyj-metod.ru</a>
+                            <a href="mailto:<?php echo $site_settings->contact_front_email;?>" class="link"><?php echo $site_settings->contact_front_email;?></a>
                         </div>
                     </div>
 
@@ -143,7 +143,7 @@ insertTemplate('/templates/header-home', ['data' => $data]);
 
                         <div class="flex-1 ms-3">
                             <h5 class="mb-2">Адрес</h5>
-                            <p class="text-muted mb-2">Россия, Краснодарский край г. Краснодар, ул.Красная, д.149, оф.№1</p>
+                            <p class="text-muted mb-2"><?php echo $site_settings->contact_adress;?></p>
                         </div>
                     </div>
                 </div>

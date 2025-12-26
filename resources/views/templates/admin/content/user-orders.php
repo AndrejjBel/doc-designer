@@ -7,7 +7,6 @@ if ($data['mod'] == 'dashboard') {
     $br_gen = 'Личный кабинет';
     $pag_url = '/dashboard/user-orders';
 }
-$document_drafting = config('main', 'document_drafting');
 ?>
 <div class="content-page user-settings">
     <div class="content">
@@ -40,7 +39,6 @@ $document_drafting = config('main', 'document_drafting');
                                 <tr>
                                     <th>ID</th>
                                     <th class="col-1">Дата</th>
-                                    <!-- <th class="col-3">Клиент</th> -->
                                     <th class="col-5">Шаблон</th>
                                     <th>Сумма</th>
                                     <th>Оплачено</th>
@@ -69,7 +67,6 @@ $document_drafting = config('main', 'document_drafting');
                                             <?php echo date('d.m.Y', strtotime($order['dateopen']));?><br>
                                             <?php echo date('H:m', strtotime($order['dateopen']));?>
                                         </td>
-                                        <!-- <td><?php //echo $data['user']['fio'];?></td> -->
                                         <td><?php echo order_prod_title($data['products'], $order['productid']);?></td>
                                         <td class="text-center"><?php echo $order['summ'];?>р.</td>
                                         <td class="text-center"><?php echo $order['sumpay'];?>р.</td>
@@ -78,7 +75,6 @@ $document_drafting = config('main', 'document_drafting');
                                             <?php echo order_vars_html('status', $order['status']);?>
                                         </td>
                                         <td class="text-center actions-product">
-                                            <?php //echo order_upload($order['status'], $order['doc_url']);?>
                                             <?php echo order_upload($order, $data['products']);?>
                                         </td>
                                     </tr>
@@ -116,9 +112,9 @@ $document_drafting = config('main', 'document_drafting');
     // $pr = prod_meta_fid($data['products'], $search, 'parentid');
     //
     // $parentid = order_prod_meta($data['products'], 14557, 'parentid');
-    //
+
     // echo '<pre>';
-    // var_dump($parentid);
+    // var_dump($data['pagesCount']);
     // echo '</pre>';
 
     insertTemplate('/templates/admin/content/footer', ['data' => $data]);?>

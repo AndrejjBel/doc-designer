@@ -122,6 +122,7 @@ class ProductsModel extends Model
                     favor        = :favor,
                     descr        = :descr,
                     price        = :price,
+                    typeid       = :typeid,
                     active       = :active,
                     calc         = :calc,
                     allsit       = :allsit,
@@ -292,6 +293,12 @@ class ProductsModel extends Model
         return  DB::run($sql, ['parentid' => $parentid])->fetchAll();
     }
 
+    public static function getProductGroup($id)
+    {
+        $sql = "SELECT parentid FROM products WHERE id = :id";
+        return  DB::run($sql, ['id' => $id])->fetchColumn();
+    }
+
     public static function getProductsParentIdGr($parentid, $isgr=1)
     {
         $sql = "SELECT id FROM products WHERE parentid = :parentid AND isgr = :isgr";
@@ -303,114 +310,5 @@ class ProductsModel extends Model
     {
         $sql = "SELECT varid FROM varsbyprods WHERE parentid = :parentid";
         return DB::run($sql, ['parentid' => $parentid])->fetchAll();
-    }
-
-
-
-
-    // Для удаления...
-    public static function getLocationsFront()
-    {
-        $sql = "SELECT
-                    id,
-                    title,
-                    description,
-                    slug,
-                    img,
-                    count
-                        FROM location";
-        return DB::run($sql)->fetchAll();
-    }
-
-    public static function getLocationsIst()
-    {
-        $sql = "SELECT id, title, slug FROM location";
-        return DB::run($sql)->fetchAll();
-    }
-
-    public static function getLocationsIs()
-    {
-        $sql = "SELECT id, slug FROM location";
-        return DB::run($sql)->fetchAll();
-    }
-
-    public static function getLocationsTsc()
-    {
-        $string = "ORDER BY count DESC";
-        $sql = "SELECT title, slug, count FROM location $string";
-        return DB::run($sql)->fetchAll();
-    }
-
-    public static function getLocationForSlug($slug)
-    {
-        $sql = "SELECT * FROM location WHERE slug = :slug";
-        return DB::run($sql, ['slug' => $slug])->fetchAll();
-    }
-
-    public static function getLocationForId($id)
-    {
-        $sql = "SELECT * FROM location WHERE id = :id";
-        return DB::run($sql, ['id' => $id])->fetch();
-    }
-
-    public static function getLocationsForId(string|null $locations)
-    {
-        if (empty($locations)) return false;
-        $sql = "SELECT
-                    id,
-                    title,
-                    description,
-                    slug,
-                    img,
-                    seo
-                        FROM location
-                           WHERE id IN(" . $locations . ")";
-        return DB::run($sql)->fetchAll();
-    }
-
-    public static function getLocationsPage($page, $limit, $order, $order_by)
-    {
-        $start = ($page - 1) * $limit;
-        $params = [
-            'start' => $start,
-            'limit' => $limit
-        ];
-        $string = "ORDER BY $order $order_by LIMIT";
-
-        $sql = "SELECT *
-                    FROM location
-                    $string
-                    :start, :limit";
-
-        return DB::run($sql, $params)->fetchAll();
-    }
-
-    public static function getLocationsPageFront($page, $limit, $order, $order_by)
-    {
-        $start = ($page - 1) * $limit;
-        $params = [
-            'start' => $start,
-            'limit' => $limit
-        ];
-        $string = "ORDER BY $order $order_by LIMIT";
-
-        $sql = "SELECT
-                    id,
-                    title,
-                    description,
-                    slug,
-                    img,
-                    count
-                        FROM location
-                        $string
-                        :start, :limit";
-
-        return DB::run($sql, $params)->fetchAll();
-    }
-
-    public static function getLocationsCount()
-    {
-        $sql = "SELECT id FROM location";
-        return  DB::run($sql)->rowCount();
     }
 }

@@ -5,7 +5,11 @@ namespace App\Controllers\Admin;
 use Hleb\Static\Request;
 use Hleb\Base\Controller;
 use App\Content\Upload\Upload;
-use App\Models\FileModel;
+use App\Models\{
+    FileModel,
+    OrdersModel
+};
+use App\Controllers\MailSmtpNew;
 
 class UploadController extends Controller
 {
@@ -110,6 +114,64 @@ class UploadController extends Controller
             // return $message_fin;
             echo $message_fin;
         }
+    }
+
+    public function uploadDocs()
+    {
+        $allPost = Request::allPost();
+        $userId = userId();
+
+        $message = [];
+        $message['error'] = [];
+
+        $uploadSubdir = date('m-Y');
+        $dir = '/public/upload/' . $uploadSubdir . '/';
+        $dir_dest = HLEB_GLOBAL_DIR . '/public/upload/' . $uploadSubdir . '/';
+
+        $handle = new Upload($_FILES[$allPost['action']]);
+        if ($handle->uploaded) {
+            $handle->file_new_name_body = translit_file($handle->file_src_name_body);
+
+            $handle->process($dir_dest);
+            if ($handle->processed) {
+                OrdersModel::orderDocUrlEdit($allPost['order_id'], $dir.$handle->file_dst_name);
+                $order = OrdersModel::getOrder($allPost['order_id']);
+                $clientmeta = json_decode($order['clientmeta']);
+
+                // $home_url = config('main', 'home_url');
+                // $to = $clientmeta->email;
+                // $site_name = 'Конструктор документов';
+                // $subject = 'Регистрация на сайте';
+                //
+                // $body = '';
+                // $body .= '<p><strong>Вы зарегистрированы на сайте: ' . $site_name . '</strong></p>';
+                // $body .= '<p>Для авторизации используйте: </p>';
+                // $body .= '<p>Логин: </p>';
+                // $body .= $username . ' или ' . $allPost['user_email'];
+                // $body .= '<p>Пароль: ' . $password . '</p>';
+                // $body .= '<p><strong>Отправлено с сайта <a href="' . $home_url . '">' . $site_name . '</a></strong></p>';
+                //
+                // $resultMail = MailSmtpNew::send($site_name, $subject, $body, $to);
+
+                $message['file'] = [
+                    'order_id' => $allPost['order_id'],
+                    'link' => $dir.$handle->file_dst_name,
+                    'file_path' => $handle->file_dst_pathname,
+                    'file_name' => $handle->file_dst_name
+                ];
+                $message['type'] = 'success';
+                $message_fin = json_encode($message, JSON_UNESCAPED_UNICODE);
+            } else {
+                $message['error'] = $handle->error;
+                $message_fin = json_encode($message, JSON_UNESCAPED_UNICODE);
+            }
+            $handle-> clean();
+
+        } else {
+            $message['error'] = $handle->error;
+            $message_fin = json_encode($message, JSON_UNESCAPED_UNICODE);
+        }
+        echo $message_fin;
     }
 
     public function deleteFiles()

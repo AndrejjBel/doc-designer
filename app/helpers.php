@@ -4,6 +4,8 @@ use App\Models\{
     ProductsModel,
     VarsModel,
     OrdersModel,
+    DocOrdersModel,
+    DocCommentsModel,
     Admin\AdminModel,
     Myorm\MyormModel,
     User\UsersModel
@@ -73,6 +75,15 @@ function is_superadmin() {
     return $auth->hasRole(\Delight\Auth\Role::SUPER_ADMIN);
 }
 
+function is_admin() {
+    $db = MyormModel::dbc();
+    $auth = new \Delight\Auth\Auth($db);
+    return $auth->hasAnyRole(
+        \Delight\Auth\Role::SUPER_ADMIN,
+        \Delight\Auth\Role::ADMIN
+    );
+}
+
 function is_admin_allowed() {
     $db = MyormModel::dbc();
     $auth = new \Delight\Auth\Auth($db);
@@ -80,7 +91,18 @@ function is_admin_allowed() {
         \Delight\Auth\Role::ADMIN,
         \Delight\Auth\Role::SUPER_ADMIN,
         \Delight\Auth\Role::EDITOR,
-        \Delight\Auth\Role::SUPER_EDITOR
+        \Delight\Auth\Role::SUPER_EDITOR,
+        \Delight\Auth\Role::LAWYER
+    );
+}
+
+function is_lawyer_allowed() {
+    $db = MyormModel::dbc();
+    $auth = new \Delight\Auth\Auth($db);
+    return $auth->hasAnyRole(
+        \Delight\Auth\Role::ADMIN,
+        \Delight\Auth\Role::SUPER_ADMIN,
+        \Delight\Auth\Role::LAWYER
     );
 }
 
@@ -224,6 +246,16 @@ function unicValueNotId($table, $key, $id, $link) {
     return $value;
 }
 
+function userForId($user_id) {
+    $db = MyormModel::dbc();
+    $sql = "SELECT * FROM users WHERE id=:user_id";
+    $sth = $db->prepare($sql);
+    $sth->bindValue(":user_id", $user_id);
+    $sth->execute();
+    $user = $sth->fetch(PDO::FETCH_ASSOC);
+    return $user;
+}
+
 function usernameId($user_id) {
     $db = MyormModel::dbc();
     $sql = "SELECT username, first_name FROM users WHERE id=:user_id";
@@ -261,7 +293,7 @@ function rolesOptions() {
 }
 
 function createRolesOptions($defolt='Нет роли', $value=0) {
-    $keyRoles = [262144,1,1024,131072];  //[262144,524288,1048576,1,1024,16384,8192,65536,131072]
+    $keyRoles = [262144,1,1024,131072,4194304];  //[262144,524288,1048576,1,1024,16384,8192,65536,131072]
 	$out = '';
     $out .= '<option value="0">' . $defolt . '</option>';
 	foreach (\Delight\Auth\Role::getMap() as $roleValue => $roleName) {
@@ -1017,4 +1049,41 @@ function prodVarsAdd() {
 
 function get_order($id) {
     return OrdersModel::getOrder($id);
+}
+
+function set_doc_order_test($orderid) {
+    $order = OrdersModel::getOrder($orderid);
+    DocOrdersModel::create([
+        'order_id'   => $order['id'],
+        'productid'  => $order['productid'],
+        'status'     => 1,
+        'summ'       => $order['summ'],
+        'descr'      => $order['descr'],
+        'clientid'   => $order['clientid'],
+        'clientmeta' => $order['clientmeta'],
+        'strjson'    => $order['strjson'],
+        'doc_url'    => ''
+    ]);
+}
+
+function get_lawyers() {
+    return UsersModel::getUsersLawyers();
+}
+
+function docOrderComments($id) {
+    return DocCommentsModel::getCommentsOrderMess($id);
+}
+
+function noVisionMess($vessages, $user_id) {
+    $count = 0;
+    foreach ($vessages as $key => $vessage) {
+        $views_ids = explode(',', $vessage['views']);
+        array_walk($views_ids, function(&$elem) {
+            $elem = (int)$elem;
+        });
+        if (!in_array($user_id, $views_ids)) {
+            $count++;
+        }
+    }
+    return $count;
 }

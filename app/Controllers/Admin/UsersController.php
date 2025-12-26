@@ -18,7 +18,7 @@ class UsersController extends Controller
             [
                 'data'  => [
                     'temp' => 'users',
-                    'title' => 'Admin users',
+                    'title' => 'Пользователи',
                     'description' => 'Admin users description',
                     'mod' => 'admin',
                     'user_all' => $user_all,
@@ -37,7 +37,26 @@ class UsersController extends Controller
             [
                 'data'  => [
                     'temp' => 'users',
-                    'title' => 'Admin users',
+                    'title' => 'Администраторы',
+                    'description' => 'Admin users description',
+                    'mod' => 'admin',
+                    'user_all' => $user_all,
+                    'current_user' => $current_user
+                ]
+            ]
+        );
+    }
+
+    public function users_lawyers(): View
+    {
+        $user_all = AdminUsersModel::getUsersLawyers(1, 20);
+        $current_user = AdminUsersModel::getUser();
+
+        return view('/admin/index',
+            [
+                'data'  => [
+                    'temp' => 'users',
+                    'title' => 'Юристы',
                     'description' => 'Admin users description',
                     'mod' => 'admin',
                     'user_all' => $user_all,

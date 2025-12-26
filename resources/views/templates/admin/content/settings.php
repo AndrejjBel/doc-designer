@@ -45,6 +45,23 @@ if ($site_settings) {
                     <span class="help-block"><small>Copyright</small></span>
                 </div>
 
+                <h5>Контакты</h5>
+                <div class="mb-3">
+                    <label for="contact_phone" class="form-label">Телефон</label>
+                    <input type="text" id="contact_phone" name="contact_phone" class="form-control" value="<?php echo ($site_settings)? $site_settings->contact_phone : '';?>">
+                    <span class="help-block"><small>Контакты Телефон</small></span>
+                </div>
+                <div class="mb-3">
+                    <label for="contact_front_email" class="form-label">Email</label>
+                    <input type="text" id="contact_front_email" name="contact_front_email" class="form-control" value="<?php echo ($site_settings)? $site_settings->contact_front_email : '';?>">
+                    <span class="help-block"><small>Контакты Email</small></span>
+                </div>
+                <div class="mb-3">
+                    <label for="contact_adress" class="form-label">Адрес</label>
+                    <input type="text" id="contact_adress" name="contact_adress" class="form-control" value="<?php echo ($site_settings)? $site_settings->contact_adress : '';?>">
+                    <span class="help-block"><small>Контакты Адрес</small></span>
+                </div>
+
                 <div class="row">
                     <div class="col-md-6">
                         <div class="mb-3">

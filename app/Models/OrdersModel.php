@@ -108,6 +108,25 @@ class OrdersModel extends Model
 
         $sql = "SELECT *
                     FROM orders
+                    -- WHERE nomer = 0
+                    $string
+                    :start, :limit";
+
+        return DB::run($sql, $params)->fetchAll();
+    }
+
+    public static function getOrdersDoc($page, $limit, $order, $order_by)
+    {
+        $start = ($page - 1) * $limit;
+        $params = [
+            'start' => $start,
+            'limit' => $limit
+        ];
+        $string = "ORDER BY $order $order_by LIMIT";
+
+        $sql = "SELECT *
+                    FROM orders
+                    WHERE nomer = 1
                     $string
                     :start, :limit";
 
@@ -116,7 +135,19 @@ class OrdersModel extends Model
 
     public static function getOrdersCount()
     {
-        $sql = "SELECT id FROM orders";
+        $sql = "SELECT id FROM orders WHERE nomer = 0";
         return  DB::run($sql)->rowCount();
+    }
+
+    public static function getOrdersDocCount()
+    {
+        $sql = "SELECT id FROM orders WHERE nomer = 1";
+        return  DB::run($sql)->rowCount();
+    }
+
+    public static function getOrdersUserCount(int $user_id)
+    {
+        $sql = "SELECT * FROM orders WHERE clientid = :clientid";
+        return DB::run($sql, ['clientid' => $user_id])->rowCount();
     }
 }
