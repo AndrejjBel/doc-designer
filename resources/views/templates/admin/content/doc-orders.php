@@ -141,7 +141,7 @@ $document_drafting = config('main', 'document_drafting');
                                             <div class="d-flex align-items-center justify-content-between">
                                                 <?php echo order_upload($order, $data['products']);?>
                                                 <?php if (count($mess)) { ?>
-                                                    <div class="btn btn-primary rounded-pill position-relative px-2 count-mess">
+                                                    <div class="btn btn-primary rounded-pill position-relative px-2 count-mess" title="Сообщения">
                                                         <?php echo count($mess);?>
                                                         <?php if ($noVisionMess) { ?>
                                                             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
