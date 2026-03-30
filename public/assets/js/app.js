@@ -41,9 +41,9 @@ function fn() {
 
 //Menu
 // Toggle menu
-function toggleMenu() {
+function toggleMenu(navId) { // 'navigation'
     document.getElementById('isToggle').classList.toggle('open');
-    var isOpen = document.getElementById('navigation')
+    var isOpen = document.getElementById(navId)
     if (isOpen.style.display === "block") {
         isOpen.style.display = "none";
     } else {

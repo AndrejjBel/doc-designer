@@ -14,26 +14,83 @@ if (is_admin_allowed()) {
 $site_settings = json_decode(site_settings('site_settings'));
 ?>
 
-<header id="topnav" class="defaultscroll sticky">
+<header id="topnav" class="defaultscroll sticky navbar-white-bg">
     <div class="container">
         <div class="header-container">
             <a class="logo" href="<?php echo $home_link;?>">
-                <img src="../public/images/favicon/android-chrome-512x512.png" height="24" class="logo-light-mode" alt="">
-                <img src="../public/images/favicon/android-chrome-512x512.png" height="24" class="logo-dark-mode" alt="">
-                <div class="text-logo">
+                <img src="../public/images/favicon/logo.png" height="24" class="logo-light-mode" alt="">
+                <img src="../public/images/favicon/logo.png" height="24" class="logo-dark-mode" alt="">
+                <!-- <div class="text-logo">
                     <span class="d-block fw-bolder text-logo-top">ВЕРНЫЙ МЕТОД</span>
                     <span class="d-block fs-6 fw-medium text-logo-bottom">юридическая помощь</span>
                     <span class="d-block fs-6 fw-medium text-logo-bottom">юристы И адвокаты</span>
-                </div>
+                </div> -->
             </a>
 
+            <div class="catalog-list dropdown-center d-none d-lg-block">
+                <button type="button" class="btn btn-primary border border-white btn-catalog-list d-flex" data-bs-toggle="dropdown">
+                    <span class="mdi mdi-content-paste"></span>
+                    <span>Документы</span>
+                    <i data-feather="chevron-down" class="chevron-down icon-sm"> </i>
+                </button>
+                <div class="catalog-list-content dropdown-menu">
+                    <div class="d-flex">
+                        <ul class="list">
+                            <li><a class="dropdown-item" href="#">Претензии</a></li>
+                            <li><a class="dropdown-item" href="#">Заявления</a></li>
+                            <li><a class="dropdown-item" href="#">Требования</a></li>
+                            <li><a class="dropdown-item" href="#">Жалобы</a></li>
+                        </ul>
+
+                        <ul class="list">
+                            <li><a class="dropdown-item" href="#">Исковые заявления</a></li>
+                            <li><a class="dropdown-item" href="#">Административные иски</a></li>
+                            <li><a class="dropdown-item" href="#">Прочие документы</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center subcribe-form w-100 d-none d-lg-block">
+                <form style="max-width: 800px; width: 100%;">
+                    <div class="mb-0">
+                        <input type="search" id="search" name="search" class="border rounded bg-white-color" required="" placeholder="Поиск по сайту">
+                        <button type="submit" class="btn btn-primary">Поиск</button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="navDocs" class="nav-docs pt-3  pb-3" style="display: none;">
+                <div class="container">
+                    <div class="text-center subcribe-form w-100">
+                        <form style="max-width: 100%; width: 100%;">
+                            <div class="mb-0">
+                                <input type="search" id="search" name="search" class="border rounded bg-white-color" required="" placeholder="Поиск по сайту">
+                                <button type="submit" class="btn btn-primary">Поиск</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="ul-list mt-3">
+                        <ul class="list">
+                            <li><a class="dropdown-item" href="#">Претензии</a></li>
+                            <li><a class="dropdown-item" href="#">Заявления</a></li>
+                            <li><a class="dropdown-item" href="#">Требования</a></li>
+                            <li><a class="dropdown-item" href="#">Жалобы</a></li>
+                            <li><a class="dropdown-item" href="#">Исковые заявления</a></li>
+                            <li><a class="dropdown-item" href="#">Административные иски</a></li>
+                            <li><a class="dropdown-item" href="#">Прочие документы</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
             <div id="navigation">
-                <?php echo top_nav_site('nav-light');?>
+                <?php //echo top_nav_site('');?>
             </div>
 
             <div class="menu-extras">
                 <div class="menu-item">
-                    <a class="navbar-toggle" id="isToggle" onclick="toggleMenu()">
+                    <a class="navbar-toggle" id="isToggle" onclick="toggleMenu('navDocs')">
                         <div class="lines">
                             <span></span>
                             <span></span>
